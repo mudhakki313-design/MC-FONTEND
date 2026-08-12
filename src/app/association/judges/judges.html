@@ -1,0 +1,669 @@
+<div class="judges-page">
+
+  <!-- ==========================================
+       PAGE HEADER
+  =========================================== -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="eyebrow">
+        ASSOCIATION MANAGEMENT
+      </span>
+
+      <h1>
+        Judges
+      </h1>
+
+      <p>
+        Manage competition judges and their judging roles.
+      </p>
+
+    </div>
+
+
+    <button
+      class="primary-btn"
+      (click)="openCreate()"
+    >
+
+      <i class="fas fa-plus"></i>
+
+      Add Judge
+
+    </button>
+
+  </div>
+
+
+  <!-- ==========================================
+       SUMMARY
+  =========================================== -->
+
+  <div class="stats-grid">
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        <i class="fas fa-user-tie"></i>
+      </div>
+
+      <div>
+
+        <span>
+          Total Judges
+        </span>
+
+        <strong>
+          {{ judges.length }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon active">
+        <i class="fas fa-user-check"></i>
+      </div>
+
+      <div>
+
+        <span>
+          Active
+        </span>
+
+        <strong>
+          {{ activeCount }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon chief">
+        <i class="fas fa-user-shield"></i>
+      </div>
+
+      <div>
+
+        <span>
+          Chief Judges
+        </span>
+
+        <strong>
+          {{ chiefCount }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon scoring">
+        <i class="fas fa-pen"></i>
+      </div>
+
+      <div>
+
+        <span>
+          Scoring Judges
+        </span>
+
+        <strong>
+          {{ scoringJudgesCount }}
+        </strong>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       TOOLBAR
+  =========================================== -->
+
+  <div class="toolbar">
+
+    <div class="search-box">
+
+      <i class="fas fa-search"></i>
+
+      <input
+        type="text"
+        placeholder="Search judge..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applyFilters()"
+      >
+
+    </div>
+
+
+    <div class="filter-box">
+
+      <i class="fas fa-filter"></i>
+
+      <select
+        [(ngModel)]="selectedType"
+        (ngModelChange)="applyFilters()"
+      >
+
+        <option value="ALL">
+          All Judge Types
+        </option>
+
+        <option value="MEMORIZATION">
+          Memorization
+        </option>
+
+        <option value="TAJWEED">
+          Tajweed
+        </option>
+
+        <option value="MAKHARIJ">
+          Makharij
+        </option>
+
+        <option value="CHIEF">
+          Chief Judge
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       TABLE
+  =========================================== -->
+
+  <div class="table-card">
+
+
+    <div
+      class="loading"
+      *ngIf="loading"
+    >
+
+      <i class="fas fa-spinner fa-spin"></i>
+
+      Loading judges...
+
+    </div>
+
+
+    <div
+      class="empty"
+      *ngIf="!loading && filteredJudges.length === 0"
+    >
+
+      <i class="fas fa-user-slash"></i>
+
+      <h3>
+        No Judges Found
+      </h3>
+
+      <p>
+        No judge matches your search or filter.
+      </p>
+
+    </div>
+
+
+    <div
+      class="table-wrapper"
+      *ngIf="!loading && filteredJudges.length > 0"
+    >
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Judge
+            </th>
+
+            <th>
+              Judge Number
+            </th>
+
+            <th>
+              Type
+            </th>
+
+            <th>
+              Contact
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="let judge of filteredJudges"
+          >
+
+            <td>
+
+              <div class="judge-info">
+
+                <div class="avatar">
+
+                  <i class="fas fa-user"></i>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    {{ judge.fullName }}
+                  </strong>
+
+                  <small>
+                    {{ judge.email }}
+                  </small>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <td>
+
+              <span class="judge-number">
+                {{ judge.judgeNumber }}
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <span
+                class="type-badge"
+                [class.memorization]="judge.judgeType === 'MEMORIZATION'"
+                [class.tajweed]="judge.judgeType === 'TAJWEED'"
+                [class.makharij]="judge.judgeType === 'MAKHARIJ'"
+                [class.chief]="judge.judgeType === 'CHIEF'"
+              >
+
+                <i
+                  class="fas"
+                  [class.fa-book-quran]="judge.judgeType === 'MEMORIZATION'"
+                  [class.fa-star-and-crescent]="judge.judgeType === 'TAJWEED'"
+                  [class.fa-microphone]="judge.judgeType === 'MAKHARIJ'"
+                  [class.fa-user-shield]="judge.judgeType === 'CHIEF'"
+                ></i>
+
+                {{ judge.judgeType }}
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <div class="contact">
+
+                <span>
+                  <i class="fas fa-phone"></i>
+                  {{ judge.phone }}
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <td>
+
+              <span
+                class="status"
+                [class.active]="judge.status === 'ACTIVE'"
+                [class.inactive]="judge.status === 'INACTIVE'"
+              >
+
+                <span class="dot"></span>
+
+                {{ judge.status }}
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <div class="actions">
+
+                <button
+                  class="action-btn edit"
+                  title="Edit"
+                  (click)="openEdit(judge)"
+                >
+
+                  <i class="fas fa-pen"></i>
+
+                </button>
+
+
+                <button
+                  class="action-btn deactivate"
+                  title="Deactivate"
+                  *ngIf="judge.status === 'ACTIVE'"
+                  (click)="deactivate(judge)"
+                >
+
+                  <i class="fas fa-user-slash"></i>
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ==========================================
+     JUDGE FORM MODAL
+=========================================== -->
+
+<div
+  class="modal-overlay"
+  *ngIf="showForm"
+  (click)="closeForm()"
+>
+
+
+  <div
+    class="modal"
+    (click)="$event.stopPropagation()"
+  >
+
+
+    <!-- HEADER -->
+
+    <div class="modal-header">
+
+      <div>
+
+        <span class="modal-eyebrow">
+          JUDGE MANAGEMENT
+        </span>
+
+        <h2>
+
+          {{
+            editingId !== null
+              ? 'Edit Judge'
+              : 'Register Judge'
+          }}
+
+        </h2>
+
+      </div>
+
+
+      <button
+        class="close-btn"
+        (click)="closeForm()"
+      >
+
+        <i class="fas fa-times"></i>
+
+      </button>
+
+    </div>
+
+
+    <!-- BODY -->
+
+    <div class="modal-body">
+
+
+      <div class="form-grid">
+
+
+        <!-- JUDGE NUMBER -->
+
+        <div class="form-group">
+
+          <label>
+            Judge Number
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="form.judgeNumber"
+            placeholder="e.g. JDG001"
+            [disabled]="editingId !== null"
+          >
+
+        </div>
+
+
+        <!-- FULL NAME -->
+
+        <div class="form-group">
+
+          <label>
+            Full Name
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="form.fullName"
+            placeholder="Enter full name"
+          >
+
+        </div>
+
+
+        <!-- PHONE -->
+
+        <div class="form-group">
+
+          <label>
+            Phone Number
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="form.phone"
+            placeholder="e.g. 0777123456"
+          >
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="form-group">
+
+          <label>
+            Email Address
+          </label>
+
+          <input
+            type="email"
+            [(ngModel)]="form.email"
+            placeholder="judge@example.com"
+          >
+
+        </div>
+
+
+        <!-- JUDGE TYPE -->
+
+        <div class="form-group">
+
+          <label>
+            Judge Type
+          </label>
+
+          <select
+            [(ngModel)]="form.judgeType"
+          >
+
+            <option value="MEMORIZATION">
+              Memorization Judge
+            </option>
+
+            <option value="TAJWEED">
+              Tajweed Judge
+            </option>
+
+            <option value="MAKHARIJ">
+              Makharij Judge
+            </option>
+
+            <option value="CHIEF">
+              Chief Judge
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="form-group">
+
+          <label>
+            Status
+          </label>
+
+          <select
+            [(ngModel)]="form.status"
+          >
+
+            <option value="ACTIVE">
+              Active
+            </option>
+
+            <option value="INACTIVE">
+              Inactive
+            </option>
+
+          </select>
+
+        </div>
+
+
+      </div>
+
+
+      <!-- LOGIN INFO -->
+
+      <div class="login-info">
+
+        <i class="fas fa-key"></i>
+
+        <div>
+
+          <strong>
+            Login Credentials
+          </strong>
+
+          <p>
+
+            Username will be the Judge Number.
+            The initial password is automatically generated
+            by the system.
+
+          </p>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="modal-footer">
+
+      <button
+        class="cancel-btn"
+        type="button"
+        (click)="closeForm()"
+      >
+
+        Cancel
+
+      </button>
+
+
+      <button
+        class="save-btn"
+        type="button"
+        [disabled]="saving"
+        (click)="save()"
+      >
+
+        <i
+          class="fas"
+          [class.fa-spinner]="saving"
+          [class.fa-spin]="saving"
+          [class.fa-save]="!saving"
+        ></i>
+
+        {{
+          saving
+            ? 'Saving...'
+            : editingId !== null
+              ? 'Update Judge'
+              : 'Register Judge'
+        }}
+
+      </button>
+
+    </div>
+
+
+  </div>
+
+</div>

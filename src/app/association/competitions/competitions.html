@@ -1,0 +1,621 @@
+<div class="competitions-page">
+
+
+  <!-- =====================================
+       PAGE HEADER
+  ====================================== -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="eyebrow">
+        ASSOCIATION MANAGEMENT
+      </span>
+
+      <h1>
+        Competitions
+      </h1>
+
+      <p>
+        Create and manage Quran memorization competitions.
+      </p>
+
+    </div>
+
+
+    <button
+      class="primary-btn"
+      (click)="openCreate()"
+    >
+
+      <i class="fas fa-plus"></i>
+
+      New Competition
+
+    </button>
+
+  </div>
+
+
+  <!-- =====================================
+       STATISTICS
+  ====================================== -->
+
+  <div class="stats-grid">
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+
+        <i class="fas fa-trophy"></i>
+
+      </div>
+
+      <div>
+
+        <span>
+          Total Competitions
+        </span>
+
+        <strong>
+          {{ competitions.length }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon upcoming">
+
+        <i class="fas fa-calendar-days"></i>
+
+      </div>
+
+      <div>
+
+        <span>
+          Upcoming
+        </span>
+
+        <strong>
+          {{ upcomingCount }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon ongoing">
+
+        <i class="fas fa-play"></i>
+
+      </div>
+
+      <div>
+
+        <span>
+          Ongoing
+        </span>
+
+        <strong>
+          {{ ongoingCount }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon completed">
+
+        <i class="fas fa-circle-check"></i>
+
+      </div>
+
+      <div>
+
+        <span>
+          Completed
+        </span>
+
+        <strong>
+          {{ completedCount }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================================
+       TOOLBAR
+  ====================================== -->
+
+  <div class="toolbar">
+
+
+    <div class="search-box">
+
+      <i class="fas fa-search"></i>
+
+      <input
+        type="text"
+        placeholder="Search competition or venue..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applyFilters()"
+      >
+
+    </div>
+
+
+    <div class="filter-box">
+
+      <i class="fas fa-filter"></i>
+
+      <select
+        [(ngModel)]="selectedStatus"
+        (ngModelChange)="applyFilters()"
+      >
+
+        <option value="ALL">
+          All Status
+        </option>
+
+        <option value="UPCOMING">
+          Upcoming
+        </option>
+
+        <option value="ONGOING">
+          Ongoing
+        </option>
+
+        <option value="COMPLETED">
+          Completed
+        </option>
+
+      </select>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================================
+       TABLE
+  ====================================== -->
+
+  <div class="table-card">
+
+
+    <div
+      class="loading"
+      *ngIf="loading"
+    >
+
+      <i class="fas fa-spinner fa-spin"></i>
+
+      Loading competitions...
+
+    </div>
+
+
+    <div
+      class="empty"
+      *ngIf="
+        !loading &&
+        filteredCompetitions.length === 0
+      "
+    >
+
+      <i class="fas fa-trophy"></i>
+
+      <h3>
+        No Competitions Found
+      </h3>
+
+      <p>
+        Create your first Quran memorization competition.
+      </p>
+
+    </div>
+
+
+    <div
+      class="table-wrapper"
+      *ngIf="
+        !loading &&
+        filteredCompetitions.length > 0
+      "
+    >
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Competition
+            </th>
+
+            <th>
+              Venue
+            </th>
+
+            <th>
+              Date
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="
+              let competition
+              of filteredCompetitions
+            "
+          >
+
+
+            <!-- TITLE -->
+
+            <td>
+
+              <div class="competition-info">
+
+                <div class="competition-icon">
+
+                  <i class="fas fa-trophy"></i>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    {{ competition.title }}
+                  </strong>
+
+                  <small>
+                    #{{ competition.id }}
+                  </small>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <!-- VENUE -->
+
+            <td>
+
+              <span class="venue">
+
+                <i class="fas fa-location-dot"></i>
+
+                {{ competition.venue }}
+
+              </span>
+
+            </td>
+
+
+            <!-- DATE -->
+
+            <td>
+
+              <span class="date">
+
+                <i class="fas fa-calendar"></i>
+
+                {{ competition.competitionDate | date:'dd MMM yyyy' }}
+
+              </span>
+
+            </td>
+
+
+            <!-- STATUS -->
+
+            <td>
+
+              <span
+                class="status"
+                [class.upcoming]="competition.status === 'UPCOMING'"
+                [class.ongoing]="competition.status === 'ONGOING'"
+                [class.completed]="competition.status === 'COMPLETED'"
+              >
+
+                <span class="dot"></span>
+
+                {{ competition.status }}
+
+              </span>
+
+            </td>
+
+
+            <!-- ACTIONS -->
+
+            <td>
+
+              <div class="actions">
+
+                <button
+                  class="action-btn edit"
+                  title="Edit"
+                  (click)="openEdit(competition)"
+                >
+
+                  <i class="fas fa-pen"></i>
+
+                </button>
+
+
+                <button
+                  class="action-btn delete"
+                  title="Delete"
+                  (click)="deleteCompetition(competition)"
+                >
+
+                  <i class="fas fa-trash"></i>
+
+                </button>
+
+              </div>
+
+            </td>
+
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================
+     CREATE / EDIT MODAL
+====================================== -->
+
+<div
+  class="modal-overlay"
+  *ngIf="showForm"
+  (click)="closeForm()"
+>
+
+
+  <div
+    class="modal"
+    (click)="$event.stopPropagation()"
+  >
+
+
+    <!-- HEADER -->
+
+    <div class="modal-header">
+
+      <div>
+
+        <span class="modal-eyebrow">
+          COMPETITION MANAGEMENT
+        </span>
+
+        <h2>
+
+          {{
+            editingId !== null
+              ? 'Edit Competition'
+              : 'Create Competition'
+          }}
+
+        </h2>
+
+      </div>
+
+
+      <button
+        class="close-btn"
+        (click)="closeForm()"
+      >
+
+        <i class="fas fa-times"></i>
+
+      </button>
+
+    </div>
+
+
+    <!-- BODY -->
+
+    <div class="modal-body">
+
+
+      <div class="form-grid">
+
+
+        <!-- TITLE -->
+
+        <div class="form-group full">
+
+          <label>
+            Competition Title
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="form.title"
+            placeholder="e.g. National Quran Memorization Competition 2026"
+          >
+
+        </div>
+
+
+        <!-- VENUE -->
+
+        <div class="form-group full">
+
+          <label>
+            Venue
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="form.venue"
+            placeholder="Enter competition venue"
+          >
+
+        </div>
+
+
+        <!-- DATE -->
+
+        <div class="form-group">
+
+          <label>
+            Competition Date
+          </label>
+
+          <input
+            type="date"
+            [(ngModel)]="form.competitionDate"
+          >
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="form-group">
+
+          <label>
+            Status
+          </label>
+
+          <select
+            [(ngModel)]="form.status"
+          >
+
+            <option value="UPCOMING">
+              Upcoming
+            </option>
+
+            <option value="ONGOING">
+              Ongoing
+            </option>
+
+            <option value="COMPLETED">
+              Completed
+            </option>
+
+          </select>
+
+        </div>
+
+
+      </div>
+
+
+      <!-- INFORMATION -->
+
+      <div class="info-box">
+
+        <i class="fas fa-circle-info"></i>
+
+        <div>
+
+          <strong>
+            Competition Information
+          </strong>
+
+          <p>
+            Competition date must be today or a future date
+            according to the current backend validation.
+          </p>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="modal-footer">
+
+      <button
+        class="cancel-btn"
+        type="button"
+        (click)="closeForm()"
+      >
+
+        Cancel
+
+      </button>
+
+
+      <button
+        class="save-btn"
+        type="button"
+        [disabled]="saving"
+        (click)="save()"
+      >
+
+        <i
+          class="fas"
+          [class.fa-spinner]="saving"
+          [class.fa-spin]="saving"
+          [class.fa-save]="!saving"
+        ></i>
+
+        {{
+          saving
+            ? 'Saving...'
+            : editingId !== null
+              ? 'Update Competition'
+              : 'Create Competition'
+        }}
+
+      </button>
+
+    </div>
+
+
+  </div>
+
+</div>

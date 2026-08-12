@@ -1,0 +1,795 @@
+<div class="participants-page">
+
+  <!-- ==========================================
+       HEADER
+  =========================================== -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="eyebrow">
+        ASSOCIATION MANAGEMENT
+      </span>
+
+      <h1>
+        Participants
+      </h1>
+
+      <p>
+        Manage Quran competition participants.
+      </p>
+
+    </div>
+
+
+    <button
+      class="primary-btn"
+      (click)="openCreate()"
+    >
+
+      <i class="fas fa-user-plus"></i>
+
+      Add Participant
+
+    </button>
+
+  </div>
+
+
+  <!-- ==========================================
+       STATS
+  =========================================== -->
+
+  <div class="stats-grid">
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        <i class="fas fa-users"></i>
+      </div>
+
+      <div>
+
+        <span>
+          Total Participants
+        </span>
+
+        <strong>
+          {{ participants.length }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon pending">
+        <i class="fas fa-clock"></i>
+      </div>
+
+      <div>
+
+        <span>
+          Pending
+        </span>
+
+        <strong>
+          {{ pendingCount }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon approved">
+        <i class="fas fa-circle-check"></i>
+      </div>
+
+      <div>
+
+        <span>
+          Approved
+        </span>
+
+        <strong>
+          {{ approvedCount }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon rejected">
+        <i class="fas fa-circle-xmark"></i>
+      </div>
+
+      <div>
+
+        <span>
+          Rejected
+        </span>
+
+        <strong>
+          {{ rejectedCount }}
+        </strong>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       TOOLBAR
+  =========================================== -->
+
+  <div class="toolbar">
+
+    <div class="search-box">
+
+      <i class="fas fa-search"></i>
+
+      <input
+        type="text"
+        placeholder="Search participant, madrasa..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applyFilters()"
+      >
+
+    </div>
+
+
+    <div class="filter-group">
+
+
+      <div class="filter-box">
+
+        <i class="fas fa-filter"></i>
+
+        <select
+          [(ngModel)]="selectedStatus"
+          (ngModelChange)="applyFilters()"
+        >
+
+          <option value="ALL">
+            All Status
+          </option>
+
+          <option value="PENDING">
+            Pending
+          </option>
+
+          <option value="APPROVED">
+            Approved
+          </option>
+
+          <option value="REJECTED">
+            Rejected
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="filter-box">
+
+        <i class="fas fa-book-quran"></i>
+
+        <select
+          [(ngModel)]="selectedJuzuu"
+          (ngModelChange)="applyFilters()"
+        >
+
+          <option value="ALL">
+            All Juzuu
+          </option>
+
+          <option
+            *ngFor="let juzuu of juzuuList"
+            [value]="juzuu"
+          >
+
+            {{ juzuu.replace('_', ' ') }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       TABLE
+  =========================================== -->
+
+  <div class="table-card">
+
+
+    <div
+      class="loading"
+      *ngIf="loading"
+    >
+
+      <i class="fas fa-spinner fa-spin"></i>
+
+      Loading participants...
+
+    </div>
+
+
+    <div
+      class="empty"
+      *ngIf="
+        !loading &&
+        filteredParticipants.length === 0
+      "
+    >
+
+      <i class="fas fa-users-slash"></i>
+
+      <h3>
+        No Participants Found
+      </h3>
+
+      <p>
+        No participant matches your current search or filters.
+      </p>
+
+    </div>
+
+
+    <div
+      class="table-wrapper"
+      *ngIf="
+        !loading &&
+        filteredParticipants.length > 0
+      "
+    >
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Participant
+            </th>
+
+            <th>
+              Age / Gender
+            </th>
+
+            <th>
+              Madrasa
+            </th>
+
+            <th>
+              Competition
+            </th>
+
+            <th>
+              Juzuu
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="
+              let participant
+              of filteredParticipants
+            "
+          >
+
+
+            <!-- PARTICIPANT -->
+
+            <td>
+
+              <div class="participant-info">
+
+                <div class="avatar">
+
+                  <i class="fas fa-user"></i>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    {{ participant.fullName }}
+                  </strong>
+
+                  <small>
+                    #{{ participant.id }}
+                  </small>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <!-- AGE / GENDER -->
+
+            <td>
+
+              <div class="age-gender">
+
+                <strong>
+                  {{ participant.age }} yrs
+                </strong>
+
+                <span>
+
+                  <i
+                    class="fas"
+                    [class.fa-mars]="participant.gender === 'MALE'"
+                    [class.fa-venus]="participant.gender === 'FEMALE'"
+                  ></i>
+
+                  {{ participant.gender }}
+
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <!-- MADRASA -->
+
+            <td>
+
+              <span class="madrasa-name">
+
+                <i class="fas fa-school"></i>
+
+                {{ participant.madrasa }}
+
+              </span>
+
+            </td>
+
+
+            <!-- COMPETITION -->
+
+            <td>
+
+              <span class="competition-name">
+
+                {{ participant.competition }}
+
+              </span>
+
+            </td>
+
+
+            <!-- JUZUU -->
+
+            <td>
+
+              <span class="juzuu-badge">
+
+                <i class="fas fa-book-quran"></i>
+
+                {{ participant.juzuu.replace('_', ' ') }}
+
+              </span>
+
+            </td>
+
+
+            <!-- STATUS -->
+
+            <td>
+
+              <span
+                class="status"
+                [class.pending]="participant.status === 'PENDING'"
+                [class.approved]="participant.status === 'APPROVED'"
+                [class.rejected]="participant.status === 'REJECTED'"
+              >
+
+                <span class="dot"></span>
+
+                {{ participant.status }}
+
+              </span>
+
+            </td>
+
+
+            <!-- ACTIONS -->
+
+            <!-- ACTIONS -->
+
+<td>
+
+  <div class="actions">
+
+    <!-- EDIT -->
+
+    <button
+      class="action-btn edit"
+      title="Edit"
+      (click)="openEdit(participant)"
+    >
+
+      <i class="fas fa-pen"></i>
+
+    </button>
+
+
+    <!-- APPROVE -->
+
+    <button
+      *ngIf="participant.status === 'PENDING'"
+      class="action-btn approve"
+      title="Approve Participant"
+      (click)="approveParticipant(participant)"
+    >
+
+      <i class="fas fa-check"></i>
+
+    </button>
+
+
+    <!-- REJECT -->
+
+    <button
+      *ngIf="participant.status === 'PENDING'"
+      class="action-btn reject"
+      title="Reject Participant"
+      (click)="rejectParticipant(participant)"
+    >
+
+      <i class="fas fa-xmark"></i>
+
+    </button>
+
+
+    <!-- DELETE -->
+
+    <button
+      class="action-btn delete"
+      title="Delete"
+      (click)="deleteParticipant(participant)"
+    >
+
+      <i class="fas fa-trash"></i>
+
+    </button>
+
+  </div>
+
+</td>
+
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ==========================================
+     PARTICIPANT MODAL
+=========================================== -->
+
+<div
+  class="modal-overlay"
+  *ngIf="showForm"
+  (click)="closeForm()"
+>
+
+
+  <div
+    class="modal"
+    (click)="$event.stopPropagation()"
+  >
+
+
+    <!-- HEADER -->
+
+    <div class="modal-header">
+
+      <div>
+
+        <span class="modal-eyebrow">
+          PARTICIPANT MANAGEMENT
+        </span>
+
+        <h2>
+
+          {{
+            editingId !== null
+              ? 'Edit Participant'
+              : 'Register Participant'
+          }}
+
+        </h2>
+
+      </div>
+
+
+      <button
+        class="close-btn"
+        (click)="closeForm()"
+      >
+
+        <i class="fas fa-times"></i>
+
+      </button>
+
+    </div>
+
+
+    <!-- BODY -->
+
+    <div class="modal-body">
+
+
+      <div class="form-grid">
+
+
+        <!-- FULL NAME -->
+
+        <div class="form-group full">
+
+          <label>
+            Full Name
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="form.fullName"
+            placeholder="Enter participant full name"
+          >
+
+        </div>
+
+
+        <!-- GENDER -->
+
+        <div class="form-group">
+
+          <label>
+            Gender
+          </label>
+
+          <select
+            [(ngModel)]="form.gender"
+          >
+
+            <option value="MALE">
+              Male
+            </option>
+
+            <option value="FEMALE">
+              Female
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- AGE -->
+
+        <div class="form-group">
+
+          <label>
+            Age
+          </label>
+
+          <input
+            type="number"
+            min="5"
+            max="100"
+            [(ngModel)]="form.age"
+            placeholder="Age"
+          >
+
+        </div>
+
+
+        <!-- JUZUU -->
+
+        <div class="form-group">
+
+          <label>
+            Juzuu
+          </label>
+
+          <select
+            [(ngModel)]="form.juzuu"
+          >
+
+            <option
+              *ngFor="let juzuu of juzuuList"
+              [value]="juzuu"
+            >
+
+              {{ juzuu.replace('_', ' ') }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- MADRASA -->
+
+        <div class="form-group">
+
+          <label>
+            Madrasa
+          </label>
+
+          <select
+            [(ngModel)]="form.madrasaId"
+          >
+
+            <option [ngValue]="0">
+              Select Madrasa
+            </option>
+
+            <option
+              *ngFor="let madrasa of madrasas"
+              [ngValue]="madrasa.id"
+            >
+
+              {{ madrasa.name }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- COMPETITION -->
+
+        <div class="form-group full">
+
+          <label>
+            Competition
+          </label>
+
+          <select
+            [(ngModel)]="form.competitionId"
+          >
+
+            <option [ngValue]="0">
+              Select Competition
+            </option>
+
+            <option
+              *ngFor="
+                let competition
+                of competitions
+              "
+              [ngValue]="competition.id"
+            >
+
+              {{ competition.title }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+
+      </div>
+
+
+      <!-- INFO -->
+
+      <div class="pending-info">
+
+        <i class="fas fa-circle-info"></i>
+
+        <div>
+
+          <strong>
+            Screening Status
+          </strong>
+
+          <p>
+            Newly registered participants are automatically
+            placed in <b>PENDING</b> status.
+          </p>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="modal-footer">
+
+      <button
+        class="cancel-btn"
+        type="button"
+        (click)="closeForm()"
+      >
+
+        Cancel
+
+      </button>
+
+
+      <button
+        class="save-btn"
+        type="button"
+        [disabled]="saving"
+        (click)="save()"
+      >
+
+        <i
+          class="fas"
+          [class.fa-spinner]="saving"
+          [class.fa-spin]="saving"
+          [class.fa-save]="!saving"
+        ></i>
+
+        {{
+          saving
+            ? 'Saving...'
+            : editingId !== null
+              ? 'Update Participant'
+              : 'Register Participant'
+        }}
+
+      </button>
+
+    </div>
+
+
+  </div>
+
+</div>

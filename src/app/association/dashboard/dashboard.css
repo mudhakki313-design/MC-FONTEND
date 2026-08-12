@@ -1,0 +1,72 @@
+.page-header h1 {
+
+  font-family: 'Playfair Display', serif;
+
+  color: #0B4F4A;
+
+  font-size: 30px;
+
+}
+
+
+.page-header p {
+
+  color: #777;
+
+  font-size: 13px;
+
+  margin-top: 5px;
+
+}
+
+
+.empty-page {
+
+  margin-top: 30px;
+
+  min-height: 400px;
+
+  background: white;
+
+  border-radius: 15px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  box-shadow: 0 8px 25px rgba(0,0,0,.05);
+
+  color: #777;
+
+}
+
+
+.empty-page i {
+
+  font-size: 45px;
+
+  color: #D4AF37;
+
+  margin-bottom: 15px;
+
+}
+
+
+.empty-page h2 {
+
+  color: #0B4F4A;
+
+  font-family: 'Playfair Display', serif;
+
+}
+
+
+.empty-page p {
+
+  font-size: 13px;
+
+}

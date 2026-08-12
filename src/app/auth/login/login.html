@@ -1,0 +1,353 @@
+<div class="login-page">
+
+  <!-- =========================
+       LEFT SIDE
+  ========================== -->
+
+  <section class="login-visual">
+
+    <div class="visual-overlay"></div>
+
+    <div class="visual-content">
+
+      <!-- LOGO -->
+
+      <div class="brand">
+
+        <img
+          src="/img/logo-t.png"
+          alt="IMCMS Logo"
+        >
+
+        <div class="brand-text">
+
+          <h2>IMCMS</h2>
+
+          <span>
+            Integrated Madrasa and<br>
+            Competition Management System
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- WELCOME -->
+
+      <div class="welcome">
+
+        <h1>Welcome Back!</h1>
+
+        <div class="gold-line"></div>
+
+        <p>
+          Login to access the Integrated Madrasa
+          and Competition Management System
+        </p>
+
+      </div>
+
+
+      <!-- QUOTE -->
+
+      <div class="quote-box">
+
+        <div class="quote-mark">
+          “
+        </div>
+
+        <p>
+          The best among you are those<br>
+          who learn the Quran and teach it.
+        </p>
+
+        <span>
+          – Sahih Bukhari
+        </span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       RIGHT SIDE
+  ========================== -->
+
+  <section class="login-section">
+
+    <div class="login-wrapper">
+
+      <!-- LOGIN CARD -->
+
+      <div class="login-card">
+
+        <!-- LOGO ICON -->
+
+        <div class="login-logo">
+
+          <img
+            src="/img/logo-t.png"
+            alt="IMCMS"
+          >
+
+        </div>
+
+
+        <!-- TITLE -->
+
+        <div class="login-heading">
+
+          <h1>Login</h1>
+
+          <div class="ornament">
+
+            <span></span>
+
+            <i class="fas fa-gem"></i>
+
+            <span></span>
+
+          </div>
+
+          <p>
+            Enter your credentials to access your account
+          </p>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        @if (errorMessage) {
+
+          <div class="error-message">
+
+            <i class="fas fa-circle-exclamation"></i>
+
+            <span>
+              {{ errorMessage }}
+            </span>
+
+          </div>
+
+        }
+
+
+        <!-- FORM -->
+
+        <form
+          (ngSubmit)="login()"
+          #loginForm="ngForm"
+        >
+
+          <!-- USERNAME -->
+
+          <div class="form-group">
+
+            <label for="username">
+              Email or Username
+            </label>
+
+            <div class="input-wrapper">
+
+              <i class="far fa-user"></i>
+
+              <input
+                id="username"
+                name="username"
+                type="text"
+                [(ngModel)]="username"
+                placeholder="Enter your email or username"
+                autocomplete="username"
+              >
+
+            </div>
+
+          </div>
+
+
+          <!-- PASSWORD -->
+
+          <div class="form-group">
+
+            <label for="password">
+              Password
+            </label>
+
+            <div class="input-wrapper">
+
+              <i class="fas fa-lock"></i>
+
+              <input
+                id="password"
+                name="password"
+                [type]="showPassword ? 'text' : 'password'"
+                [(ngModel)]="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+              >
+
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="togglePassword()"
+              >
+
+                <i
+                  [class]="
+                    showPassword
+                      ? 'far fa-eye-slash'
+                      : 'far fa-eye'
+                  "
+                ></i>
+
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- OPTIONS -->
+
+          <div class="login-options">
+
+            <label class="remember">
+
+              <input
+                type="checkbox"
+                [(ngModel)]="rememberMe"
+                name="rememberMe"
+              >
+
+              <span class="checkmark"></span>
+
+              <span>
+                Remember me
+              </span>
+
+            </label>
+
+            <a routerLink="/auth/forgot-password">
+              Forgot Password?
+            </a>
+
+          </div>
+
+
+          <!-- LOGIN BUTTON -->
+
+          <button
+            type="submit"
+            class="login-button"
+            [disabled]="loading"
+          >
+
+            @if (!loading) {
+
+              <i class="fas fa-right-to-bracket"></i>
+
+              <span>Login</span>
+
+            } @else {
+
+              <span class="spinner"></span>
+
+              <span>Signing in...</span>
+
+            }
+
+          </button>
+
+        </form>
+
+
+        <!-- DIVIDER -->
+
+        <div class="divider">
+
+          <span></span>
+
+          <p>or</p>
+
+          <span></span>
+
+        </div>
+
+
+        <!-- MADRASA LOGIN -->
+
+        <button
+          type="button"
+          class="madrasa-button"
+          (click)="loginAsMadrasa()"
+        >
+
+          <i class="fas fa-school"></i>
+
+          <span>
+            Login as Madrasa
+          </span>
+
+        </button>
+
+      </div>
+
+
+      <!-- FOOTER TEXT -->
+
+      <div class="login-footer-text">
+
+        <p>
+          Don't have an account?
+          <a href="#">
+            Contact Association
+          </a>
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- DECORATIVE LANTERN -->
+
+    <div class="decorative-lantern">
+
+      <img
+        src="/img/lantern.png"
+        alt=""
+      >
+
+    </div>
+
+  </section>
+
+
+  <!-- FOOTER -->
+
+  <footer class="login-footer">
+
+    <span>
+      © 2026 IMCMS. All rights reserved.
+    </span>
+
+    <span class="footer-divider">|</span>
+
+    <a href="#">Privacy Policy</a>
+
+    <span class="footer-divider">|</span>
+
+    <a href="#">Terms of Use</a>
+
+    <span class="footer-divider">|</span>
+
+    <a href="#">Help</a>
+
+  </footer>
+
+</div>

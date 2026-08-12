@@ -1,0 +1,682 @@
+<div class="page">
+
+
+  <!-- =====================================
+       HEADER
+  ====================================== -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="eyebrow">
+        ASSOCIATION MANAGEMENT
+      </span>
+
+      <h1>
+        Madrasa Management
+      </h1>
+
+      <p>
+        Register and manage madrasas participating
+        in the IMCMS system.
+      </p>
+
+    </div>
+
+
+    <button
+      class="primary-btn"
+      type="button"
+      (click)="openCreate()"
+    >
+
+      <i class="fas fa-plus"></i>
+
+      Add Madrasa
+
+    </button>
+
+  </div>
+
+
+  <!-- =====================================
+       SUMMARY
+  ====================================== -->
+
+  <div class="summary-grid">
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon">
+
+        <i class="fas fa-school"></i>
+
+      </div>
+
+      <div>
+
+        <span>Total Madrasas</span>
+
+        <strong>
+          {{ madrasas.length }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon active">
+
+        <i class="fas fa-circle-check"></i>
+
+      </div>
+
+      <div>
+
+        <span>Active</span>
+
+        <strong>
+          {{ activeCount }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon inactive">
+
+        <i class="fas fa-circle-xmark"></i>
+
+      </div>
+
+      <div>
+
+        <span>Inactive</span>
+
+        <strong>
+          {{ inactiveCount }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================================
+       MADRASA TABLE
+  ====================================== -->
+
+  <div class="table-card">
+
+
+    <div class="table-header">
+
+      <div>
+
+        <h2>
+          Registered Madrasas
+        </h2>
+
+        <p>
+          Manage madrasa registration and account status.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- LOADING -->
+
+    @if (loading) {
+
+      <div class="loading">
+
+        <i class="fas fa-spinner fa-spin"></i>
+
+        Loading madrasas...
+
+      </div>
+
+    }
+
+
+    <!-- EMPTY -->
+
+    @if (!loading && madrasas.length === 0) {
+
+      <div class="empty">
+
+        <div class="empty-icon">
+
+          <i class="fas fa-school"></i>
+
+        </div>
+
+        <h3>
+          No Madrasas Found
+        </h3>
+
+        <p>
+          There are currently no registered madrasas.
+        </p>
+
+        <button
+          class="primary-btn"
+          type="button"
+          (click)="openCreate()"
+        >
+
+          <i class="fas fa-plus"></i>
+
+          Register Madrasa
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- TABLE -->
+
+    @if (!loading && madrasas.length > 0) {
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>#</th>
+
+              <th>Madrasa</th>
+
+              <th>Registration</th>
+
+              <th>Location</th>
+
+              <th>Contact Person</th>
+
+              <th>Phone</th>
+
+              <th>Status</th>
+
+              <th>Action</th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              madrasa of madrasas;
+              track madrasa.id;
+              let i = $index
+            ) {
+
+              <tr>
+
+
+                <td>
+                  {{ i + 1 }}
+                </td>
+
+
+                <td>
+
+                  <div class="madrasa-cell">
+
+                    <div class="school-icon">
+
+                      <i class="fas fa-school"></i>
+
+                    </div>
+
+                    <div>
+
+                      <strong>
+                        {{ madrasa.name }}
+                      </strong>
+
+                      <small>
+                        {{ madrasa.email }}
+                      </small>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+                <td>
+
+                  <span class="registration">
+
+                    {{ madrasa.registrationNumber }}
+
+                  </span>
+
+                </td>
+
+
+                <td>
+
+                  <strong>
+                    {{ madrasa.district }}
+                  </strong>
+
+                  <small class="sub-text">
+                    {{ madrasa.region }}
+                  </small>
+
+                </td>
+
+
+                <td>
+                  {{ madrasa.contactPerson }}
+                </td>
+
+
+                <td>
+                  {{ madrasa.phone }}
+                </td>
+
+
+                <td>
+
+                  @if (madrasa.status === 'ACTIVE') {
+
+                    <span class="status active">
+
+                      <i class="fas fa-circle-check"></i>
+
+                      Active
+
+                    </span>
+
+                  } @else {
+
+                    <span class="status inactive">
+
+                      <i class="fas fa-circle-xmark"></i>
+
+                      Inactive
+
+                    </span>
+
+                  }
+
+                </td>
+
+
+                <td>
+
+                  <div class="actions">
+
+                    <button
+                      class="action edit"
+                      type="button"
+                      title="Edit"
+                      (click)="openEdit(madrasa)"
+                    >
+
+                      <i class="fas fa-pen"></i>
+
+                    </button>
+
+
+                    @if (
+                      madrasa.status === 'ACTIVE'
+                    ) {
+
+                      <button
+                        class="action deactivate"
+                        type="button"
+                        title="Deactivate"
+                        (click)="deactivate(madrasa)"
+                      >
+
+                        <i class="fas fa-user-slash"></i>
+
+                      </button>
+
+                    }
+
+                  </div>
+
+                </td>
+
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+
+  </div>
+
+
+  <!-- =====================================
+       MODAL
+  ====================================== -->
+
+  @if (showForm) {
+
+    <div
+      class="modal-overlay"
+      (click)="closeForm()"
+    >
+
+      <div
+        class="modal"
+        (click)="$event.stopPropagation()"
+      >
+
+
+        <!-- MODAL HEADER -->
+
+        <div class="modal-header">
+
+          <div>
+
+            <span class="eyebrow">
+              MADRASA
+            </span>
+
+            <h2>
+
+              @if (editingId !== null) {
+
+                Edit Madrasa
+
+              } @else {
+
+                Register Madrasa
+
+              }
+
+            </h2>
+
+          </div>
+
+
+          <button
+            class="close-btn"
+            type="button"
+            (click)="closeForm()"
+          >
+
+            <i class="fas fa-xmark"></i>
+
+          </button>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form
+          #madrasaForm="ngForm"
+          (ngSubmit)="save()"
+        >
+
+
+          <div class="form-grid">
+
+
+            <!-- NAME -->
+
+            <div class="field full">
+
+              <label>
+                Madrasa Name
+              </label>
+
+              <input
+                type="text"
+                name="name"
+                [(ngModel)]="form.name"
+                required
+                placeholder="Enter madrasa name"
+              >
+
+            </div>
+
+
+            <!-- REGISTRATION -->
+
+            <div class="field">
+
+              <label>
+                Registration Number
+              </label>
+
+              <input
+                type="text"
+                name="registrationNumber"
+                [(ngModel)]="form.registrationNumber"
+                required
+                [disabled]="editingId !== null"
+                placeholder="e.g. MDR001"
+              >
+
+            </div>
+
+
+            <!-- REGION -->
+
+            <div class="field">
+
+              <label>
+                Region
+              </label>
+
+              <input
+                type="text"
+                name="region"
+                [(ngModel)]="form.region"
+                required
+                placeholder="Enter region"
+              >
+
+            </div>
+
+
+            <!-- DISTRICT -->
+
+            <div class="field">
+
+              <label>
+                District
+              </label>
+
+              <input
+                type="text"
+                name="district"
+                [(ngModel)]="form.district"
+                required
+                placeholder="Enter district"
+              >
+
+            </div>
+
+
+            <!-- CONTACT -->
+
+            <div class="field">
+
+              <label>
+                Contact Person
+              </label>
+
+              <input
+                type="text"
+                name="contactPerson"
+                [(ngModel)]="form.contactPerson"
+                required
+                placeholder="Full name"
+              >
+
+            </div>
+
+
+            <!-- PHONE -->
+
+            <div class="field">
+
+              <label>
+                Phone
+              </label>
+
+              <input
+                type="tel"
+                name="phone"
+                [(ngModel)]="form.phone"
+                required
+                placeholder="07XXXXXXXX"
+              >
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="field">
+
+              <label>
+                Email
+              </label>
+
+              <input
+                type="email"
+                name="email"
+                [(ngModel)]="form.email"
+                required
+                placeholder="madrasa@example.com"
+              >
+
+            </div>
+
+
+            <!-- ADDRESS -->
+
+            <div class="field full">
+
+              <label>
+                Address
+              </label>
+
+              <textarea
+                name="address"
+                [(ngModel)]="form.address"
+                rows="3"
+                placeholder="Enter madrasa address"
+              ></textarea>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="field">
+
+              <label>
+                Status
+              </label>
+
+              <select
+                name="status"
+                [(ngModel)]="form.status"
+              >
+
+                <option value="ACTIVE">
+                  Active
+                </option>
+
+                <option value="INACTIVE">
+                  Inactive
+                </option>
+
+              </select>
+
+            </div>
+
+
+          </div>
+
+
+          <!-- ACTIONS -->
+
+          <div class="form-actions">
+
+            <button
+              type="button"
+              class="cancel-btn"
+              (click)="closeForm()"
+            >
+              Cancel
+            </button>
+
+
+            <button
+              type="submit"
+              class="primary-btn"
+              [disabled]="saving || !madrasaForm.valid"
+            >
+
+              @if (saving) {
+
+                <i class="fas fa-spinner fa-spin"></i>
+
+                Saving...
+
+              } @else {
+
+                <i class="fas fa-save"></i>
+
+                @if (editingId !== null) {
+                  Update Madrasa
+                } @else {
+                  Register Madrasa
+                }
+
+              }
+
+            </button>
+
+          </div>
+
+
+        </form>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

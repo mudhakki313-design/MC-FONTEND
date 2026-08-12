@@ -1,0 +1,267 @@
+<div
+  class="panel"
+  [class.sidebar-collapsed]="sidebarCollapsed"
+  [class.mobile-open]="mobileSidebarOpen"
+>
+
+
+  <!-- ==========================================
+       MOBILE OVERLAY
+  =========================================== -->
+
+  @if (mobileSidebarOpen) {
+
+    <div
+      class="sidebar-overlay"
+      (click)="closeMobileSidebar()"
+    ></div>
+
+  }
+
+
+  <!-- ==========================================
+       SIDEBAR
+  =========================================== -->
+
+  <aside class="sidebar">
+
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+      <img 
+        src="/img/logo.png"
+        alt="IMCMS"
+      >
+
+      <div class="brand-text">
+
+        <h2>IMCMS</h2>
+
+        <small>
+          Integrated Madrasa and<br>
+          Competition Management System
+        </small>
+
+      </div>
+
+
+      <!-- MOBILE CLOSE -->
+
+      <button
+        class="mobile-close"
+        type="button"
+        (click)="closeMobileSidebar()"
+      >
+
+        <i class="fas fa-xmark"></i>
+
+      </button>
+
+    </div>
+
+
+    <!-- ======================================
+         PANEL TITLE
+    ======================================= -->
+
+    <div class="panel-title">
+
+      ASSOCIATION PANEL
+
+    </div>
+
+
+    <!-- ======================================
+         NAVIGATION
+    ======================================= -->
+
+    <nav>
+
+
+      <!-- DASHBOARD -->
+
+      <a
+        routerLink="/association/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="navigateMobile()"
+      >
+
+        <i class="fas fa-gauge"></i>
+
+        <span>
+          Dashboard
+        </span>
+
+      </a>
+
+
+      <!-- MADRASAS -->
+
+      <a
+        routerLink="/association/madrasa"
+        routerLinkActive="active"
+        (click)="navigateMobile()"
+      >
+
+        <i class="fas fa-school"></i>
+
+        <span>
+          Madrasas
+        </span>
+
+      </a>
+
+       <a
+        routerLink="/association/judges"
+        routerLinkActive="active"
+      >
+        <i class="fas fa-user-tie"></i>
+       <span>Judges</span>
+    </a>
+    
+    <a
+       routerLink="/association/participants"
+       routerLinkActive="active"
+    >
+       <i class="fas fa-users"></i>
+       <span>Participants</span>
+    </a>
+
+    <a
+        routerLink="/association/competitions"
+         routerLinkActive="active"
+    >
+        <i class="fas fa-trophy"></i>
+         <span>Competitions</span>
+     </a>
+
+    </nav>
+
+
+    <!-- ======================================
+         SIDEBAR BOTTOM
+    ======================================= -->
+
+    <div class="sidebar-bottom">
+
+      <button
+        type="button"
+        (click)="logout()"
+      >
+
+        <i class="fas fa-right-from-bracket"></i>
+
+        <span>
+          Logout
+        </span>
+
+      </button>
+
+    </div>
+
+
+  </aside>
+
+
+  <!-- ==========================================
+       MAIN
+  =========================================== -->
+
+  <main class="main">
+
+
+    <!-- ======================================
+         TOP HEADER
+    ======================================= -->
+
+    <header class="top-header">
+
+
+      <!-- DESKTOP COLLAPSE -->
+
+      <button
+        class="menu-button desktop-menu"
+        type="button"
+        (click)="toggleSidebar()"
+        title="Toggle sidebar"
+      >
+
+        <i class="fas fa-bars"></i>
+
+      </button>
+
+
+      <!-- MOBILE MENU -->
+
+      <button
+        class="menu-button mobile-menu"
+        type="button"
+        (click)="openMobileSidebar()"
+        title="Open menu"
+      >
+
+        <i class="fas fa-bars"></i>
+
+      </button>
+
+
+      <!-- HEADER TITLE -->
+
+      <div class="header-title">
+
+        <span>
+          Association Administration
+        </span>
+
+      </div>
+
+
+      <!-- USER -->
+
+      <div class="header-user">
+
+
+        <div class="avatar">
+
+          <i class="fas fa-user"></i>
+
+        </div>
+
+
+        <div class="user-details">
+
+          <strong>
+            {{ fullName || 'Association User' }}
+          </strong>
+
+          <small>
+            {{ role }}
+          </small>
+
+        </div>
+
+
+      </div>
+
+
+    </header>
+
+
+    <!-- ======================================
+         PAGE CONTENT
+    ======================================= -->
+
+    <section class="content">
+
+      <router-outlet></router-outlet>
+
+    </section>
+
+
+  </main>
+
+
+</div>
