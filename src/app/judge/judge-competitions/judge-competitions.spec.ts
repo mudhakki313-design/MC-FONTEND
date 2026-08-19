@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChiefLayout } from './chief-layout';
+import { JudgeCompetitions } from './judge-competitions';
 
-describe('ChiefLayout', () => {
-  let component: ChiefLayout;
-  let fixture: ComponentFixture<ChiefLayout>;
+describe('JudgeCompetitions', () => {
+  let component: JudgeCompetitions;
+  let fixture: ComponentFixture<JudgeCompetitions>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChiefLayout]
+      imports: [JudgeCompetitions]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ChiefLayout);
+    fixture = TestBed.createComponent(JudgeCompetitions);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

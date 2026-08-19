@@ -1,0 +1,665 @@
+<div class="page-header">
+
+  <div>
+
+    <div class="eyebrow">
+      <i class="fas fa-trophy"></i>
+      Competition Results
+    </div>
+
+    <h1>Chief Judge Results</h1>
+
+    <p>
+      Generate, review and manage final competition rankings.
+    </p>
+
+  </div>
+
+
+  <div class="header-icon">
+
+    <i class="fas fa-ranking-star"></i>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     FILTER PANEL
+========================================================= -->
+
+<div class="filter-card">
+
+  <div class="filter-heading">
+
+    <div class="filter-title">
+
+      <div class="filter-icon">
+        <i class="fas fa-sliders"></i>
+      </div>
+
+      <div>
+
+        <h3>Result Selection</h3>
+
+        <span>
+          Select competition and Juzuu
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="filters">
+
+    <!-- Competition -->
+
+    <div class="form-group">
+
+      <label>
+        Competition
+      </label>
+
+      <div class="select-wrapper">
+
+        <i class="fas fa-trophy"></i>
+
+        <select
+          [(ngModel)]="selectedCompetitionId"
+        >
+
+          <option [ngValue]="null">
+            Select competition
+          </option>
+
+          @for (
+            competition of competitions;
+            track competition.id
+          ) {
+
+            <option
+              [ngValue]="competition.id"
+            >
+              {{ competition.title }}
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <!-- Juzuu -->
+
+    <div class="form-group">
+
+      <label>
+        Juzuu
+      </label>
+
+      <div class="select-wrapper">
+
+        <i class="fas fa-book-quran"></i>
+
+        <select
+          [(ngModel)]="selectedJuzuu"
+        >
+
+          <option value="">
+            Select Juzuu
+          </option>
+
+          @for (
+            juzuu of juzuuList;
+            track juzuu
+          ) {
+
+            <option [value]="juzuu">
+              {{ formatJuzuu(juzuu) }}
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <!-- Load -->
+
+    <button
+      class="btn btn-outline"
+      type="button"
+      (click)="loadResults()"
+      [disabled]="loading"
+    >
+
+      <i class="fas fa-rotate"></i>
+
+      {{ loading ? 'Loading...' : 'Load Results' }}
+
+    </button>
+
+
+    <!-- Generate -->
+
+    <button
+      class="btn btn-primary"
+      type="button"
+      (click)="generateResults()"
+      [disabled]="generating"
+    >
+
+      <i class="fas fa-wand-magic-sparkles"></i>
+
+      {{
+        generating
+          ? 'Generating...'
+          : 'Generate Results'
+      }}
+
+    </button>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     SUMMARY
+========================================================= -->
+
+@if (results.length > 0) {
+
+  <div class="summary-grid">
+
+    <div class="summary-card">
+
+      <div class="summary-icon participants">
+        <i class="fas fa-users"></i>
+      </div>
+
+      <div>
+
+        <span>Total Participants</span>
+
+        <strong>
+          {{ results.length }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon winner">
+        <i class="fas fa-crown"></i>
+      </div>
+
+      <div>
+
+        <span>Champion</span>
+
+        <strong>
+          {{ results[0]?.participant || '—' }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon score">
+        <i class="fas fa-star"></i>
+      </div>
+
+      <div>
+
+        <span>Highest Score</span>
+
+        <strong>
+          {{ results[0]?.totalScore | number:'1.2-2' }}
+        </strong>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}
+
+
+
+<!-- =========================================================
+     RESULTS TABLE
+========================================================= -->
+
+<div class="results-card">
+
+  <div class="card-header">
+
+    <div>
+
+      <h2>
+        <i class="fas fa-ranking-star"></i>
+        Final Ranking
+      </h2>
+
+      <p>
+        Official generated results for the selected competition.
+      </p>
+
+    </div>
+
+
+    @if (results.length > 0) {
+
+      <div class="result-badge">
+
+        <i class="fas fa-check-circle"></i>
+
+        Results Available
+
+      </div>
+
+    }
+
+  </div>
+
+
+
+  @if (loading) {
+
+    <div class="loading-state">
+
+      <div class="spinner"></div>
+
+      <p>
+        Loading competition results...
+      </p>
+
+    </div>
+
+  }
+
+
+  @else if (results.length === 0) {
+
+    <div class="empty-state">
+
+      <div class="empty-icon">
+
+        <i class="fas fa-ranking-star"></i>
+
+      </div>
+
+      <h3>
+        No Results Available
+      </h3>
+
+      <p>
+        Select a competition and Juzuu, then load or generate the results.
+      </p>
+
+    </div>
+
+  }
+
+
+  @else {
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Rank
+            </th>
+
+            <th>
+              Participant
+            </th>
+
+            <th>
+              Madrasa
+            </th>
+
+            <th>
+              Competition
+            </th>
+
+            <th>
+              Juzuu
+            </th>
+
+            <th>
+              Total Score
+            </th>
+
+            <th>
+              Action
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          @for (
+            result of results;
+            track result.resultId
+          ) {
+
+            <tr>
+
+              <td>
+
+                <div
+                  class="rank"
+                  [ngClass]="getRankClass(result.rank)"
+                >
+
+                  @if (result.rank === 1) {
+
+                    <i class="fas fa-crown"></i>
+
+                  }
+
+                  {{ result.rank }}
+
+                </div>
+
+              </td>
+
+
+              <td>
+
+                <div class="participant-cell">
+
+                  <div class="participant-avatar">
+
+                    {{ result.participant.charAt(0).toUpperCase() }}
+
+                  </div>
+
+                  <div>
+
+                    <strong>
+                      {{ result.participant }}
+                    </strong>
+
+                    <span>
+                      Participant #{{ result.participantId }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+
+              <td>
+
+                <span class="madrasa-name">
+                  {{ result.madrasa }}
+                </span>
+
+              </td>
+
+
+              <td>
+
+                <span class="competition-name">
+                  {{ result.competition }}
+                </span>
+
+              </td>
+
+
+              <td>
+
+                <span class="juzuu-badge">
+
+                  <i class="fas fa-book-quran"></i>
+
+                  {{ formatJuzuu(result.juzuu) }}
+
+                </span>
+
+              </td>
+
+
+              <td>
+
+                <strong class="total-score">
+
+                  {{ result.totalScore | number:'1.2-2' }}
+
+                  <small>/ 100</small>
+
+                </strong>
+
+              </td>
+
+
+              <td>
+
+                <button
+                  type="button"
+                  class="edit-btn"
+                  (click)="openEdit(result)"
+                >
+
+                  <i class="fas fa-pen-to-square"></i>
+
+                  Edit
+
+                </button>
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  }
+
+</div>
+
+
+
+<!-- =========================================================
+     EDIT MODAL
+========================================================= -->
+
+@if (editing && editingResult) {
+
+  <div
+    class="modal-backdrop"
+    (click)="closeEdit()"
+  >
+
+    <div
+      class="edit-modal"
+      (click)="$event.stopPropagation()"
+    >
+
+      <div class="modal-header">
+
+        <div>
+
+          <div class="modal-icon">
+            <i class="fas fa-pen-to-square"></i>
+          </div>
+
+          <div>
+
+            <h2>
+              Edit Result
+            </h2>
+
+            <p>
+              Correct the result if an accidental error occurred.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="close-btn"
+          (click)="closeEdit()"
+        >
+
+          <i class="fas fa-xmark"></i>
+
+        </button>
+
+      </div>
+
+
+      <div class="participant-preview">
+
+        <div class="preview-avatar">
+
+          {{ editingResult.participant.charAt(0).toUpperCase() }}
+
+        </div>
+
+        <div>
+
+          <strong>
+            {{ editingResult.participant }}
+          </strong>
+
+          <span>
+            {{ editingResult.madrasa }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="edit-form">
+
+        <div class="form-group">
+
+          <label>
+            Total Score
+          </label>
+
+          <div class="input-wrapper">
+
+            <i class="fas fa-star"></i>
+
+            <input
+              type="number"
+              min="0"
+              max="100"
+              step="0.01"
+              [(ngModel)]="editTotalScore"
+            />
+
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Rank
+          </label>
+
+          <div class="input-wrapper">
+
+            <i class="fas fa-ranking-star"></i>
+
+            <input
+              type="number"
+              min="1"
+              [(ngModel)]="editRank"
+            />
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="edit-warning">
+
+        <i class="fas fa-triangle-exclamation"></i>
+
+        <span>
+          Only make changes when a result was entered incorrectly.
+        </span>
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn btn-cancel"
+          (click)="closeEdit()"
+        >
+
+          Cancel
+
+        </button>
+
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="saveEdit()"
+        >
+
+          <i class="fas fa-floppy-disk"></i>
+
+          Save Changes
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

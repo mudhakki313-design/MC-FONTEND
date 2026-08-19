@@ -50,7 +50,8 @@ export class Participants implements OnInit {
   // =====================================
   // DATA
   // =====================================
-
+  approvingId: number | null = null;
+rejectingId: number | null = null;
   participants: Participant[] = [];
 
   filteredParticipants: Participant[] = [];
@@ -596,49 +597,53 @@ export class Participants implements OnInit {
 // SCREENING - APPROVE
 // =====================================
 
-approveParticipant(participant: Participant): void {
+  approveParticipant(participant: Participant): void {
 
-  if (participant.status !== 'PENDING') {
+  if (this.approvingId !== null) {
     return;
   }
 
-  this.alert.confirm(
-    'Approve Participant?',
-    `Are you sure you want to approve ${participant.fullName}?`
-  ).then((confirmed: boolean) => {
+  const confirmed = confirm(
+    `Approve ${participant.fullName} as a competition participant?`
+  );
 
-    if (!confirmed) {
-      return;
-    }
+  if (!confirmed) {
+    return;
+  }
 
-    this.loading = true;
+  this.approvingId = participant.id;
 
-    this.participantService
-      .approveParticipant(participant.id)
-      .subscribe({
+  this.participantService
+    .approveParticipant(participant.id)
+    .subscribe({
 
-        next: () => {
+      next: (updatedParticipant) => {
 
-          this.alert.success(
-            'Participant Approved',
-            `${participant.fullName} has been approved successfully.`
-          );
+        participant.status = updatedParticipant.status;
 
-          this.loadData();
+        this.approvingId = null;
 
-        },
+        this.applyFilters();
 
-        error: (error) => {
+      },
 
-          this.loading = false;
+      error: (error) => {
 
-          this.showError(error);
+        console.error(
+          'Failed to approve participant:',
+          error
+        );
 
-        }
+        this.approvingId = null;
 
-      });
+        alert(
+          error?.error?.message ||
+          'Failed to approve participant.'
+        );
 
-  });
+      }
+
+    });
 
 }
 
@@ -646,50 +651,53 @@ approveParticipant(participant: Participant): void {
 // =====================================
 // SCREENING - REJECT
 // =====================================
-
 rejectParticipant(participant: Participant): void {
 
-  if (participant.status !== 'PENDING') {
+  if (this.rejectingId !== null) {
     return;
   }
 
-  this.alert.confirm(
-    'Reject Participant?',
-    `Are you sure you want to reject ${participant.fullName}?`
-  ).then((confirmed: boolean) => {
+  const confirmed = confirm(
+    `Reject ${participant.fullName} from this competition?`
+  );
 
-    if (!confirmed) {
-      return;
-    }
+  if (!confirmed) {
+    return;
+  }
 
-    this.loading = true;
+  this.rejectingId = participant.id;
 
-    this.participantService
-      .rejectParticipant(participant.id)
-      .subscribe({
+  this.participantService
+    .rejectParticipant(participant.id)
+    .subscribe({
 
-        next: () => {
+      next: (updatedParticipant) => {
 
-          this.alert.success(
-            'Participant Rejected',
-            `${participant.fullName} has been rejected successfully.`
-          );
+        participant.status = updatedParticipant.status;
 
-          this.loadData();
+        this.rejectingId = null;
 
-        },
+        this.applyFilters();
 
-        error: (error) => {
+      },
 
-          this.loading = false;
+      error: (error) => {
 
-          this.showError(error);
+        console.error(
+          'Failed to reject participant:',
+          error
+        );
 
-        }
+        this.rejectingId = null;
 
-      });
+        alert(
+          error?.error?.message ||
+          'Failed to reject participant.'
+        );
 
-  });
+      }
+
+    });
 
 }
 
@@ -782,5 +790,6 @@ rejectParticipant(participant: Participant): void {
     ).length;
 
   }
+
 
 }

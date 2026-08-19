@@ -1,0 +1,1237 @@
+
+
+<div class="results-page">
+
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+
+  <div class="page-header">
+
+    <div class="header-content">
+
+      <span class="eyebrow">
+        ASSOCIATION MANAGEMENT
+      </span>
+
+      <h1>
+        Competition Results
+      </h1>
+
+      <p>
+        Monitor participant scores, performance and final rankings.
+      </p>
+
+    </div>
+
+    <div class="header-status">
+
+      <div class="live-indicator">
+
+        <span class="live-dot"></span>
+
+        Live Results
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       SUMMARY CARDS
+  ====================================================== -->
+
+  <div class="summary-grid">
+
+
+    <!-- PARTICIPANTS -->
+
+    <div class="summary-card">
+
+      <div class="summary-icon participants">
+
+        <i class="fas fa-users"></i>
+
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          Participants
+        </span>
+
+        <strong>
+          {{ results.length }}
+        </strong>
+
+        <small>
+          Completed results
+        </small>
+
+      </div>
+
+    </div>
+
+
+    <!-- SCORED -->
+
+    <div class="summary-card">
+
+      <div class="summary-icon scores">
+
+        <i class="fas fa-chart-column"></i>
+
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          Scored
+        </span>
+
+        <strong>
+          {{ scoredCount }}
+        </strong>
+
+        <small>
+          Participants with scores
+        </small>
+
+      </div>
+
+    </div>
+
+
+    <!-- HIGHEST SCORE -->
+
+    <div class="summary-card">
+
+      <div class="summary-icon winner">
+
+        <i class="fas fa-trophy"></i>
+
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          Highest Score
+        </span>
+
+        <strong>
+          {{ highestScore }}
+        </strong>
+
+        <small>
+          Out of 100
+        </small>
+
+      </div>
+
+    </div>
+
+
+    <!-- COMPLETION -->
+
+    <div class="summary-card">
+
+      <div class="summary-icon completion">
+
+        <i class="fas fa-circle-check"></i>
+
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          Completion
+        </span>
+
+        <strong>
+          {{ completionPercentage }}%
+        </strong>
+
+        <small>
+          Judging completion
+        </small>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       CONTROL PANEL
+  ====================================================== -->
+
+  <div class="control-panel">
+
+
+    <div class="control-left">
+
+      <div class="control-title">
+
+        <div class="control-title-icon">
+
+          <i class="fas fa-ranking-star"></i>
+
+        </div>
+
+        <div>
+
+          <strong>
+            Competition Results
+          </strong>
+
+          <span>
+            Select competition and Juzuu to view rankings
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="filters">
+
+
+      <!-- =================================================
+           COMPETITION
+      ================================================== -->
+
+      <div class="filter-field">
+
+        <label>
+          Competition
+        </label>
+
+        <div class="select-wrapper">
+
+          <i class="fas fa-trophy"></i>
+
+          <select
+            [(ngModel)]="selectedCompetitionId"
+            (ngModelChange)="onCompetitionChange()"
+          >
+
+            <option [ngValue]="'ALL'">
+               Select Competition
+            </option>
+
+           <option
+               *ngFor="let competition of competitions"
+               [ngValue]="competition.id"
+            >
+               {{ competition.title }}
+            </option>
+
+          </select>
+
+          <i class="fas fa-chevron-down arrow"></i>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           JUZUU
+      ================================================== -->
+
+      <div class="filter-field">
+
+        <label>
+          Juzuu
+        </label>
+
+        <div class="select-wrapper">
+
+          <i class="fas fa-book-quran"></i>
+
+          <select
+            [(ngModel)]="selectedJuzuu"
+            (ngModelChange)="onJuzuuChange()"
+           >
+
+            <option [ngValue]="'ALL'">
+            Select Juzuu
+           </option>
+
+           <option
+           *ngFor="let juzuu of juzuuList"
+            [ngValue]="juzuu"
+           >
+           {{ formatJuzuu(juzuu) }}
+           </option>
+
+        </select>
+
+          <i class="fas fa-chevron-down arrow"></i>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           REFRESH
+      ================================================== -->
+
+      <button
+        type="button"
+        class="refresh-btn"
+        title="Refresh Results"
+        (click)="loadResults()"
+        [disabled]="resultsLoading"
+      >
+
+        <i
+          class="fas"
+          [class.fa-rotate]="!resultsLoading"
+          [class.fa-spinner]="resultsLoading"
+          [class.fa-spin]="resultsLoading"
+        ></i>
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       RESULTS CARD
+  ====================================================== -->
+
+  <div class="results-card">
+
+
+    <!-- HEADER -->
+
+    <div class="results-card-header">
+
+      <div>
+
+        <span class="section-label">
+          FINAL RANKING
+        </span>
+
+        <h2>
+          Participant Performance
+        </h2>
+
+      </div>
+
+
+      <div
+        class="selected-info"
+        *ngIf="
+        selectedCompetitionId !== 'ALL' &&
+         selectedJuzuu !== 'ALL'"
+      >
+
+        <span>
+
+          <i class="fas fa-circle"></i>
+
+          {{ formatJuzuu(selectedJuzuu) }}
+
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+         LOADING
+    ================================================== -->
+
+    <div
+      class="loading-state"
+      *ngIf="loading || resultsLoading"
+    >
+
+      <div class="loading-spinner">
+
+        <i class="fas fa-spinner fa-spin"></i>
+
+      </div>
+
+      <strong>
+        Loading results...
+      </strong>
+
+      <span>
+        Please wait while competition results are loaded.
+      </span>
+
+    </div>
+
+
+    <!-- =================================================
+         INITIAL STATE
+    ================================================== -->
+
+    <div
+      class="initial-state"
+      *ngIf="
+      !loading &&
+      !resultsLoading &&
+      (
+      selectedCompetitionId === 'ALL' ||
+      selectedJuzuu === 'ALL'
+      )
+     "
+    >
+
+      <div class="initial-icon">
+
+        <i class="fas fa-ranking-star"></i>
+
+      </div>
+
+      <h3>
+        Select Competition & Juzuu
+      </h3>
+
+      <p>
+        Choose a competition and Juzuu above to view
+        participant rankings and scores.
+      </p>
+
+    </div>
+
+
+    <!-- =================================================
+         EMPTY RESULTS
+    ================================================== -->
+
+    <div
+      class="empty-state"
+      *ngIf="
+       !loading &&
+       !resultsLoading &&
+       selectedCompetitionId !== 'ALL' &&
+       selectedJuzuu !== 'ALL' &&
+       results.length === 0
+       "
+    >
+
+      <div class="empty-icon">
+
+        <i class="fas fa-chart-column"></i>
+
+      </div>
+
+      <h3>
+        No Completed Results
+      </h3>
+
+      <p>
+        No participant has completed all required judging
+        scores for this competition and Juzuu yet.
+      </p>
+
+    </div>
+
+
+    <!-- =================================================
+         RESULTS TABLE
+    ================================================== -->
+
+    <div
+      class="table-wrapper"
+      *ngIf="
+      !loading &&
+      !resultsLoading &&
+      results.length > 0
+      "
+    >
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th class="rank-column">
+              Rank
+            </th>
+
+            <th>
+              Participant
+            </th>
+
+            <th>
+              Madrasa
+            </th>
+
+            <th>
+              Competition
+            </th>
+
+            <th>
+              Juzuu
+            </th>
+
+            <th>
+              Total Score
+            </th>
+
+            <th>
+              Performance
+            </th>
+
+            <th class="action-column">
+              Action
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="let result of results"
+            [class.top-rank]="result.rank <= 3"
+          >
+
+
+            <!-- RANK -->
+
+            <td>
+
+              <div
+                class="rank-badge"
+                [class.first]="result.rank === 1"
+                [class.second]="result.rank === 2"
+                [class.third]="result.rank === 3"
+              >
+
+                <i
+                  *ngIf="result.rank === 1"
+                  class="fas fa-crown"
+                ></i>
+
+                <span>
+                  {{ result.rank }}
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <!-- PARTICIPANT -->
+
+            <td>
+
+              <div class="participant-cell">
+
+                <div class="participant-avatar">
+
+                  <i class="fas fa-user"></i>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    {{ result.participant }}
+                  </strong>
+
+                  <small>
+                    Participant #{{ result.participantId }}
+                  </small>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <!-- MADRASA -->
+
+            <td>
+
+              <div class="madrasa-cell">
+
+                <i class="fas fa-school"></i>
+
+                <span>
+                  {{ result.madrasa }}
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <!-- COMPETITION -->
+
+            <td>
+
+              <span class="competition-cell">
+
+                {{ result.competition }}
+
+              </span>
+
+            </td>
+
+
+            <!-- JUZUU -->
+
+            <td>
+
+              <span class="juzuu-badge">
+
+                <i class="fas fa-book-quran"></i>
+
+                {{ formatJuzuu(result.juzuu) }}
+
+              </span>
+
+            </td>
+
+
+            <!-- SCORE -->
+
+            <td>
+
+              <div class="score-cell">
+
+                <strong>
+                  {{ result.totalScore }}
+                </strong>
+
+                <span>
+                  / 100
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <!-- PERFORMANCE -->
+
+            <td>
+
+              <div class="performance-cell">
+
+                <div class="progress">
+
+                  <div
+                    class="progress-bar"
+                    [style.width.%]="result.totalScore"
+                  ></div>
+
+                </div>
+
+                <span>
+                  {{ result.totalScore }}%
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <!-- ACTION -->
+
+            <td>
+
+              <div class="row-actions">
+
+                <button
+                  type="button"
+                  class="view-score-btn"
+                  title="View Score Details"
+                  (click)="openScoreWindow(result)"
+                >
+
+                  <i class="fas fa-chart-pie"></i>
+
+                  <span>
+                    View Scores
+                  </span>
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     PREMIUM SCORE WINDOW
+====================================================== -->
+
+<div
+  class="score-window-overlay"
+  *ngIf="showScoreWindow"
+  (click)="closeScoreWindow()"
+>
+
+
+  <div
+    class="score-window"
+    (click)="$event.stopPropagation()"
+  >
+
+
+    <!-- =================================================
+         HEADER
+    ================================================== -->
+
+    <div class="score-window-header">
+
+      <div class="window-title">
+
+        <div class="window-avatar">
+
+          <i class="fas fa-user"></i>
+
+        </div>
+
+        <div>
+
+          <span>
+            PARTICIPANT SCORE PROFILE
+          </span>
+
+          <h2>
+            {{ selectedParticipant?.participant }}
+          </h2>
+
+          <small>
+
+            {{ selectedParticipant?.madrasa }}
+
+            <span class="separator">
+              •
+            </span>
+
+            {{ selectedParticipant?.juzuu
+              ? formatJuzuu(selectedParticipant!.juzuu)
+              : ''
+            }}
+
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="window-close"
+        (click)="closeScoreWindow()"
+      >
+
+        <i class="fas fa-xmark"></i>
+
+      </button>
+
+    </div>
+
+
+    <!-- =================================================
+         TABS
+    ================================================== -->
+
+    <div class="window-tabs">
+
+      <button
+        type="button"
+        [class.active]="scoreWindowTab === 'overview'"
+        (click)="scoreWindowTab = 'overview'"
+      >
+
+        <i class="fas fa-chart-pie"></i>
+
+        Overview
+
+      </button>
+
+
+      <button
+        type="button"
+        [class.active]="scoreWindowTab === 'scores'"
+        (click)="scoreWindowTab = 'scores'"
+      >
+
+        <i class="fas fa-list-check"></i>
+
+        Score Breakdown
+
+      </button>
+
+
+      <button
+        type="button"
+        [class.active]="scoreWindowTab === 'result'"
+        (click)="scoreWindowTab = 'result'"
+      >
+
+        <i class="fas fa-ranking-star"></i>
+
+        Final Result
+
+      </button>
+
+    </div>
+
+
+    <!-- =================================================
+         BODY
+    ================================================== -->
+
+    <div class="score-window-body">
+
+
+      <!-- =================================================
+           OVERVIEW
+      ================================================== -->
+
+      <div
+        class="window-tab-content"
+        *ngIf="scoreWindowTab === 'overview'"
+      >
+
+        <div class="overview-layout">
+
+
+          <!-- TOTAL SCORE -->
+
+          <div class="total-score-card">
+
+            <div class="score-ring">
+
+              <div>
+
+                <strong>
+                  {{ selectedParticipant?.totalScore }}
+                </strong>
+
+                <span>
+                  /100
+                </span>
+
+              </div>
+
+            </div>
+
+            <span class="score-caption">
+              FINAL SCORE
+            </span>
+
+            <strong class="rank-text">
+
+              Rank
+              #{{ selectedParticipant?.rank }}
+
+            </strong>
+
+          </div>
+
+
+          <!-- COMPONENT SUMMARY -->
+
+          <div class="component-summary">
+
+            <div class="component-title">
+
+              <span>
+                SCORE COMPONENTS
+              </span>
+
+              <small>
+                Maximum 100 points
+              </small>
+
+            </div>
+
+
+            <!-- MEMORIZATION -->
+
+            <div class="component-row">
+
+              <div class="component-info">
+
+                <div class="component-icon memorization">
+
+                  <i class="fas fa-brain"></i>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    Memorization
+                  </strong>
+
+                  <small>
+                    Maximum 50 points
+                  </small>
+
+                </div>
+
+              </div>
+
+              <strong class="component-score">
+
+                {{ getScoreByType('MEMORIZATION') }}
+
+                <span>
+                  /50
+                </span>
+
+              </strong>
+
+            </div>
+
+
+            <!-- TAJWEED -->
+
+            <div class="component-row">
+
+              <div class="component-info">
+
+                <div class="component-icon tajweed">
+
+                  <i class="fas fa-book-quran"></i>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    Tajweed
+                  </strong>
+
+                  <small>
+                    Maximum 30 points
+                  </small>
+
+                </div>
+
+              </div>
+
+              <strong class="component-score">
+
+                {{ getScoreByType('TAJWEED') }}
+
+                <span>
+                  /30
+                </span>
+
+              </strong>
+
+            </div>
+
+
+            <!-- MAKHARIJ -->
+
+            <div class="component-row">
+
+              <div class="component-info">
+
+                <div class="component-icon makharij">
+
+                  <i class="fas fa-microphone-lines"></i>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    Makharij
+                  </strong>
+
+                  <small>
+                    Maximum 20 points
+                  </small>
+
+                </div>
+
+              </div>
+
+              <strong class="component-score">
+
+                {{ getScoreByType('MAKHARIJ') }}
+
+                <span>
+                  /20
+                </span>
+
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           SCORE BREAKDOWN
+      ================================================== -->
+
+      <div
+        class="window-tab-content"
+        *ngIf="scoreWindowTab === 'scores'"
+      >
+
+        <div class="score-breakdown-header">
+
+          <div>
+
+            <span class="section-label">
+              JUDGES
+            </span>
+
+            <h3>
+              Submitted Scores
+            </h3>
+
+          </div>
+
+          <span class="judge-count">
+
+            {{ selectedScores.length }} / 3
+
+          </span>
+
+        </div>
+
+
+        <div class="judge-score-list">
+
+
+          <!-- JUDGE SCORES -->
+
+          <div
+            class="judge-score-card"
+            *ngFor="let score of selectedScores"
+          >
+
+            <div class="judge-avatar">
+
+              <i class="fas fa-user-tie"></i>
+
+            </div>
+
+
+            <div class="judge-details">
+
+              <strong>
+                {{ score.judge }}
+              </strong>
+
+              <span>
+                {{ formatJudgeType(score.judgeType) }}
+              </span>
+
+            </div>
+
+
+            <div class="judge-score">
+
+              <strong>
+                {{ score.score }}
+              </strong>
+
+              <span>
+
+                /
+                {{ getMaximumScore(score.judgeType) }}
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- NO SCORES -->
+
+          <div
+            class="no-scores"
+            *ngIf="selectedScores.length === 0"
+          >
+
+            <i class="fas fa-clipboard-list"></i>
+
+            <strong>
+              No scores available
+            </strong>
+
+            <span>
+              Judges have not submitted scores for this participant.
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           FINAL RESULT
+      ================================================== -->
+
+      <div
+        class="window-tab-content"
+        *ngIf="scoreWindowTab === 'result'"
+      >
+
+        <div class="final-result">
+
+          <div class="result-crown">
+
+            <i class="fas fa-trophy"></i>
+
+          </div>
+
+          <span class="result-label">
+            FINAL RESULT
+          </span>
+
+          <h3>
+            {{ selectedParticipant?.participant }}
+          </h3>
+
+          <div class="final-score">
+
+            {{ selectedParticipant?.totalScore }}
+
+            <span>
+              / 100
+            </span>
+
+          </div>
+
+          <div class="final-rank">
+
+            <span>
+              FINAL RANK
+            </span>
+
+            <strong>
+              #{{ selectedParticipant?.rank }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="result-summary-grid">
+
+          <div>
+
+            <span>
+              Competition
+            </span>
+
+            <strong>
+              {{ selectedParticipant?.competition }}
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Madrasa
+            </span>
+
+            <strong>
+              {{ selectedParticipant?.madrasa }}
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Juzuu
+            </span>
+
+            <strong>
+
+              {{ selectedParticipant?.juzuu
+                ? formatJuzuu(selectedParticipant!.juzuu)
+                : ''
+              }}
+
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+         FOOTER
+    ================================================== -->
+
+    <div class="score-window-footer">
+
+      <div class="footer-status">
+
+        <span class="verified-dot"></span>
+
+        Scores verified from judging records
+
+      </div>
+
+      <button
+        type="button"
+        class="window-done-btn"
+        (click)="closeScoreWindow()"
+      >
+
+        Done
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

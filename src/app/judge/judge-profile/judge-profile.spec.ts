@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { JudgeLayout } from './judge-layout';
+import { JudgeProfile } from './judge-profile';
 
-describe('JudgeLayout', () => {
-  let component: JudgeLayout;
-  let fixture: ComponentFixture<JudgeLayout>;
+describe('JudgeProfile', () => {
+  let component: JudgeProfile;
+  let fixture: ComponentFixture<JudgeProfile>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [JudgeLayout]
+      imports: [JudgeProfile]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(JudgeLayout);
+    fixture = TestBed.createComponent(JudgeProfile);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

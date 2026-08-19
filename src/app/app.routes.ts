@@ -14,6 +14,16 @@ import { JudgeDashboard } from './judge/judge-dashboard/judge-dashboard';
 import { Judges } from './association/judges/judges';
 import { Participants } from './association/participants/participants';
 import { Competitions } from './association/competitions/competitions';
+import { Results } from './association/results/results';
+import { ChiefDaashboard } from './chief/chief-daashboard/chief-daashboard';
+import { ChiefParticipants } from './chief/chief-participants/chief-participants';
+import { ChiefProfile } from './chief/chief-profile/chief-profile';
+import { ChiefResults } from './chief/chief-results/chief-results';
+import { ChiefScores } from './chief/chief-scores/chief-scores';
+import { MyScore } from './judge/my-score/my-score';
+import { JudgeCompetitions } from './judge/judge-competitions/judge-competitions';
+import { JudgeParticipants } from './judge/judge-participants/judge-participants';
+import { JudgeProfile } from './judge/judge-profile/judge-profile';
 
 
 export const routes: Routes = [
@@ -29,7 +39,8 @@ export const routes: Routes = [
       {path: 'madrasa',component: Madrasas},
       {path: 'judges',component:Judges},
       {path: 'participants',component: Participants},
-      {path: 'competitions',component: Competitions}
+      {path: 'competitions',component: Competitions},
+      {path: 'results',component: Results}
     ]
 
   },
@@ -40,14 +51,14 @@ export const routes: Routes = [
   {
     path: 'chief',
     component: ChiefLayout,
-
     children: [
 
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      }
+      {path: '',redirectTo: 'dashboard',pathMatch: 'full'},
+      {path: 'dashboard',component:ChiefDaashboard},
+      {path: 'profile',component:ChiefProfile},
+      {path: 'participants', component:ChiefParticipants},
+      {path: 'results',component:ChiefResults},
+      {path: 'scores',component:ChiefScores}
 
       // Tutakuja kuongeza Chief Dashboard hapa
     ]
@@ -63,16 +74,12 @@ export const routes: Routes = [
 
     children: [
 
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      },
-
-      {
-        path: 'dashboard',
-        component: JudgeDashboard
-      }
+      {path: '',redirectTo: 'dashboard',pathMatch: 'full'},
+      {path: 'dashboard',component: JudgeDashboard},
+      {path: 'scores',component: MyScore},
+      {path: 'competition',component: JudgeCompetitions},
+      {path: 'participants',component: JudgeParticipants},
+      {path: 'profile',component: JudgeProfile}
 
     ]
 

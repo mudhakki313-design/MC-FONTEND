@@ -165,5 +165,13 @@ rejectParticipant(id: number) {
   );
 
 }
+getParticipantsForJudge(): Observable<Participant[]> {
+
+  return this.http.get<Participant[]>(
+    `${this.apiUrl}/judge`
+  );
+
+}
+
 
 }

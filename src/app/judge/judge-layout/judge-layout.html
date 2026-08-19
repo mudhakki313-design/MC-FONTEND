@@ -1,1 +1,259 @@
-<p>judge-layout works!</p>
+<div class="judge-layout">
+
+
+  <!-- ===================================================== -->
+  <!-- SIDEBAR OVERLAY - MOBILE -->
+  <!-- ===================================================== -->
+
+  @if (sidebarOpen) {
+
+    <div
+      class="sidebar-overlay"
+      (click)="closeSidebar()">
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- SIDEBAR -->
+  <!-- ===================================================== -->
+
+  <aside
+    class="sidebar"
+    [class.sidebar-open]="sidebarOpen">
+
+
+    <!-- LOGO -->
+    <div class="sidebar-brand">
+
+      <div class="brand-icon">
+        <i class="fa-solid fa-quran"></i>
+      </div>
+
+      <div class="brand-text">
+
+        <h2>IMCMS</h2>
+
+        <span>Judge Panel</span>
+
+      </div>
+
+    </div>
+
+
+    <!-- JUDGE PROFILE -->
+    <div class="judge-profile">
+
+      <div class="profile-avatar">
+
+        <i class="fa-solid fa-user-tie"></i>
+
+      </div>
+
+      <div class="profile-info">
+
+        <strong>
+          {{ user?.fullName || 'Judge' }}
+        </strong>
+
+        <span>
+          {{ user?.role || 'JUDGE' }}
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- NAVIGATION -->
+    <nav class="sidebar-nav">
+
+
+      <div class="nav-section-title">
+        JUDGING
+      </div>
+
+
+      <!-- Dashboard -->
+      <a
+        routerLink="/judge/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="closeSidebar()">
+
+        <i class="fa-solid fa-gauge-high"></i>
+
+        <span>Dashboard</span>
+
+      </a>
+
+
+      <!-- Participants -->
+      <a
+        routerLink="/judge/participants"
+        routerLinkActive="active"
+        (click)="closeSidebar()">
+
+        <i class="fa-solid fa-users"></i>
+
+        <span>Participants</span>
+
+      </a>
+
+
+      <!-- Scores -->
+      <a
+        routerLink="/judge/scores"
+        routerLinkActive="active"
+        (click)="closeSidebar()">
+
+        <i class="fa-solid fa-pen-to-square"></i>
+
+        <span>My Scores</span>
+
+      </a>
+
+
+      <!-- Competition -->
+      <a
+        routerLink="/judge/competition"
+        routerLinkActive="active"
+        (click)="closeSidebar()">
+
+        <i class="fa-solid fa-trophy"></i>
+
+        <span>Competition</span>
+
+      </a>
+
+
+      <div class="nav-section-title second">
+        ACCOUNT
+      </div>
+
+
+      <!-- Profile -->
+      <a
+        routerLink="/judge/profile"
+        routerLinkActive="active"
+        (click)="closeSidebar()">
+
+        <i class="fa-solid fa-user"></i>
+
+        <span>My Profile</span>
+
+      </a>
+
+
+    </nav>
+
+
+    <!-- SIDEBAR FOOTER -->
+    <div class="sidebar-footer">
+
+      <button
+        type="button"
+        class="logout-btn"
+        (click)="logout()">
+
+        <i class="fa-solid fa-right-from-bracket"></i>
+
+        <span>Logout</span>
+
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN -->
+  <!-- ===================================================== -->
+
+  <main class="main-content">
+
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+
+
+      <div class="topbar-left">
+
+        <button
+          type="button"
+          class="menu-btn"
+          (click)="toggleSidebar()">
+
+          <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+
+        <div class="page-context">
+
+          <span>Judge Panel</span>
+
+          <h1>Qur'an Competition</h1>
+
+        </div>
+
+      </div>
+
+
+      <div class="topbar-right">
+
+
+        <!-- Notification -->
+        <button
+          type="button"
+          class="icon-btn"
+          title="Notifications">
+
+          <i class="fa-regular fa-bell"></i>
+
+          <span class="notification-dot"></span>
+
+        </button>
+
+
+        <!-- User -->
+        <div class="top-user">
+
+          <div class="top-user-avatar">
+
+            <i class="fa-solid fa-user"></i>
+
+          </div>
+
+          <div class="top-user-info">
+
+            <strong>
+              {{ user?.fullName || 'Judge' }}
+            </strong>
+
+            <span>
+              {{ user?.role || 'JUDGE' }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- PAGE CONTENT -->
+    <section class="page-content">
+
+      <router-outlet></router-outlet>
+
+    </section>
+
+
+  </main>
+
+</div>

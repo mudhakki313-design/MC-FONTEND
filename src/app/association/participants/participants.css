@@ -1215,3 +1215,29 @@ tbody tr:hover {
   background: #FFF0EF;
   color: #B42318;
 }
+
+
+.action-btn.approve {
+  background: #e8f7f1;
+  color: #0b8f63;
+}
+
+.action-btn.approve:hover {
+  background: #0b8f63;
+  color: #ffffff;
+}
+
+.action-btn.reject {
+  background: #fff0f0;
+  color: #d33b3b;
+}
+
+.action-btn.reject:hover {
+  background: #d33b3b;
+  color: #ffffff;
+}
+
+.action-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

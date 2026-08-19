@@ -22,16 +22,13 @@
 
     </div>
 
-
     <button
       class="primary-btn"
+      type="button"
       (click)="openCreate()"
     >
-
       <i class="fas fa-user-plus"></i>
-
       Add Participant
-
     </button>
 
   </div>
@@ -42,7 +39,6 @@
   =========================================== -->
 
   <div class="stats-grid">
-
 
     <div class="stat-card">
 
@@ -152,6 +148,7 @@
 
     <div class="filter-group">
 
+      <!-- STATUS FILTER -->
 
       <div class="filter-box">
 
@@ -183,6 +180,8 @@
       </div>
 
 
+      <!-- JUZUU FILTER -->
+
       <div class="filter-box">
 
         <i class="fas fa-book-quran"></i>
@@ -200,15 +199,12 @@
             *ngFor="let juzuu of juzuuList"
             [value]="juzuu"
           >
-
             {{ juzuu.replace('_', ' ') }}
-
           </option>
 
         </select>
 
       </div>
-
 
     </div>
 
@@ -222,6 +218,8 @@
   <div class="table-card">
 
 
+    <!-- LOADING -->
+
     <div
       class="loading"
       *ngIf="loading"
@@ -233,6 +231,8 @@
 
     </div>
 
+
+    <!-- EMPTY -->
 
     <div
       class="empty"
@@ -254,6 +254,8 @@
 
     </div>
 
+
+    <!-- TABLE -->
 
     <div
       class="table-wrapper"
@@ -306,13 +308,13 @@
 
           <tr
             *ngFor="
-              let participant
-              of filteredParticipants
+              let participant of filteredParticipants
             "
           >
 
-
-            <!-- PARTICIPANT -->
+            <!-- ==================================
+                 PARTICIPANT
+            =================================== -->
 
             <td>
 
@@ -341,7 +343,9 @@
             </td>
 
 
-            <!-- AGE / GENDER -->
+            <!-- ==================================
+                 AGE / GENDER
+            =================================== -->
 
             <td>
 
@@ -368,7 +372,9 @@
             </td>
 
 
-            <!-- MADRASA -->
+            <!-- ==================================
+                 MADRASA
+            =================================== -->
 
             <td>
 
@@ -383,7 +389,9 @@
             </td>
 
 
-            <!-- COMPETITION -->
+            <!-- ==================================
+                 COMPETITION
+            =================================== -->
 
             <td>
 
@@ -396,7 +404,9 @@
             </td>
 
 
-            <!-- JUZUU -->
+            <!-- ==================================
+                 JUZUU
+            =================================== -->
 
             <td>
 
@@ -411,7 +421,9 @@
             </td>
 
 
-            <!-- STATUS -->
+            <!-- ==================================
+                 STATUS
+            =================================== -->
 
             <td>
 
@@ -431,70 +443,108 @@
             </td>
 
 
-            <!-- ACTIONS -->
+            <!-- ==================================
+                 ACTIONS
+            =================================== -->
 
-            <!-- ACTIONS -->
+            <td>
 
-<td>
-
-  <div class="actions">
-
-    <!-- EDIT -->
-
-    <button
-      class="action-btn edit"
-      title="Edit"
-      (click)="openEdit(participant)"
-    >
-
-      <i class="fas fa-pen"></i>
-
-    </button>
+              <div class="actions">
 
 
-    <!-- APPROVE -->
+                <!-- ==============================
+                     APPROVE
+                =============================== -->
 
-    <button
-      *ngIf="participant.status === 'PENDING'"
-      class="action-btn approve"
-      title="Approve Participant"
-      (click)="approveParticipant(participant)"
-    >
+                <button
+                  *ngIf="participant.status === 'PENDING'"
+                  type="button"
+                  class="action-btn approve"
+                  title="Approve Participant"
+                  [disabled]="approvingId === participant.id"
+                  (click)="approveParticipant(participant)"
+                >
 
-      <i class="fas fa-check"></i>
+                  <i
+                    class="fas"
+                    [class.fa-check]="
+                      approvingId !== participant.id
+                    "
+                    [class.fa-spinner]="
+                      approvingId === participant.id
+                    "
+                    [class.fa-spin]="
+                      approvingId === participant.id
+                    "
+                  ></i>
 
-    </button>
-
-
-    <!-- REJECT -->
-
-    <button
-      *ngIf="participant.status === 'PENDING'"
-      class="action-btn reject"
-      title="Reject Participant"
-      (click)="rejectParticipant(participant)"
-    >
-
-      <i class="fas fa-xmark"></i>
-
-    </button>
+                </button>
 
 
-    <!-- DELETE -->
+                <!-- ==============================
+                     REJECT
+                =============================== -->
 
-    <button
-      class="action-btn delete"
-      title="Delete"
-      (click)="deleteParticipant(participant)"
-    >
+                <button
+                  *ngIf="participant.status === 'PENDING'"
+                  type="button"
+                  class="action-btn reject"
+                  title="Reject Participant"
+                  [disabled]="rejectingId === participant.id"
+                  (click)="rejectParticipant(participant)"
+                >
 
-      <i class="fas fa-trash"></i>
+                  <i
+                    class="fas"
+                    [class.fa-xmark]="
+                      rejectingId !== participant.id
+                    "
+                    [class.fa-spinner]="
+                      rejectingId === participant.id
+                    "
+                    [class.fa-spin]="
+                      rejectingId === participant.id
+                    "
+                  ></i>
 
-    </button>
+                </button>
 
-  </div>
 
-</td>
+                <!-- ==============================
+                     EDIT
+                =============================== -->
+
+                <button
+                  type="button"
+                  class="action-btn edit"
+                  title="Edit Participant"
+                  (click)="openEdit(participant)"
+                >
+
+                  <i class="fas fa-pen"></i>
+
+                </button>
+
+
+                <!-- ==============================
+                     DELETE
+                =============================== -->
+
+                <button
+                  type="button"
+                  class="action-btn delete"
+                  title="Delete Participant"
+                  (click)="deleteParticipant(participant)"
+                >
+
+                  <i class="fas fa-trash"></i>
+
+                </button>
+
+
+              </div>
+
+            </td>
 
 
           </tr>
@@ -527,7 +577,9 @@
   >
 
 
-    <!-- HEADER -->
+    <!-- ========================================
+         MODAL HEADER
+    ========================================= -->
 
     <div class="modal-header">
 
@@ -551,6 +603,7 @@
 
 
       <button
+        type="button"
         class="close-btn"
         (click)="closeForm()"
       >
@@ -562,10 +615,11 @@
     </div>
 
 
-    <!-- BODY -->
+    <!-- ========================================
+         MODAL BODY
+    ========================================= -->
 
     <div class="modal-body">
-
 
       <div class="form-grid">
 
@@ -704,10 +758,7 @@
             </option>
 
             <option
-              *ngFor="
-                let competition
-                of competitions
-              "
+              *ngFor="let competition of competitions"
               [ngValue]="competition.id"
             >
 
@@ -719,11 +770,12 @@
 
         </div>
 
-
       </div>
 
 
-      <!-- INFO -->
+      <!-- ========================================
+           SCREENING INFO
+      ========================================= -->
 
       <div class="pending-info">
 
@@ -744,11 +796,12 @@
 
       </div>
 
-
     </div>
 
 
-    <!-- FOOTER -->
+    <!-- ========================================
+         MODAL FOOTER
+    ========================================= -->
 
     <div class="modal-footer">
 

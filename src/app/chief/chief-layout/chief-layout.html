@@ -1,1 +1,330 @@
-<p>chief-layout works!</p>
+<div
+  class="chief-layout"
+  [class.sidebar-collapsed]="!sidebarOpen"
+>
+
+
+  <!-- =====================================================
+       SIDEBAR
+  ====================================================== -->
+
+  <aside class="chief-sidebar">
+
+
+    <!-- =================================================
+         BRAND
+    ================================================== -->
+
+    <div class="sidebar-brand">
+
+      <div class="brand-mark">
+
+        <i class="fas fa-book-quran"></i>
+
+      </div>
+
+      <div class="brand-text">
+
+        <strong>
+          QMCMS
+        </strong>
+
+        <span>
+          Chief Judge
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+         NAVIGATION
+    ================================================== -->
+
+    <nav class="sidebar-nav">
+
+
+      <!-- SECTION -->
+
+      <div class="nav-section">
+
+        <span class="nav-section-title">
+          JUDGING
+        </span>
+
+
+        <!-- DASHBOARD -->
+
+        <a
+          routerLink="/chief/dashboard"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-item"
+          title="Dashboard"
+        >
+
+          <span class="nav-icon">
+            <i class="fas fa-chart-pie"></i>
+          </span>
+
+          <span class="nav-label">
+            Dashboard
+          </span>
+
+        </a>
+
+
+        <!-- PARTICIPANTS -->
+
+        <a
+          routerLink="/chief/participants"
+          routerLinkActive="active"
+          class="nav-item"
+          title="Participants"
+        >
+
+          <span class="nav-icon">
+            <i class="fas fa-users"></i>
+          </span>
+
+          <span class="nav-label">
+            Participants
+          </span>
+
+        </a>
+
+
+        <!-- SCORES -->
+
+        <a
+          routerLink="/chief/scores"
+          routerLinkActive="active"
+          class="nav-item"
+          title="Scores"
+        >
+
+          <span class="nav-icon">
+            <i class="fas fa-list-check"></i>
+          </span>
+
+          <span class="nav-label">
+            Scores
+          </span>
+
+        </a>
+
+
+        <!-- RESULTS -->
+
+        <a
+          routerLink="/chief/results"
+          routerLinkActive="active"
+          class="nav-item"
+          title="Final Results"
+        >
+
+          <span class="nav-icon">
+            <i class="fas fa-ranking-star"></i>
+          </span>
+
+          <span class="nav-label">
+            Final Results
+          </span>
+
+        </a>
+
+      </div>
+
+
+      <!-- =================================================
+           ACCOUNT
+      ================================================== -->
+
+      <div class="nav-section account-section">
+
+        <span class="nav-section-title">
+          ACCOUNT
+        </span>
+
+
+        <!-- PROFILE -->
+
+        <a
+          routerLink="/chief/profile"
+          routerLinkActive="active"
+          class="nav-item"
+          title="My Profile"
+        >
+
+          <span class="nav-icon">
+            <i class="fas fa-user-circle"></i>
+          </span>
+
+          <span class="nav-label">
+            My Profile
+          </span>
+
+        </a>
+
+      </div>
+
+    </nav>
+
+
+    <!-- =================================================
+         SIDEBAR FOOTER
+    ================================================== -->
+
+    <div class="sidebar-footer">
+
+
+      <div class="chief-user">
+
+        <div class="user-avatar">
+
+          <i class="fas fa-user-tie"></i>
+
+        </div>
+
+        <div class="user-info">
+
+          <strong>
+            {{ fullName }}
+          </strong>
+
+          <span>
+            Chief Judge
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="logout-btn"
+        (click)="logout()"
+        title="Logout"
+      >
+
+        <i class="fas fa-right-from-bracket"></i>
+
+        <span>
+          Logout
+        </span>
+
+      </button>
+
+    </div>
+
+  </aside>
+
+
+
+  <!-- =====================================================
+       MAIN AREA
+  ====================================================== -->
+
+  <div class="chief-main">
+
+
+    <!-- =================================================
+         TOPBAR
+    ================================================== -->
+
+    <header class="chief-topbar">
+
+
+      <div class="topbar-left">
+
+        <button
+          type="button"
+          class="sidebar-toggle"
+          (click)="toggleSidebar()"
+          title="Toggle Sidebar"
+        >
+
+          <i
+            class="fas"
+            [class.fa-bars]="!sidebarOpen"
+            [class.fa-xmark]="sidebarOpen"
+          ></i>
+
+        </button>
+
+
+        <div class="topbar-title">
+
+          <span>
+            QUR'AN MEMORIZATION COMPETITION
+          </span>
+
+          <strong>
+            Chief Judge Panel
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           TOPBAR RIGHT
+      ================================================== -->
+
+      <div class="topbar-right">
+
+
+        <div class="competition-status">
+
+          <span class="status-dot"></span>
+
+          <span>
+            Judging Active
+          </span>
+
+        </div>
+
+
+        <div class="topbar-user">
+
+          <div class="topbar-avatar">
+
+            <i class="fas fa-user-tie"></i>
+
+          </div>
+
+          <div>
+
+            <strong>
+              {{ fullName }}
+            </strong>
+
+            <span>
+              Chief Judge
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- =================================================
+         CONTENT
+    ================================================== -->
+
+    <main class="chief-content">
+
+      <router-outlet></router-outlet>
+
+    </main>
+
+  </div>
+
+</div>

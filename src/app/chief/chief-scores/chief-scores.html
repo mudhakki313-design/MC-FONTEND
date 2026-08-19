@@ -1,0 +1,468 @@
+<div class="page-header">
+
+  <div>
+
+    <div class="eyebrow">
+      <i class="fas fa-trophy"></i>
+      Chief Judge Panel
+    </div>
+
+    <h1>Competition Results</h1>
+
+    <p>
+      Review scores and generate official competition results.
+    </p>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     FILTER / CONTROL CARD
+========================================================= -->
+
+<section class="control-card">
+
+  <div class="control-header">
+
+    <div>
+
+      <h2>
+        <i class="fas fa-sliders-h"></i>
+        Result Generation
+      </h2>
+
+      <p>
+        Select a competition and Juzuu to review or generate results.
+      </p>
+
+    </div>
+
+    <div class="control-icon">
+      <i class="fas fa-ranking-star"></i>
+    </div>
+
+  </div>
+
+
+  <div class="filters">
+
+    <!-- Competition -->
+
+    <div class="form-group">
+
+      <label>
+        Competition
+      </label>
+
+      <div class="select-wrapper">
+
+        <i class="fas fa-trophy"></i>
+
+        <select
+          [(ngModel)]="selectedCompetitionId">
+
+          <option [ngValue]="null">
+            Select competition
+          </option>
+
+          <option
+            *ngFor="let competition of competitions"
+            [ngValue]="competition.id">
+
+            {{ competition.title }}
+
+          </option>
+
+        </select>
+
+        <i class="fas fa-chevron-down arrow"></i>
+
+      </div>
+
+    </div>
+
+
+    <!-- Juzuu -->
+
+    <div class="form-group">
+
+      <label>
+        Juzuu
+      </label>
+
+      <div class="select-wrapper">
+
+        <i class="fas fa-book-quran"></i>
+
+        <select
+          [(ngModel)]="selectedJuzuu">
+
+          <option value="">
+            Select Juzuu
+          </option>
+
+          <option
+            *ngFor="let juzuu of juzuuList"
+            [value]="juzuu">
+
+            {{ formatJuzuu(juzuu) }}
+
+          </option>
+
+        </select>
+
+        <i class="fas fa-chevron-down arrow"></i>
+
+      </div>
+
+    </div>
+
+
+    <!-- Load -->
+
+    <button
+      class="btn btn-outline"
+      type="button"
+      (click)="loadResults()"
+      [disabled]="loadingResults">
+
+      <i
+        class="fas"
+        [class.fa-search]="!loadingResults"
+        [class.fa-spinner]="loadingResults"
+        [class.fa-spin]="loadingResults">
+      </i>
+
+      {{ loadingResults ? 'Loading...' : 'View Results' }}
+
+    </button>
+
+
+    <!-- Generate -->
+
+    <button
+      class="btn btn-primary"
+      type="button"
+      (click)="generateResults()"
+      [disabled]="generating">
+
+      <i
+        class="fas"
+        [class.fa-ranking-star]="!generating"
+        [class.fa-spinner]="generating"
+        [class.fa-spin]="generating">
+      </i>
+
+      {{ generating ? 'Generating...' : 'Generate Results' }}
+
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     SUMMARY
+========================================================= -->
+
+<section
+  class="summary-grid"
+  *ngIf="results.length > 0">
+
+  <div class="summary-card">
+
+    <div class="summary-icon participants">
+      <i class="fas fa-users"></i>
+    </div>
+
+    <div>
+
+      <span>
+        Participants
+      </span>
+
+      <strong>
+        {{ totalParticipants }}
+      </strong>
+
+    </div>
+
+  </div>
+
+
+  <div class="summary-card">
+
+    <div class="summary-icon score">
+      <i class="fas fa-star"></i>
+    </div>
+
+    <div>
+
+      <span>
+        Highest Score
+      </span>
+
+      <strong>
+        {{ topScore | number:'1.2-2' }}
+      </strong>
+
+    </div>
+
+  </div>
+
+
+  <div class="summary-card">
+
+    <div class="summary-icon ranking">
+      <i class="fas fa-ranking-star"></i>
+    </div>
+
+    <div>
+
+      <span>
+        Top Rank
+      </span>
+
+      <strong>
+        #1
+      </strong>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     RESULTS TABLE
+========================================================= -->
+
+<section class="results-card">
+
+  <div class="results-header">
+
+    <div>
+
+      <h2>
+        <i class="fas fa-list-ol"></i>
+        Official Rankings
+      </h2>
+
+      <p *ngIf="results.length > 0">
+
+        {{ results[0].competition }}
+
+        <span>•</span>
+
+        {{ formatJuzuu(results[0].juzuu) }}
+
+      </p>
+
+      <p *ngIf="results.length === 0">
+        No generated results to display.
+      </p>
+
+    </div>
+
+
+    <div
+      class="result-status"
+      *ngIf="results.length > 0">
+
+      <i class="fas fa-circle-check"></i>
+
+      Results Available
+
+    </div>
+
+  </div>
+
+
+  <!-- Table -->
+
+  <div
+    class="table-wrapper"
+    *ngIf="results.length > 0">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th class="rank-column">
+            Rank
+          </th>
+
+          <th>
+            Participant
+          </th>
+
+          <th>
+            Madrasa
+          </th>
+
+          <th>
+            Juzuu
+          </th>
+
+          <th class="score-column">
+            Total Score
+          </th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody>
+
+        <tr
+          *ngFor="let result of results">
+
+          <!-- Rank -->
+
+          <td class="rank-cell">
+
+            <div
+              class="rank-badge"
+              [class]="getRankClass(result.rank)">
+
+              <i
+                *ngIf="result.rank <= 3"
+                class="fas fa-medal">
+              </i>
+
+              <span>
+                {{ result.rank }}
+              </span>
+
+            </div>
+
+          </td>
+
+
+          <!-- Participant -->
+
+          <td>
+
+            <div class="participant-cell">
+
+              <div class="participant-avatar">
+
+                {{ result.participant.charAt(0).toUpperCase() }}
+
+              </div>
+
+              <div>
+
+                <strong>
+                  {{ result.participant }}
+                </strong>
+
+                <small>
+                  Participant #{{ result.participantId }}
+                </small>
+
+              </div>
+
+            </div>
+
+          </td>
+
+
+          <!-- Madrasa -->
+
+          <td>
+
+            <div class="madrasa-cell">
+
+              <i class="fas fa-school"></i>
+
+              {{ result.madrasa }}
+
+            </div>
+
+          </td>
+
+
+          <!-- Juzuu -->
+
+          <td>
+
+            <span class="juzuu-badge">
+
+              <i class="fas fa-book-quran"></i>
+
+              {{ formatJuzuu(result.juzuu) }}
+
+            </span>
+
+          </td>
+
+
+          <!-- Score -->
+
+          <td class="score-cell">
+
+            <strong>
+              {{ result.totalScore | number:'1.2-2' }}
+            </strong>
+
+            <span>
+              / 100
+            </span>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+
+  <!-- Empty -->
+
+  <div
+    class="empty-state"
+    *ngIf="results.length === 0 && !loadingResults">
+
+    <div class="empty-icon">
+
+      <i class="fas fa-ranking-star"></i>
+
+    </div>
+
+    <h3>
+      No Results Available
+    </h3>
+
+    <p>
+      Select a competition and Juzuu, then generate the official results.
+    </p>
+
+  </div>
+
+
+  <!-- Loading -->
+
+  <div
+    class="loading-state"
+    *ngIf="loadingResults">
+
+    <i class="fas fa-spinner fa-spin"></i>
+
+    <span>
+      Loading results...
+    </span>
+
+  </div>
+
+</section>

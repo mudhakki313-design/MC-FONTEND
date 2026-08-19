@@ -1,26 +1,896 @@
-<div class="page-header">
+<div class="dashboard-page">
 
-  <div>
 
-    <h1>Dashboard</h1>
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
 
-    <p>
-      Welcome back, Admin! Here is what's happening today.
-    </p>
+  <div class="page-header">
+
+    <div class="header-content">
+
+      <span class="eyebrow">
+        ASSOCIATION MANAGEMENT
+      </span>
+
+      <h1>
+        Dashboard
+      </h1>
+
+      <p>
+        Welcome back, Admin. Here's an overview of
+        the Quran competition management system.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="refresh-btn"
+      (click)="refreshDashboard()"
+      [disabled]="loading"
+    >
+
+      <i
+        class="fas"
+        [class.fa-rotate]="!loading"
+        [class.fa-spinner]="loading"
+        [class.fa-spin]="loading"
+      ></i>
+
+      <span>
+        Refresh
+      </span>
+
+    </button>
 
   </div>
 
-</div>
+
+  <!-- =====================================================
+       LOADING
+  ====================================================== -->
+
+  <div
+    class="loading-state"
+    *ngIf="loading"
+  >
+
+    <div class="loading-icon">
+
+      <i class="fas fa-spinner fa-spin"></i>
+
+    </div>
+
+    <strong>
+      Loading dashboard...
+    </strong>
+
+    <span>
+      Please wait while system data is being loaded.
+    </span>
+
+  </div>
 
 
-<div class="empty-page">
+  <!-- =====================================================
+       DASHBOARD CONTENT
+  ====================================================== -->
 
-  <i class="fas fa-chart-pie"></i>
+  <div
+    class="dashboard-content"
+    *ngIf="!loading"
+  >
 
-  <h2>Association Dashboard</h2>
 
-  <p>
-    Dashboard content will be implemented later.
-  </p>
+    <!-- =================================================
+         STAT CARDS
+    ================================================== -->
+
+    <div class="stats-grid">
+
+
+      <!-- PARTICIPANTS -->
+
+      <div class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon participants">
+
+            <i class="fas fa-users"></i>
+
+          </div>
+
+          <span class="stat-label">
+            Participants
+          </span>
+
+        </div>
+
+        <strong class="stat-value">
+          {{ totalParticipants }}
+        </strong>
+
+        <div class="stat-footer">
+
+          <span class="positive">
+            {{ approvedParticipants }}
+            approved
+          </span>
+
+          <span>
+            <i class="fas fa-user-check"></i>
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- MADRASAS -->
+
+      <div class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon madrasas">
+
+            <i class="fas fa-school"></i>
+
+          </div>
+
+          <span class="stat-label">
+            Madrasas
+          </span>
+
+        </div>
+
+        <strong class="stat-value">
+          {{ totalMadrasas }}
+        </strong>
+
+        <div class="stat-footer">
+
+          <span>
+            Registered institutions
+          </span>
+
+          <i class="fas fa-building-columns"></i>
+
+        </div>
+
+      </div>
+
+
+      <!-- JUDGES -->
+
+      <div class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon judges">
+
+            <i class="fas fa-user-tie"></i>
+
+          </div>
+
+          <span class="stat-label">
+            Judges
+          </span>
+
+        </div>
+
+        <strong class="stat-value">
+          {{ totalJudges }}
+        </strong>
+
+        <div class="stat-footer">
+
+          <span class="positive">
+            {{ activeJudges }} active
+          </span>
+
+          <i class="fas fa-circle-check"></i>
+
+        </div>
+
+      </div>
+
+
+      <!-- COMPETITIONS -->
+
+      <div class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon competitions">
+
+            <i class="fas fa-trophy"></i>
+
+          </div>
+
+          <span class="stat-label">
+            Competitions
+          </span>
+
+        </div>
+
+        <strong class="stat-value">
+          {{ totalCompetitions }}
+        </strong>
+
+        <div class="stat-footer">
+
+          <span class="positive">
+            {{ ongoingCompetitions }} ongoing
+          </span>
+
+          <i class="fas fa-ranking-star"></i>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+         MAIN ANALYTICS
+    ================================================== -->
+
+    <div class="analytics-grid">
+
+
+      <!-- ===============================================
+           JUDGING PROGRESS
+      ================================================ -->
+
+      <div class="panel progress-panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <span class="panel-eyebrow">
+              JUDGING
+            </span>
+
+            <h2>
+              Competition Progress
+            </h2>
+
+          </div>
+
+          <div class="panel-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+
+        </div>
+
+
+        <div class="progress-main">
+
+          <div class="progress-circle">
+
+            <div>
+
+              <strong>
+                {{ judgingProgress }}%
+              </strong>
+
+              <span>
+                Complete
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="progress-details">
+
+            <div class="progress-stat">
+
+              <span>
+                Participants
+              </span>
+
+              <strong>
+                {{ totalParticipants }}
+              </strong>
+
+            </div>
+
+            <div class="progress-stat">
+
+              <span>
+                With scores
+              </span>
+
+              <strong>
+                {{ scoredParticipants }}
+              </strong>
+
+            </div>
+
+            <div class="progress-stat">
+
+              <span>
+                Completed
+              </span>
+
+              <strong>
+                {{ completedParticipants }}
+              </strong>
+
+            </div>
+
+            <div class="progress-stat">
+
+              <span>
+                Pending
+              </span>
+
+              <strong>
+                {{ totalParticipants - completedParticipants }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="progress-track">
+
+          <div
+            class="progress-fill"
+            [style.width.%]="judgingProgress"
+          ></div>
+
+        </div>
+
+
+        <div class="progress-caption">
+
+          <span>
+            Overall judging completion
+          </span>
+
+          <strong>
+            {{ totalScores }} scores submitted
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- ===============================================
+           COMPETITION STATUS
+      ================================================ -->
+
+      <div class="panel competition-panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <span class="panel-eyebrow">
+              COMPETITIONS
+            </span>
+
+            <h2>
+              Competition Status
+            </h2>
+
+          </div>
+
+          <div class="panel-icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+
+        </div>
+
+
+        <div class="competition-status-list">
+
+
+          <div class="status-row">
+
+            <div class="status-info">
+
+              <span class="status-dot upcoming"></span>
+
+              <span>
+                Upcoming
+              </span>
+
+            </div>
+
+            <strong>
+              {{ upcomingCompetitions }}
+            </strong>
+
+          </div>
+
+
+          <div class="status-row">
+
+            <div class="status-info">
+
+              <span class="status-dot ongoing"></span>
+
+              <span>
+                Ongoing
+              </span>
+
+            </div>
+
+            <strong>
+              {{ ongoingCompetitions }}
+            </strong>
+
+          </div>
+
+
+          <div class="status-row">
+
+            <div class="status-info">
+
+              <span class="status-dot completed"></span>
+
+              <span>
+                Completed
+              </span>
+
+            </div>
+
+            <strong>
+              {{ completedCompetitions }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="competition-total">
+
+          <span>
+            Total competitions
+          </span>
+
+          <strong>
+            {{ totalCompetitions }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CHARTS
+    ================================================== -->
+
+    <div class="charts-grid">
+
+
+      <!-- ===============================================
+           SCORE SUBMISSIONS
+      ================================================ -->
+
+      <div class="panel chart-panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <span class="panel-eyebrow">
+              JUDGING ACTIVITY
+            </span>
+
+            <h2>
+              Score Submissions
+            </h2>
+
+          </div>
+
+          <span class="chart-total">
+            {{ totalScores }} total
+          </span>
+
+        </div>
+
+
+        <div class="bar-chart">
+
+          <!-- MEMORIZATION -->
+
+          <div class="bar-column">
+
+            <div class="bar-value">
+              {{ memorizationScores }}
+            </div>
+
+            <div class="bar-track">
+
+              <div
+                class="bar memorization-bar"
+                [style.height.%]="memorizationHeight"
+              ></div>
+
+            </div>
+
+            <span>
+              Memorization
+            </span>
+
+          </div>
+
+
+          <!-- TAJWEED -->
+
+          <div class="bar-column">
+
+            <div class="bar-value">
+              {{ tajweedScores }}
+            </div>
+
+            <div class="bar-track">
+
+              <div
+                class="bar tajweed-bar"
+                [style.height.%]="tajweedHeight"
+              ></div>
+
+            </div>
+
+            <span>
+              Tajweed
+            </span>
+
+          </div>
+
+
+          <!-- MAKHARIJ -->
+
+          <div class="bar-column">
+
+            <div class="bar-value">
+              {{ makharijScores }}
+            </div>
+
+            <div class="bar-track">
+
+              <div
+                class="bar makharij-bar"
+                [style.height.%]="makharijHeight"
+              ></div>
+
+            </div>
+
+            <span>
+              Makharij
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ===============================================
+           JUZUU DISTRIBUTION
+      ================================================ -->
+
+      <div class="panel juzuu-panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <span class="panel-eyebrow">
+              PARTICIPANTS
+            </span>
+
+            <h2>
+              Juzuu Distribution
+            </h2>
+
+          </div>
+
+          <div class="panel-icon">
+            <i class="fas fa-book-quran"></i>
+          </div>
+
+        </div>
+
+
+        <div
+          class="juzuu-list"
+          *ngIf="juzuuDistribution.length > 0"
+        >
+
+          <div
+            class="juzuu-row"
+            *ngFor="let item of juzuuDistribution"
+          >
+
+            <div class="juzuu-name">
+
+              <span>
+                {{ formatJuzuu(item.juzuu) }}
+              </span>
+
+              <strong>
+                {{ item.count }}
+              </strong>
+
+            </div>
+
+            <div class="juzuu-track">
+
+              <div
+                class="juzuu-fill"
+                [style.width.%]="item.percentage"
+              ></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="small-empty"
+          *ngIf="juzuuDistribution.length === 0"
+        >
+
+          <i class="fas fa-book-open"></i>
+
+          <span>
+            No participant data available.
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+         BOTTOM GRID
+    ================================================== -->
+
+    <div class="bottom-grid">
+
+
+      <!-- ===============================================
+           RECENT PARTICIPANTS
+      ================================================ -->
+
+      <div class="panel recent-panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <span class="panel-eyebrow">
+              PARTICIPANTS
+            </span>
+
+            <h2>
+              Recent Participants
+            </h2>
+
+          </div>
+
+          <span class="record-count">
+            {{ totalParticipants }} total
+          </span>
+
+        </div>
+
+
+        <div
+          class="participant-list"
+          *ngIf="recentParticipants.length > 0"
+        >
+
+          <div
+            class="participant-row"
+            *ngFor="let participant of recentParticipants"
+          >
+
+            <div class="participant-avatar">
+
+              <i class="fas fa-user"></i>
+
+            </div>
+
+
+            <div class="participant-info">
+
+              <strong>
+                {{ participant.fullName }}
+              </strong>
+
+              <span>
+                {{ participant.madrasa }}
+              </span>
+
+            </div>
+
+
+            <div class="participant-meta">
+
+              <span class="juzuu-tag">
+                {{ formatJuzuu(participant.juzuu) }}
+              </span>
+
+              <span
+                class="status-tag"
+                [class.approved]="participant.status === 'APPROVED'"
+                [class.pending]="participant.status === 'PENDING'"
+                [class.rejected]="participant.status === 'REJECTED'"
+              >
+
+                {{ participant.status }}
+
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="small-empty"
+          *ngIf="recentParticipants.length === 0"
+        >
+
+          <i class="fas fa-users"></i>
+
+          <span>
+            No participants registered yet.
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- ===============================================
+           SYSTEM OVERVIEW
+      ================================================ -->
+
+      <div class="panel overview-panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <span class="panel-eyebrow">
+              SYSTEM OVERVIEW
+            </span>
+
+            <h2>
+              Current Statistics
+            </h2>
+
+          </div>
+
+          <div class="panel-icon">
+            <i class="fas fa-chart-pie"></i>
+          </div>
+
+        </div>
+
+
+        <div class="overview-list">
+
+
+          <div class="overview-item">
+
+            <div class="overview-icon">
+              <i class="fas fa-users"></i>
+            </div>
+
+            <div>
+
+              <span>
+                Approved Participants
+              </span>
+
+              <strong>
+                {{ approvedParticipants }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="overview-item">
+
+            <div class="overview-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+
+            <div>
+
+              <span>
+                Pending Screening
+              </span>
+
+              <strong>
+                {{ pendingParticipants }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="overview-item">
+
+            <div class="overview-icon">
+              <i class="fas fa-user-tie"></i>
+            </div>
+
+            <div>
+
+              <span>
+                Active Judges
+              </span>
+
+              <strong>
+                {{ activeJudges }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="overview-item">
+
+            <div class="overview-icon">
+              <i class="fas fa-file-signature"></i>
+            </div>
+
+            <div>
+
+              <span>
+                Scores Submitted
+              </span>
+
+              <strong>
+                {{ totalScores }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </div>

@@ -2,6 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export type JudgeType =
+  | 'MEMORIZATION'
+  | 'TAJWEED'
+  | 'MAKHARIJ'
+  | 'CHIEF';
+
+export type JudgeStatus =
+  | 'ACTIVE'
+  | 'INACTIVE';
+
+
 export interface Judge {
 
   id: number;
@@ -14,19 +25,14 @@ export interface Judge {
 
   email: string;
 
-  judgeType:
-    | 'MEMORIZATION'
-    | 'TAJWEED'
-    | 'MAKHARIJ'
-    | 'CHIEF';
+  judgeType: JudgeType;
 
-  status:
-    | 'ACTIVE'
-    | 'INACTIVE';
+  status: JudgeStatus;
 
   username: string;
 
   createdAt?: string;
+
 }
 
 
@@ -40,15 +46,9 @@ export interface JudgeRequest {
 
   email: string;
 
-  judgeType:
-    | 'MEMORIZATION'
-    | 'TAJWEED'
-    | 'MAKHARIJ'
-    | 'CHIEF';
+  judgeType: JudgeType;
 
-  status:
-    | 'ACTIVE'
-    | 'INACTIVE';
+  status: JudgeStatus;
 
 }
 
@@ -65,6 +65,19 @@ export class JudgeService {
   constructor(
     private http: HttpClient
   ) {}
+
+
+  // =====================================
+  // GET CURRENT LOGGED-IN JUDGE
+  // =====================================
+
+  getCurrentJudge(): Observable<Judge> {
+
+    return this.http.get<Judge>(
+      `${this.apiUrl}/me`
+    );
+
+  }
 
 
   // =====================================

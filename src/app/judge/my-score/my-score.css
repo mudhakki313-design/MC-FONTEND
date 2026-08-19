@@ -1,0 +1,677 @@
+/* =========================================================
+   PAGE
+========================================================= */
+
+.score-page {
+  padding: 30px;
+  max-width: 1450px;
+  margin: 0 auto;
+  color: #1f2937;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  color: #0b4f4a;
+  margin-bottom: 7px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 750;
+  color: #172f2d;
+}
+
+.page-header p {
+  margin: 8px 0 0;
+  color: #71808a;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   JUDGE BADGE
+========================================================= */
+
+.judge-badge {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 18px;
+  background: #ffffff;
+  border: 1px solid #e5e9e8;
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(11, 79, 74, 0.06);
+}
+
+.badge-icon {
+  width: 43px;
+  height: 43px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eaf4f2;
+  color: #0b4f4a;
+  font-size: 17px;
+}
+
+.judge-badge small {
+  display: block;
+  font-size: 11px;
+  color: #899492;
+  margin-bottom: 4px;
+}
+
+.judge-badge strong {
+  font-size: 13px;
+  color: #173d39;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.score-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 24px;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e7eceb;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 8px 25px rgba(20, 48, 45, 0.055);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding-bottom: 21px;
+  border-bottom: 1px solid #edf0ef;
+  margin-bottom: 24px;
+}
+
+.header-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #eaf4f2;
+  color: #0b4f4a;
+  font-size: 17px;
+}
+
+.header-icon.gold {
+  background: #fbf5e7;
+  color: #b78b18;
+}
+
+.card-header h2 {
+  margin: 0;
+  color: #1d3835;
+  font-size: 17px;
+}
+
+.card-header p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #84908f;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label,
+.score-input-area label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #344846;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper > i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #0b4f4a;
+  pointer-events: none;
+}
+
+select {
+  width: 100%;
+  height: 49px;
+  border: 1px solid #dce4e2;
+  border-radius: 11px;
+  background: #fbfcfc;
+  padding: 0 42px;
+  color: #293a38;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+select:focus {
+  border-color: #0b4f4a;
+  box-shadow: 0 0 0 3px rgba(11, 79, 74, 0.08);
+}
+
+select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   EMPTY SELECTION
+========================================================= */
+
+.empty-selection {
+  min-height: 230px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: #f0f5f4;
+  color: #0b4f4a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 23px;
+  margin-bottom: 15px;
+}
+
+.empty-selection h3 {
+  margin: 0;
+  font-size: 15px;
+  color: #354643;
+}
+
+.empty-selection p {
+  margin: 7px 0;
+  font-size: 12px;
+  color: #899391;
+}
+
+
+/* =========================================================
+   PARTICIPANT DETAILS
+========================================================= */
+
+.participant-details {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  padding: 18px;
+  border-radius: 14px;
+  background: #f8faf9;
+  border: 1px solid #e8eeec;
+}
+
+.participant-avatar {
+  flex: 0 0 58px;
+  height: 58px;
+  border-radius: 15px;
+  background: #0b4f4a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.participant-info {
+  min-width: 0;
+}
+
+.participant-info h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  color: #193a36;
+}
+
+.detail-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.detail-list span {
+  font-size: 11px;
+  color: #697875;
+}
+
+.detail-list i {
+  color: #0b4f4a;
+  margin-right: 4px;
+}
+
+
+/* =========================================================
+   SCORE EMPTY
+========================================================= */
+
+.score-empty {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #a0aaa8;
+  gap: 12px;
+}
+
+.score-empty i {
+  font-size: 40px;
+  color: #d7dfdd;
+}
+
+.score-empty span {
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   SCORE FORM
+========================================================= */
+
+.score-form {
+  padding-top: 5px;
+}
+
+.score-input-area {
+  margin-top: 12px;
+}
+
+.score-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.score-input-wrapper input {
+  width: 100%;
+  height: 75px;
+  border: 2px solid #dce6e3;
+  border-radius: 14px;
+  background: #fbfdfc;
+  padding: 0 20px;
+  font-size: 28px;
+  font-weight: 750;
+  color: #0b4f4a;
+  outline: none;
+  text-align: center;
+  transition: 0.2s ease;
+}
+
+.score-input-wrapper input:focus {
+  border-color: #0b4f4a;
+  box-shadow: 0 0 0 4px rgba(11, 79, 74, 0.08);
+}
+
+.score-input-wrapper > span {
+  white-space: nowrap;
+  font-size: 18px;
+  font-weight: 700;
+  color: #82908d;
+}
+
+
+/* =========================================================
+   SCORE LIMIT
+========================================================= */
+
+.score-limit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 11px;
+  color: #899492;
+}
+
+.score-limit strong {
+  color: #0b4f4a;
+  margin-right: 10px;
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+.submit-btn {
+  width: 100%;
+  height: 50px;
+  margin-top: 25px;
+  border: none;
+  border-radius: 11px;
+  background: #0b4f4a;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #083f3b;
+  transform: translateY(-1px);
+  box-shadow: 0 7px 18px rgba(11, 79, 74, 0.18);
+}
+
+.submit-btn i {
+  margin-right: 8px;
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   ALREADY SUBMITTED
+========================================================= */
+
+.already-submitted {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 16px;
+  border-radius: 13px;
+  background: #edf8f2;
+  border: 1px solid #d4ebdd;
+}
+
+.success-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d8f1e2;
+  color: #25804e;
+  font-size: 18px;
+}
+
+.already-submitted strong {
+  font-size: 13px;
+  color: #276344;
+}
+
+.already-submitted p {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: #6d8779;
+}
+
+
+/* =========================================================
+   SUBMITTED SCORE
+========================================================= */
+
+.submitted-score {
+  text-align: center;
+  padding: 25px;
+  border-radius: 15px;
+  background: #f8faf9;
+  border: 1px solid #e4ebe9;
+}
+
+.submitted-score span {
+  display: block;
+  color: #7c8987;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.submitted-score strong {
+  color: #0b4f4a;
+  font-size: 38px;
+}
+
+.submitted-score small {
+  color: #87928f;
+  font-size: 15px;
+  margin-left: 4px;
+}
+
+
+/* =========================================================
+   CHANGE BUTTON
+========================================================= */
+
+.change-btn {
+  width: 100%;
+  height: 44px;
+  margin-top: 11px;
+  border: 1px solid #dce4e2;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #536461;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.change-btn:hover {
+  border-color: #0b4f4a;
+  color: #0b4f4a;
+  background: #f7faf9;
+}
+
+.change-btn i {
+  margin-right: 7px;
+}
+
+
+/* =========================================================
+   SCORING GUIDE
+========================================================= */
+
+.scoring-guide {
+  margin-top: 24px;
+  padding: 21px 24px;
+  border-radius: 17px;
+  background: #ffffff;
+  border: 1px solid #e6ebe9;
+  box-shadow: 0 7px 22px rgba(20, 48, 45, 0.045);
+}
+
+.guide-title {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 18px;
+}
+
+.guide-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f2df;
+  color: #b18721;
+}
+
+.guide-title h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #354643;
+}
+
+.guide-title p {
+  margin: 3px 0 0;
+  font-size: 11px;
+  color: #899492;
+}
+
+.guide-items {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 13px;
+}
+
+.guide-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+  border-radius: 12px;
+  background: #fafbfb;
+  border: 1px solid #edf0ef;
+  transition: 0.2s ease;
+}
+
+.guide-item.active {
+  border-color: #bdd8d4;
+  background: #f1f8f6;
+}
+
+.guide-number {
+  width: 39px;
+  height: 39px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eaf4f2;
+  color: #0b4f4a;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.guide-item strong {
+  display: block;
+  font-size: 12px;
+  color: #354643;
+}
+
+.guide-item small {
+  display: block;
+  margin-top: 3px;
+  color: #8a9693;
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1050px) {
+
+  .score-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 760px) {
+
+  .score-page {
+    padding: 20px 15px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .judge-badge {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .guide-items {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 520px) {
+
+  .page-header h1 {
+    font-size: 25px;
+  }
+
+  .card {
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .participant-details {
+    align-items: flex-start;
+  }
+
+  .participant-avatar {
+    flex-basis: 48px;
+    height: 48px;
+  }
+
+  .detail-list {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .score-input-wrapper input {
+    height: 65px;
+    font-size: 24px;
+  }
+
+}

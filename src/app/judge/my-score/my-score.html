@@ -1,0 +1,670 @@
+<div class="score-page">
+
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="eyebrow">
+        JUDGE PANEL
+      </span>
+
+      <h1>
+        My Score
+      </h1>
+
+      <p>
+        Evaluate approved Qur'an competition participants
+        according to your assigned judging category.
+      </p>
+
+    </div>
+
+
+    <!-- JUDGE BADGE -->
+
+    <div class="judge-badge">
+
+      <span class="badge-icon">
+
+        <i class="fa-solid fa-scale-balanced"></i>
+
+      </span>
+
+      <div>
+
+        <small>
+          Judging Category
+        </small>
+
+        <strong>
+          {{ judgeTypeLabel }}
+        </strong>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       MAIN GRID
+  ====================================================== -->
+
+  <div class="score-grid">
+
+
+    <!-- ===================================================
+         SELECTION CARD
+    ==================================================== -->
+
+    <section class="card participant-card">
+
+
+      <div class="card-header">
+
+        <div class="header-icon">
+
+          <i class="fa-solid fa-users"></i>
+
+        </div>
+
+        <div>
+
+          <h2>
+            Select Participant
+          </h2>
+
+          <p>
+            Select competition, madrasa and participant.
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =================================================
+           COMPETITION
+      ================================================== -->
+
+      <div class="form-group">
+
+        <label>
+          Competition
+        </label>
+
+        <div class="select-wrapper">
+
+          <i class="fa-solid fa-trophy"></i>
+
+          <select
+            [(ngModel)]="selectedCompetition"
+            (change)="onCompetitionChange()"
+            [disabled]="loadingParticipants"
+          >
+
+            <option [ngValue]="null">
+
+              {{
+                loadingParticipants
+                  ? 'Loading competitions...'
+                  : 'Select competition'
+              }}
+
+            </option>
+
+
+            <option
+              *ngFor="let competition of competitions"
+              [ngValue]="competition"
+            >
+
+              {{ competition }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =================================================
+           MADRASA
+      ================================================== -->
+
+      <div
+        class="form-group"
+        *ngIf="selectedCompetition"
+      >
+
+        <label>
+          Madrasa
+        </label>
+
+        <div class="select-wrapper">
+
+          <i class="fa-solid fa-school"></i>
+
+          <select
+            [(ngModel)]="selectedMadrasa"
+            (change)="onMadrasaChange()"
+          >
+
+            <option [ngValue]="null">
+              Select madrasa
+            </option>
+
+            <option
+              *ngFor="let madrasa of madrasas"
+              [ngValue]="madrasa"
+            >
+
+              {{ madrasa }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =================================================
+           PARTICIPANT
+      ================================================== -->
+
+      <div
+        class="form-group"
+        *ngIf="selectedMadrasa"
+      >
+
+        <label>
+          Participant
+        </label>
+
+        <div class="select-wrapper">
+
+          <i class="fa-solid fa-user"></i>
+
+          <select
+            [(ngModel)]="selectedParticipantId"
+            (change)="onParticipantChange()"
+          >
+
+            <option [ngValue]="null">
+              Select participant
+            </option>
+
+
+            <option
+              *ngFor="
+                let participant
+                of filteredParticipants
+              "
+              [ngValue]="participant.id"
+            >
+
+              {{ participant.fullName }}
+
+              —
+              {{ participant.juzuu }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =================================================
+           EMPTY STATE
+      ================================================== -->
+
+      <div
+        class="empty-selection"
+        *ngIf="!selectedParticipant"
+      >
+
+        <div class="empty-icon">
+
+          <i class="fa-solid fa-user-check"></i>
+
+        </div>
+
+        <h3>
+          No Participant Selected
+        </h3>
+
+        <p>
+
+          Select a competition, madrasa and participant
+          to begin scoring.
+
+        </p>
+
+      </div>
+
+
+
+      <!-- =================================================
+           PARTICIPANT DETAILS
+      ================================================== -->
+
+      <div
+        class="participant-details"
+        *ngIf="selectedParticipant"
+      >
+
+        <div class="participant-avatar">
+
+          <i class="fa-solid fa-user"></i>
+
+        </div>
+
+
+        <div class="participant-info">
+
+          <h3>
+            {{ selectedParticipant.fullName }}
+          </h3>
+
+
+          <div class="detail-list">
+
+            <span>
+
+              <i class="fa-solid fa-school"></i>
+
+              {{ selectedParticipant.madrasa }}
+
+            </span>
+
+
+            <span>
+
+              <i class="fa-solid fa-venus-mars"></i>
+
+              {{ selectedParticipant.gender }}
+
+            </span>
+
+
+            <span>
+
+              <i class="fa-solid fa-calendar"></i>
+
+              {{ selectedParticipant.age }} years
+
+            </span>
+
+
+            <span>
+
+              <i class="fa-solid fa-book-quran"></i>
+
+              {{ selectedParticipant.juzuu }}
+
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         SCORE CARD
+    ==================================================== -->
+
+    <section class="card scoring-card">
+
+
+      <div class="card-header">
+
+        <div class="header-icon gold">
+
+          <i class="fa-solid fa-star"></i>
+
+        </div>
+
+        <div>
+
+          <h2>
+            Enter Score
+          </h2>
+
+          <p>
+            {{ scoreCategory }} evaluation
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =================================================
+           NO PARTICIPANT
+      ================================================== -->
+
+      <div
+        class="score-empty"
+        *ngIf="!selectedParticipant"
+      >
+
+        <i class="fa-solid fa-pen-to-square"></i>
+
+        <span>
+          Select a participant first
+        </span>
+
+      </div>
+
+
+
+      <!-- =================================================
+           SCORE FORM
+      ================================================== -->
+
+      <div
+        class="score-form"
+        *ngIf="selectedParticipant"
+      >
+
+
+        <!-- EXISTING SCORE -->
+
+        <div
+          class="already-submitted"
+          *ngIf="myScore"
+        >
+
+          <div class="success-icon">
+
+            <i class="fa-solid fa-circle-check"></i>
+
+          </div>
+
+          <div>
+
+            <strong>
+              Score Already Submitted
+            </strong>
+
+            <p>
+              You submitted this participant's score.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- SCORE INPUT -->
+
+        <div
+          class="score-input-area"
+          *ngIf="!myScore"
+        >
+
+          <label>
+            {{ scoreCategory }} Score
+          </label>
+
+
+          <div class="score-input-wrapper">
+
+            <input
+              type="number"
+              [(ngModel)]="score"
+              min="0"
+              [max]="maxScore"
+              step="0.01"
+              placeholder="0.00"
+            />
+
+            <span>
+              / {{ maxScore }}
+            </span>
+
+          </div>
+
+
+          <div class="score-limit">
+
+            <span>
+              Minimum
+            </span>
+
+            <strong>
+              0
+            </strong>
+
+            <span>
+              Maximum
+            </span>
+
+            <strong>
+              {{ maxScore }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- SUBMITTED SCORE -->
+
+        <div
+          class="submitted-score"
+          *ngIf="myScore"
+        >
+
+          <span>
+            Your Score
+          </span>
+
+          <strong>
+            {{ myScore.score }}
+          </strong>
+
+          <small>
+            / {{ maxScore }}
+          </small>
+
+        </div>
+
+
+
+        <!-- SUBMIT -->
+
+        <button
+          class="submit-btn"
+          *ngIf="!myScore"
+          type="button"
+          (click)="submitScore()"
+          [disabled]="
+            submitting ||
+            loadingScore ||
+            !judgeType
+          "
+        >
+
+          <i
+            class="fa-solid"
+            [class.fa-paper-plane]="!submitting"
+            [class.fa-spinner]="submitting"
+            [class.fa-spin]="submitting"
+          ></i>
+
+          {{
+            submitting
+              ? 'Submitting...'
+              : 'Submit Score'
+          }}
+
+        </button>
+
+
+
+        <!-- CHANGE PARTICIPANT -->
+
+        <button
+          class="change-btn"
+          type="button"
+          (click)="clearParticipant()"
+        >
+
+          <i class="fa-solid fa-arrow-left"></i>
+
+          Choose Another Participant
+
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       SCORING GUIDE
+  ====================================================== -->
+
+  <section class="scoring-guide">
+
+
+    <div class="guide-title">
+
+      <div class="guide-icon">
+
+        <i class="fa-solid fa-circle-info"></i>
+
+      </div>
+
+      <div>
+
+        <h3>
+          Scoring Guide
+        </h3>
+
+        <p>
+          Your score must remain within your assigned category.
+        </p>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="guide-items">
+
+
+      <div
+        class="guide-item"
+        [class.active]="
+          judgeType === 'MEMORIZATION'
+        "
+      >
+
+        <span class="guide-number">
+          50
+        </span>
+
+        <div>
+
+          <strong>
+            Memorization
+          </strong>
+
+          <small>
+            Maximum 50 marks
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <div
+        class="guide-item"
+        [class.active]="
+          judgeType === 'TAJWEED'
+        "
+      >
+
+        <span class="guide-number">
+          30
+        </span>
+
+        <div>
+
+          <strong>
+            Tajweed
+          </strong>
+
+          <small>
+            Maximum 30 marks
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <div
+        class="guide-item"
+        [class.active]="
+          judgeType === 'MAKHARIJ'
+        "
+      >
+
+        <span class="guide-number">
+          20
+        </span>
+
+        <div>
+
+          <strong>
+            Makharij
+          </strong>
+
+          <small>
+            Maximum 20 marks
+          </small>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
