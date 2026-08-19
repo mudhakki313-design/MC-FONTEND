@@ -73,11 +73,11 @@ export class JudgeService {
 
   getCurrentJudge(): Observable<Judge> {
 
-    return this.http.get<Judge>(
-      `${this.apiUrl}/me`
-    );
+  return this.http.get<Judge>(
+    `${this.apiUrl}/me`
+  );
 
-  }
+}
 
 
   // =====================================
@@ -155,5 +155,7 @@ export class JudgeService {
     );
 
   }
+
+  
 
 }

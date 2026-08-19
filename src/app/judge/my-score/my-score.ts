@@ -127,6 +127,8 @@ export class MyScore implements OnInit {
 
     this.loadParticipants();
 
+    this.loadJudgeType();
+
   }
 
 
@@ -218,6 +220,38 @@ export class MyScore implements OnInit {
       });
 
   }
+
+  private loadJudgeType(): void {
+
+  this.judgeService
+    .getCurrentJudge()
+    .subscribe({
+
+      next: judge => {
+
+        this.judgeType = judge.judgeType;
+
+        this.cdr.detectChanges();
+
+      },
+
+      error: error => {
+
+        console.error(
+          'Failed to load current judge:',
+          error
+        );
+
+        this.alertService.error(
+          'Unable to Load Judge',
+          'Your judge profile could not be loaded.'
+        );
+
+      }
+
+    });
+
+}
 
 
   // =========================================================
@@ -414,24 +448,22 @@ export class MyScore implements OnInit {
 
   get maxScore(): number {
 
-    switch (this.judgeType) {
+  switch (this.judgeType) {
 
-      case 'MEMORIZATION':
-        return 50;
+    case 'MEMORIZATION':
+      return 50;
 
-      case 'TAJWEED':
-        return 30;
+    case 'TAJWEED':
+      return 30;
 
-      case 'MAKHARIJ':
-        return 20;
+    case 'MAKHARIJ':
+      return 20;
 
-      default:
-        return 0;
-
-    }
-
+    default:
+      return 0;
   }
 
+}
 
   // =========================================================
   // JUDGE TYPE LABEL
