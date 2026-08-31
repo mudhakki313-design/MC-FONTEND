@@ -173,5 +173,63 @@ getParticipantsForJudge(): Observable<Participant[]> {
 
 }
 
+  // =====================================================
+// MADRASA - MY PARTICIPANTS
+// =====================================================
 
+getMyMadrasaParticipants(): Observable<Participant[]> {
+
+  return this.http.get<Participant[]>(
+    `${this.apiUrl}/madrasa`
+  );
+
+}
+
+
+// =====================================================
+// MADRASA - CREATE
+// =====================================================
+
+createMadrasaParticipant(
+  request: ParticipantRequest
+): Observable<Participant> {
+
+  return this.http.post<Participant>(
+    `${this.apiUrl}/madrasa`,
+    request
+  );
+
+}
+
+
+// =====================================================
+// MADRASA - UPDATE
+// =====================================================
+
+updateMadrasaParticipant(
+  id: number,
+  request: ParticipantRequest
+): Observable<Participant> {
+
+  return this.http.put<Participant>(
+    `${this.apiUrl}/madrasa/${id}`,
+    request
+  );
+
+}
+
+
+// =====================================================
+// MADRASA - DELETE
+// =====================================================
+
+deleteMadrasaParticipant(
+  id: number
+): Observable<void> {
+
+  return this.http.delete<void>(
+    `${this.apiUrl}/madrasa/${id}`
+  );
+
+}
 }

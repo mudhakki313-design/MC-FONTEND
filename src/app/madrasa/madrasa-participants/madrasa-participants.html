@@ -1,0 +1,1070 @@
+<div class="participants-page">
+
+
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+
+  <div class="page-header">
+
+    <div class="header-content">
+
+      <div class="title-section">
+
+        <div class="title-icon">
+
+          <i class="fa-solid fa-users"></i>
+
+        </div>
+
+
+        <div>
+
+          <h1>
+            Madrasa Participants
+          </h1>
+
+          <p>
+            Manage participants registered under your madrasa.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="openAdd()"
+        [disabled]="competitionLoading"
+      >
+
+        <i class="fa-solid fa-plus"></i>
+
+        <span>
+          {{ competitionLoading
+            ? 'Loading...'
+            : 'Add Participant'
+          }}
+        </span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       CONTENT CARD
+  ====================================================== -->
+
+  <div class="content-card">
+
+
+    <!-- ===================================================
+         TOOLBAR
+    ==================================================== -->
+
+    <div class="table-toolbar">
+
+      <div class="toolbar-left">
+
+        <div class="search-box">
+
+          <i class="fa-solid fa-magnifying-glass"></i>
+
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (input)="applyFilter()"
+            placeholder="Search participant..."
+          />
+
+          @if (searchTerm) {
+
+            <button
+              type="button"
+              class="clear-search"
+              (click)="searchTerm=''; applyFilter()"
+              title="Clear search"
+            >
+
+              <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="toolbar-right">
+
+        <div class="competition-status">
+
+          @if (competitionLoading) {
+
+            <span class="loading-mini">
+
+              <span class="mini-spinner"></span>
+
+              Loading competitions...
+
+            </span>
+
+          }
+
+          @else {
+
+            <span class="competition-count">
+
+              <i class="fa-solid fa-trophy"></i>
+
+              {{ competitions.length }}
+
+              {{ competitions.length === 1
+                ? 'Competition'
+                : 'Competitions'
+              }}
+
+            </span>
+
+          }
+
+        </div>
+
+
+        <div class="participant-count">
+
+          <span class="count-number">
+            {{ filteredParticipants.length }}
+          </span>
+
+          <span class="count-label">
+            Participants
+          </span>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="refresh-btn"
+          title="Refresh"
+          (click)="refresh()"
+          [disabled]="loading || competitionLoading"
+        >
+
+          <i class="fa-solid fa-rotate"></i>
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ===================================================
+         LOADING
+    ==================================================== -->
+
+    @if (loading) {
+
+      <div class="loading-state">
+
+        <div class="spinner"></div>
+
+        <p>
+          Loading participants...
+        </p>
+
+      </div>
+
+    }
+
+
+
+    <!-- ===================================================
+         EMPTY
+    ==================================================== -->
+
+    @else if (
+      participants.length === 0
+    ) {
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+
+          <i class="fa-solid fa-users"></i>
+
+        </div>
+
+
+        <h3>
+          No Participants Yet
+        </h3>
+
+
+        <p>
+          You haven't registered any participants
+          for your madrasa yet.
+        </p>
+
+
+        <button
+          type="button"
+          class="btn-primary"
+          (click)="openAdd()"
+          [disabled]="competitionLoading"
+        >
+
+          <i class="fa-solid fa-plus"></i>
+
+          Add First Participant
+
+        </button>
+
+      </div>
+
+    }
+
+
+
+    <!-- ===================================================
+         SEARCH EMPTY
+    ==================================================== -->
+
+    @else if (
+      filteredParticipants.length === 0
+    ) {
+
+      <div class="empty-state search-empty">
+
+        <div class="empty-icon">
+
+          <i class="fa-solid fa-magnifying-glass"></i>
+
+        </div>
+
+
+        <h3>
+          No Participants Found
+        </h3>
+
+
+        <p>
+          No participant matches
+          "{{ searchTerm }}".
+        </p>
+
+
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="searchTerm=''; applyFilter()"
+        >
+
+          Clear Search
+
+        </button>
+
+      </div>
+
+    }
+
+
+
+    <!-- ===================================================
+         TABLE
+    ==================================================== -->
+
+    @else {
+
+      <div class="table-wrapper">
+
+        <table class="participants-table">
+
+          <thead>
+
+            <tr>
+
+              <th>
+                #
+              </th>
+
+              <th>
+                Participant
+              </th>
+
+              <th>
+                Gender
+              </th>
+
+              <th>
+                Age
+              </th>
+
+              <th>
+                Juzuu
+              </th>
+
+              <th>
+                Competition
+              </th>
+
+              <th>
+                Status
+              </th>
+
+              <th class="actions-header">
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              participant of filteredParticipants;
+              track participant.id;
+              let i = $index
+            ) {
+
+              <tr>
+
+
+                <!-- NUMBER -->
+
+                <td class="number-cell">
+
+                  {{ i + 1 }}
+
+                </td>
+
+
+
+                <!-- PARTICIPANT -->
+
+                <td>
+
+                  <div class="participant-info">
+
+                    <div class="avatar">
+
+                      {{
+                        participant.fullName
+                          .charAt(0)
+                          .toUpperCase()
+                      }}
+
+                    </div>
+
+
+                    <div class="participant-name">
+
+                      <span class="name">
+
+                        {{ participant.fullName }}
+
+                      </span>
+
+
+                      <span class="id">
+
+                        ID #{{ participant.id }}
+
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+
+                <!-- GENDER -->
+
+                <td>
+
+                  <span
+                    class="gender"
+                    [class.male]="
+                      participant.gender === 'MALE'
+                    "
+                    [class.female]="
+                      participant.gender === 'FEMALE'
+                    "
+                  >
+
+                    @if (
+                      participant.gender === 'MALE'
+                    ) {
+
+                      <i class="fa-solid fa-mars"></i>
+
+                      Male
+
+                    }
+
+                    @else {
+
+                      <i class="fa-solid fa-venus"></i>
+
+                      Female
+
+                    }
+
+                  </span>
+
+                </td>
+
+
+
+                <!-- AGE -->
+
+                <td>
+
+                  <span class="age">
+
+                    {{ participant.age }}
+
+                    <small>
+                      yrs
+                    </small>
+
+                  </span>
+
+                </td>
+
+
+
+                <!-- JUZUU -->
+
+                <td>
+
+                  <span class="juzuu-badge">
+
+                    <i class="fa-solid fa-book-quran"></i>
+
+                    {{ getJuzuuLabel(participant.juzuu) }}
+
+                  </span>
+
+                </td>
+
+
+
+                <!-- COMPETITION -->
+
+                <td>
+
+                  <div class="competition">
+
+                    <i class="fa-solid fa-trophy"></i>
+
+                    <span>
+                      {{ participant.competition }}
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+
+                <!-- STATUS -->
+
+                <td>
+
+                  <span
+                    class="status-badge"
+                    [ngClass]="{
+
+                      'status-approved':
+                        participant.status === 'APPROVED',
+
+                      'status-pending':
+                        participant.status === 'PENDING',
+
+                      'status-rejected':
+                        participant.status === 'REJECTED'
+
+                    }"
+                  >
+
+                    <span class="status-dot"></span>
+
+                    {{
+                      getStatusLabel(
+                        participant.status
+                      )
+                    }}
+
+                  </span>
+
+                </td>
+
+
+
+                <!-- ACTIONS -->
+
+                <td>
+
+                  <div class="action-buttons">
+
+
+                    <button
+                      type="button"
+                      class="action-btn edit-btn"
+                      title="Edit participant"
+                      (click)="openEdit(participant)"
+                      [disabled]="saving"
+                    >
+
+                      <i class="fa-solid fa-pen"></i>
+
+                    </button>
+
+
+                    <button
+                      type="button"
+                      class="action-btn delete-btn"
+                      title="Delete participant"
+                      [disabled]="deleting"
+                      (click)="deleteParticipant(participant)"
+                    >
+
+                      @if (
+                        deleting
+                      ) {
+
+                        <span class="button-spinner"></span>
+
+                      }
+
+                      @else {
+
+                        <i class="fa-solid fa-trash"></i>
+
+                      }
+
+                    </button>
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>
+
+
+
+<!-- =======================================================
+     ADD / EDIT MODAL
+======================================================== -->
+
+@if (showModal) {
+
+  <div
+    class="modal-backdrop"
+    (click)="closeModal()"
+  >
+
+    <div
+      class="modal"
+      (click)="$event.stopPropagation()"
+    >
+
+
+      <!-- =================================================
+           HEADER
+      ================================================== -->
+
+      <div class="modal-header">
+
+        <div class="modal-title">
+
+          <div class="modal-icon">
+
+            <i
+              class="fa-solid"
+              [ngClass]="
+                editMode
+                  ? 'fa-pen'
+                  : 'fa-user-plus'
+              "
+            ></i>
+
+          </div>
+
+
+          <div>
+
+            <h2>
+
+              {{
+                editMode
+                  ? 'Edit Participant'
+                  : 'Add Participant'
+              }}
+
+            </h2>
+
+
+            <p>
+
+              {{
+                editMode
+                  ? 'Update participant information'
+                  : 'Register a new madrasa participant'
+              }}
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="modal-close"
+          [disabled]="saving"
+          (click)="closeModal()"
+        >
+
+          <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+      </div>
+
+
+
+      <!-- =================================================
+           BODY
+      ================================================== -->
+
+      <div class="modal-body">
+
+
+        <!-- COMPETITION WARNING -->
+
+        @if (
+          !competitionLoading &&
+          competitions.length === 0
+        ) {
+
+          <div class="competition-warning">
+
+            <div class="warning-icon">
+
+              <i class="fa-solid fa-triangle-exclamation"></i>
+
+            </div>
+
+
+            <div>
+
+              <strong>
+                No competitions available
+              </strong>
+
+              <p>
+                Competition information could not be loaded.
+                Please check your connection or contact the administrator.
+              </p>
+
+            </div>
+
+          </div>
+
+        }
+
+
+        <div class="form-grid">
+
+
+          <!-- =================================================
+               FULL NAME
+          ================================================== -->
+
+          <div class="form-group full-width">
+
+            <label>
+
+              Full Name
+
+              <span>*</span>
+
+            </label>
+
+
+            <div class="input-wrapper">
+
+              <i class="fa-solid fa-user"></i>
+
+
+              <input
+                type="text"
+                [(ngModel)]="fullName"
+                placeholder="Enter participant full name"
+                autocomplete="off"
+              />
+
+            </div>
+
+          </div>
+
+
+
+          <!-- =================================================
+               GENDER
+          ================================================== -->
+
+          <div class="form-group">
+
+            <label>
+
+              Gender
+
+              <span>*</span>
+
+            </label>
+
+
+            <div class="select-wrapper">
+
+              <i class="fa-solid fa-venus-mars"></i>
+
+
+              <select
+                [(ngModel)]="gender"
+              >
+
+                <option value="MALE">
+                  Male
+                </option>
+
+                <option value="FEMALE">
+                  Female
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- =================================================
+               AGE
+          ================================================== -->
+
+          <div class="form-group">
+
+            <label>
+
+              Age
+
+              <span>*</span>
+
+            </label>
+
+
+            <div class="input-wrapper">
+
+              <i class="fa-solid fa-calendar"></i>
+
+
+              <input
+                type="number"
+                [(ngModel)]="age"
+                min="1"
+                max="100"
+                placeholder="Age"
+              />
+
+            </div>
+
+          </div>
+
+
+
+          <!-- =================================================
+               JUZUU
+          ================================================== -->
+
+          <div class="form-group">
+
+            <label>
+
+              Juzuu
+
+              <span>*</span>
+
+            </label>
+
+
+            <div class="select-wrapper">
+
+              <i class="fa-solid fa-book-quran"></i>
+
+
+              <select
+                [(ngModel)]="juzuu"
+              >
+
+                @for (
+                  juz of juzuuList;
+                  track juz
+                ) {
+
+                  <option
+                    [ngValue]="juz"
+                  >
+
+                    {{ getJuzuuLabel(juz) }}
+
+                  </option>
+
+                }
+
+              </select>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- =================================================
+               COMPETITION
+          ================================================== -->
+
+          <div class="form-group">
+
+            <label>
+
+              Competition
+
+              <span>*</span>
+
+            </label>
+
+
+            <div class="select-wrapper">
+
+              <i class="fa-solid fa-trophy"></i>
+
+
+              <select
+                [(ngModel)]="competitionId"
+                [disabled]="
+                  competitionLoading ||
+                  competitions.length === 0
+                "
+              >
+
+
+                <!-- PLACEHOLDER -->
+
+                <option
+                  [ngValue]="null"
+                  disabled
+                >
+
+                  @if (competitionLoading) {
+
+                    Loading competitions...
+
+                  }
+
+                  @else {
+
+                    Select competition
+
+                  }
+
+                </option>
+
+
+
+                <!-- COMPETITIONS -->
+
+                @for (
+                  competition of competitions;
+                  track competition.id
+                ) {
+
+                  <option
+                    [ngValue]="competition.id"
+                  >
+
+                    {{ competition.title }}
+
+                    @if (
+                      competition.status
+                    ) {
+
+                      -
+                      {{ competition.status }}
+
+                    }
+
+                  </option>
+
+                }
+
+
+              </select>
+
+            </div>
+
+
+            <small class="field-hint">
+
+              @if (competitionLoading) {
+
+                Loading available competitions...
+
+              }
+
+              @else if (
+                competitions.length === 0
+              ) {
+
+                No competitions are available.
+
+              }
+
+              @else {
+
+                Select the competition this participant will join.
+
+              }
+
+            </small>
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             INFO
+        ================================================== -->
+
+        <div class="form-info">
+
+          <i class="fa-solid fa-circle-info"></i>
+
+
+          <p>
+
+            The participant will automatically be registered
+            under your madrasa account.
+
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =================================================
+           FOOTER
+      ================================================== -->
+
+      <div class="modal-footer">
+
+
+        <button
+          type="button"
+          class="btn-secondary"
+          [disabled]="saving"
+          (click)="closeModal()"
+        >
+
+          Cancel
+
+        </button>
+
+
+        <button
+          type="button"
+          class="btn-primary save-btn"
+          [disabled]="
+            saving ||
+            competitionLoading ||
+            competitions.length === 0
+          "
+          (click)="saveParticipant()"
+        >
+
+
+          @if (saving) {
+
+            <span class="button-spinner"></span>
+
+            Saving...
+
+          }
+
+          @else {
+
+            <i
+              class="fa-solid"
+              [ngClass]="
+                editMode
+                  ? 'fa-check'
+                  : 'fa-plus'
+              "
+            ></i>
+
+
+            {{
+              editMode
+                ? 'Update Participant'
+                : 'Add Participant'
+            }}
+
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MadrasaLayout } from './madrasa-layout';
+import { MadrasaResults } from './madrasa-results';
 
-describe('MadrasaLayout', () => {
-  let component: MadrasaLayout;
-  let fixture: ComponentFixture<MadrasaLayout>;
+describe('MadrasaResults', () => {
+  let component: MadrasaResults;
+  let fixture: ComponentFixture<MadrasaResults>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MadrasaLayout]
+      imports: [MadrasaResults]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MadrasaLayout);
+    fixture = TestBed.createComponent(MadrasaResults);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
