@@ -1,1 +1,830 @@
-<p>judge-dashboard works!</p>
+<div class="judge-dashboard">
+
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+
+  <section class="dashboard-header">
+
+    <div class="header-content">
+
+      <span class="eyebrow">
+        JUDGE PANEL
+      </span>
+
+      <h1>
+        Welcome back,
+        <span>
+          {{ currentJudge?.fullName || 'Judge' }}
+        </span>
+      </h1>
+
+      <p>
+        Manage your assigned Qur'an competition judging
+        activities and continue evaluating approved participants.
+      </p>
+
+    </div>
+
+
+    <!-- JUDGE PROFILE BADGE -->
+
+    <div class="judge-profile-card">
+
+      <div class="judge-avatar">
+
+        <i class="fa-solid fa-scale-balanced"></i>
+
+      </div>
+
+      <div class="judge-profile-info">
+
+        <span>
+          Assigned Category
+        </span>
+
+        <strong>
+          {{ judgeTypeLabel }}
+        </strong>
+
+        <small>
+          Maximum {{ maxScore }} marks
+        </small>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       LOADING
+  ====================================================== -->
+
+  <div
+    class="dashboard-loading"
+    *ngIf="loading"
+  >
+
+    <div class="loading-spinner">
+
+      <i class="fa-solid fa-spinner fa-spin"></i>
+
+    </div>
+
+    <span>
+      Loading judge dashboard...
+    </span>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       DASHBOARD CONTENT
+  ====================================================== -->
+
+  <ng-container *ngIf="!loading">
+
+
+    <!-- ===================================================
+         STAT CARDS
+    ==================================================== -->
+
+    <section class="stats-grid">
+
+
+      <!-- ACTIVE COMPETITIONS -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon teal">
+
+          <i class="fa-solid fa-trophy"></i>
+
+        </div>
+
+        <div class="stat-content">
+
+          <span>
+            Active Competitions
+          </span>
+
+          <strong>
+            {{ activeCompetitions.length }}
+          </strong>
+
+          <small>
+            Currently ongoing
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- PARTICIPANTS -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon blue">
+
+          <i class="fa-solid fa-users"></i>
+
+        </div>
+
+        <div class="stat-content">
+
+          <span>
+            Assigned Participants
+          </span>
+
+          <strong>
+            {{ participants.length }}
+          </strong>
+
+          <small>
+            Approved for judging
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- SCORED -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon green">
+
+          <i class="fa-solid fa-circle-check"></i>
+
+        </div>
+
+        <div class="stat-content">
+
+          <span>
+            Scored
+          </span>
+
+          <strong>
+            {{ scoredParticipants }}
+          </strong>
+
+          <small>
+            Evaluations submitted
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- PENDING -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon gold">
+
+          <i class="fa-solid fa-clock"></i>
+
+        </div>
+
+        <div class="stat-content">
+
+          <span>
+            Pending
+          </span>
+
+          <strong>
+            {{ pendingParticipants }}
+          </strong>
+
+          <small>
+            Awaiting evaluation
+          </small>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         MAIN CONTENT
+    ==================================================== -->
+
+    <section class="dashboard-grid">
+
+
+      <!-- =================================================
+           LEFT COLUMN
+      ================================================== -->
+
+      <div class="dashboard-main">
+
+
+        <!-- ===============================================
+             SCORING PROGRESS
+        ================================================ -->
+
+        <section class="panel progress-panel">
+
+          <div class="panel-header">
+
+            <div class="panel-heading">
+
+              <div class="panel-icon">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+              </div>
+
+              <div>
+
+                <h2>
+                  Judging Progress
+                </h2>
+
+                <p>
+                  Your participant evaluation progress.
+                </p>
+
+              </div>
+
+            </div>
+
+            <span class="progress-percentage">
+              {{ scoringProgress }}%
+            </span>
+
+          </div>
+
+
+          <div class="progress-track">
+
+            <div
+              class="progress-fill"
+              [style.width.%]="scoringProgress"
+            ></div>
+
+          </div>
+
+
+          <div class="progress-summary">
+
+            <div>
+
+              <strong>
+                {{ scoredParticipants }}
+              </strong>
+
+              <span>
+                Completed
+              </span>
+
+            </div>
+
+            <div>
+
+              <strong>
+                {{ pendingParticipants }}
+              </strong>
+
+              <span>
+                Remaining
+              </span>
+
+            </div>
+
+            <div>
+
+              <strong>
+                {{ participants.length }}
+              </strong>
+
+              <span>
+                Total
+              </span>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ===============================================
+             CURRENT COMPETITION
+        ================================================ -->
+
+        <section class="panel current-competition-panel">
+
+          <div class="panel-header">
+
+            <div class="panel-heading">
+
+              <div class="panel-icon gold-icon">
+
+                <i class="fa-solid fa-trophy"></i>
+
+              </div>
+
+              <div>
+
+                <h2>
+                  Current Competition
+                </h2>
+
+                <p>
+                  Competition currently available for judging.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="competition-content"
+            *ngIf="currentCompetition"
+          >
+
+            <div class="competition-symbol">
+
+              <i class="fa-solid fa-quran"></i>
+
+            </div>
+
+
+            <div class="competition-info">
+
+              <span class="competition-status">
+
+                <i class="fa-solid fa-circle"></i>
+
+                {{ getStatusLabel(currentCompetition.status) }}
+
+              </span>
+
+              <h3>
+                {{ currentCompetition.title }}
+              </h3>
+
+              <div class="competition-meta">
+
+                <span>
+
+                  <i class="fa-solid fa-location-dot"></i>
+
+                  {{ currentCompetition.venue }}
+
+                </span>
+
+                <span>
+
+                  <i class="fa-solid fa-calendar-days"></i>
+
+                  {{ formatDate(currentCompetition.competitionDate) }}
+
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="no-competition"
+            *ngIf="!currentCompetition"
+          >
+
+            <div class="no-competition-icon">
+
+              <i class="fa-solid fa-calendar-xmark"></i>
+
+            </div>
+
+            <div>
+
+              <strong>
+                No Ongoing Competition
+              </strong>
+
+              <p>
+                There is currently no competition available
+                for judging.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ===============================================
+             UPCOMING COMPETITIONS
+        ================================================ -->
+
+        <section class="panel competitions-panel">
+
+          <div class="panel-header">
+
+            <div class="panel-heading">
+
+              <div class="panel-icon">
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+              </div>
+
+              <div>
+
+                <h2>
+                  Upcoming Competitions
+                </h2>
+
+                <p>
+                  Scheduled competitions in the system.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="competition-list"
+            *ngIf="upcomingCompetitions.length > 0"
+          >
+
+            <div
+              class="competition-row"
+              *ngFor="
+                let competition
+                of upcomingCompetitions | slice:0:5
+              "
+            >
+
+              <div class="row-icon">
+
+                <i class="fa-solid fa-trophy"></i>
+
+              </div>
+
+              <div class="row-info">
+
+                <strong>
+                  {{ competition.title }}
+                </strong>
+
+                <span>
+
+                  <i class="fa-solid fa-location-dot"></i>
+
+                  {{ competition.venue }}
+
+                </span>
+
+              </div>
+
+              <div class="row-date">
+
+                <strong>
+                  {{ formatDate(competition.competitionDate) }}
+                </strong>
+
+                <span>
+                  Upcoming
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="empty-panel"
+            *ngIf="upcomingCompetitions.length === 0"
+          >
+
+            <i class="fa-solid fa-calendar-check"></i>
+
+            <span>
+              No upcoming competitions.
+            </span>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+
+      <!-- =================================================
+           RIGHT COLUMN
+      ================================================== -->
+
+      <aside class="dashboard-side">
+
+
+        <!-- ===============================================
+             QUICK ACTION
+        ================================================ -->
+
+        <section class="action-card">
+
+          <div class="action-glow"></div>
+
+          <div class="action-icon">
+
+            <i class="fa-solid fa-pen-to-square"></i>
+
+          </div>
+
+          <span>
+            READY TO JUDGE?
+          </span>
+
+          <h2>
+            Continue Scoring
+          </h2>
+
+          <p>
+            Select an approved participant and submit your
+            {{ scoreCategory }} score.
+          </p>
+
+          <a
+            routerLink="/judge/scores"
+            class="primary-action"
+          >
+
+            Start Scoring
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+          </a>
+
+        </section>
+
+
+
+        <!-- ===============================================
+             JUDGE ASSIGNMENT
+        ================================================ -->
+
+        <section class="panel assignment-panel">
+
+          <div class="panel-header compact">
+
+            <div class="panel-heading">
+
+              <div class="panel-icon">
+
+                <i class="fa-solid fa-scale-balanced"></i>
+
+              </div>
+
+              <div>
+
+                <h2>
+                  My Assignment
+                </h2>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="assignment-list">
+
+            <div class="assignment-item">
+
+              <div class="assignment-item-icon">
+
+                <i class="fa-solid fa-star"></i>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Judging Category
+                </span>
+
+                <strong>
+                  {{ scoreCategory }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div class="assignment-item">
+
+              <div class="assignment-item-icon">
+
+                <i class="fa-solid fa-award"></i>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Maximum Score
+                </span>
+
+                <strong>
+                  {{ maxScore }} Marks
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div class="assignment-item">
+
+              <div class="assignment-item-icon">
+
+                <i class="fa-solid fa-school"></i>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Madrasas
+                </span>
+
+                <strong>
+                  {{ madrasaCount }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div class="assignment-item">
+
+              <div class="assignment-item-icon">
+
+                <i class="fa-solid fa-book-quran"></i>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Juzuu Categories
+                </span>
+
+                <strong>
+                  {{ juzuuCount }}
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ===============================================
+             SCORING RULES
+        ================================================ -->
+
+        <section class="panel rules-panel">
+
+          <div class="rules-heading">
+
+            <div class="rules-icon">
+
+              <i class="fa-solid fa-circle-info"></i>
+
+            </div>
+
+            <div>
+
+              <h3>
+                Scoring Rules
+              </h3>
+
+              <p>
+                Important judging information
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <ul>
+
+            <li>
+
+              <i class="fa-solid fa-check"></i>
+
+              <span>
+                Only approved participants can be scored.
+              </span>
+
+            </li>
+
+            <li>
+
+              <i class="fa-solid fa-check"></i>
+
+              <span>
+                Submit only one score per participant.
+              </span>
+
+            </li>
+
+            <li>
+
+              <i class="fa-solid fa-check"></i>
+
+              <span>
+                Your score must remain within your assigned category limit.
+              </span>
+
+            </li>
+
+            <li>
+
+              <i class="fa-solid fa-check"></i>
+
+              <span>
+                Submitted scores cannot be duplicated.
+              </span>
+
+            </li>
+
+          </ul>
+
+        </section>
+
+      </aside>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         FOOTER STATUS
+    ==================================================== -->
+
+    <div class="dashboard-footer">
+
+      <div>
+
+        <i class="fa-solid fa-shield-halved"></i>
+
+        <span>
+          Judge access is protected by role-based authorization.
+        </span>
+
+      </div>
+
+      <span class="last-updated">
+
+        Last updated:
+        {{ lastUpdated | date:'dd MMM yyyy, HH:mm' }}
+
+      </span>
+
+    </div>
+
+
+  </ng-container>
+
+</div>

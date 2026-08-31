@@ -1,1 +1,422 @@
-<p>chief-profile works!</p>
+<div class="profile-page">
+
+  <!-- ==========================================
+       PAGE HEADER
+       ========================================== -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="page-kicker">
+        ACCOUNT
+      </span>
+
+      <h1>
+        Chief Judge Profile
+      </h1>
+
+      <p>
+        Manage your personal information and profile settings.
+      </p>
+
+    </div>
+
+
+    <button
+      class="edit-btn"
+      *ngIf="profile && !editMode"
+      type="button"
+      (click)="startEdit()">
+
+      <span class="material-icons">
+        edit
+      </span>
+
+      Edit Profile
+
+    </button>
+
+  </div>
+
+
+  <!-- ==========================================
+       LOADING
+       ========================================== -->
+
+  <div
+    class="loading-state"
+    *ngIf="loading">
+
+    <div class="spinner"></div>
+
+    <p>
+      Loading profile...
+    </p>
+
+  </div>
+
+
+  <!-- ==========================================
+       PROFILE CONTENT
+       ========================================== -->
+
+  <div
+    class="profile-content"
+    *ngIf="!loading && profile">
+
+
+    <!-- ========================================
+         PROFILE CARD
+         ======================================== -->
+
+    <section class="profile-card">
+
+
+      <!-- PROFILE TOP -->
+
+      <div class="profile-top">
+
+
+        <!-- AVATAR -->
+
+        <div class="avatar-wrapper">
+
+          <img
+            *ngIf="profileImageUrl"
+            [src]="profileImageUrl"
+            alt="Chief Judge Profile"
+            class="profile-avatar">
+
+
+          <div
+            *ngIf="!profileImageUrl"
+            class="profile-avatar avatar-placeholder">
+
+            <span class="material-icons">
+              person
+            </span>
+
+          </div>
+
+
+          <!-- CAMERA -->
+
+          <label
+            class="camera-btn"
+            title="Change profile photo">
+
+            <span class="material-icons">
+              camera_alt
+            </span>
+
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              (change)="onImageSelected($event)">
+
+          </label>
+
+        </div>
+
+
+        <!-- NAME -->
+
+        <div class="profile-heading">
+
+          <h2>
+            {{ profile.fullName }}
+          </h2>
+
+          <p>
+            {{ roleLabel }}
+          </p>
+
+          <span
+            class="status-badge"
+            [class.active]="profile.status === 'ACTIVE'">
+
+            <span class="status-dot"></span>
+
+            {{ statusLabel }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- ======================================
+           PROFILE DETAILS
+           ====================================== -->
+
+      <div class="details-section">
+
+        <div class="section-title">
+
+          <span class="material-icons">
+            badge
+          </span>
+
+          <div>
+
+            <h3>
+              Personal Information
+            </h3>
+
+            <p>
+              Your account and contact information
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="details-grid">
+
+
+          <!-- FULL NAME -->
+
+          <div class="detail-item">
+
+            <label>
+              Full Name
+            </label>
+
+            <ng-container *ngIf="!editMode">
+
+              <div class="detail-value">
+
+                <span class="material-icons">
+                  person
+                </span>
+
+                {{ profile.fullName }}
+
+              </div>
+
+            </ng-container>
+
+
+            <ng-container *ngIf="editMode">
+
+              <input
+                type="text"
+                [(ngModel)]="editFullName"
+                placeholder="Enter full name">
+
+            </ng-container>
+
+          </div>
+
+
+          <!-- USERNAME -->
+
+          <div class="detail-item">
+
+            <label>
+              Username
+            </label>
+
+            <div class="detail-value readonly">
+
+              <span class="material-icons">
+                alternate_email
+              </span>
+
+              {{ profile.username }}
+
+            </div>
+
+            <small>
+              Username cannot be changed.
+            </small>
+
+          </div>
+
+
+          <!-- EMAIL -->
+
+          <div class="detail-item">
+
+            <label>
+              Email Address
+            </label>
+
+
+            <ng-container *ngIf="!editMode">
+
+              <div class="detail-value">
+
+                <span class="material-icons">
+                  email
+                </span>
+
+                {{ profile.email }}
+
+              </div>
+
+            </ng-container>
+
+
+            <ng-container *ngIf="editMode">
+
+              <input
+                type="email"
+                [(ngModel)]="editEmail"
+                placeholder="Enter email address">
+
+            </ng-container>
+
+          </div>
+
+
+          <!-- ROLE -->
+
+          <div class="detail-item">
+
+            <label>
+              Role
+            </label>
+
+            <div class="detail-value readonly">
+
+              <span class="material-icons">
+                verified_user
+              </span>
+
+              {{ roleLabel }}
+
+            </div>
+
+          </div>
+
+
+          <!-- STATUS -->
+
+          <div class="detail-item">
+
+            <label>
+              Account Status
+            </label>
+
+            <div class="detail-value">
+
+              <span class="material-icons">
+                check_circle
+              </span>
+
+              {{ statusLabel }}
+
+            </div>
+
+          </div>
+
+
+          <!-- CREATED -->
+
+          <div class="detail-item">
+
+            <label>
+              Member Since
+            </label>
+
+            <div class="detail-value readonly">
+
+              <span class="material-icons">
+                calendar_today
+              </span>
+
+              {{ formattedCreatedAt }}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ======================================
+           EDIT ACTIONS
+           ====================================== -->
+
+      <div
+        class="profile-actions"
+        *ngIf="editMode">
+
+        <button
+          type="button"
+          class="cancel-btn"
+          [disabled]="saving"
+          (click)="cancelEdit()">
+
+          Cancel
+
+        </button>
+
+
+        <button
+          type="button"
+          class="save-btn"
+          [disabled]="saving"
+          (click)="saveProfile()">
+
+          <span
+            class="button-spinner"
+            *ngIf="saving">
+          </span>
+
+          <span
+            class="material-icons"
+            *ngIf="!saving">
+            save
+          </span>
+
+          {{ saving ? 'Saving...' : 'Save Changes' }}
+
+        </button>
+
+      </div>
+
+
+    </section>
+
+
+    <!-- ========================================
+         SECURITY INFORMATION
+         ======================================== -->
+
+    <section class="info-card">
+
+      <div class="info-icon">
+
+        <span class="material-icons">
+          security
+        </span>
+
+      </div>
+
+      <div>
+
+        <h3>
+          Account Security
+        </h3>
+
+        <p>
+          Your account is protected by QMCMS
+          authentication and role-based access control.
+        </p>
+
+      </div>
+
+    </section>
+
+
+  </div>
+
+</div>

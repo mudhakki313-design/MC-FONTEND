@@ -1,1 +1,421 @@
-<p>judge-profile works!</p>
+<div class="profile-page">
+
+  <!-- =========================================
+       HEADER
+  ========================================== -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="eyebrow">
+        JUDGE PANEL
+      </span>
+
+      <h1>
+        My Profile
+      </h1>
+
+      <p>
+        View and manage your personal account information.
+      </p>
+
+    </div>
+
+
+    <div class="profile-role-badge">
+
+      <i class="fa-solid fa-scale-balanced"></i>
+
+      <span>
+        {{ judgeTypeLabel }}
+      </span>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================================
+       PROFILE GRID
+  ========================================== -->
+
+  <div class="profile-grid">
+
+
+    <!-- =======================================
+         PROFILE CARD
+    ======================================== -->
+
+    <section class="card profile-card">
+
+      <div class="profile-cover"></div>
+
+
+      <div class="profile-main">
+
+
+        <!-- PROFILE IMAGE -->
+
+        <div class="profile-image-wrapper">
+
+          <img
+            *ngIf="profileImageUrl"
+            [src]="profileImageUrl"
+            alt="Profile photo"
+            class="profile-image"
+          >
+
+
+          <div
+            class="profile-placeholder"
+            *ngIf="!profileImageUrl"
+          >
+
+            <i class="fa-solid fa-user"></i>
+
+          </div>
+
+
+          <!-- UPLOAD -->
+
+          <label
+            class="image-upload-btn"
+            title="Change profile photo"
+          >
+
+            <i class="fa-solid fa-camera"></i>
+
+            <input
+              type="file"
+              accept="image/*"
+              (change)="onImageSelected($event)"
+              hidden
+            >
+
+          </label>
+
+        </div>
+
+
+
+        <!-- NAME -->
+
+        <div class="profile-name">
+
+          <h2>
+            {{ profile?.fullName || 'Loading...' }}
+          </h2>
+
+          <span>
+            {{ judgeTypeLabel }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =====================================
+           PROFILE DETAILS
+      ====================================== -->
+
+      <div class="profile-details">
+
+
+        <!-- FULL NAME -->
+
+        <div class="detail-item">
+
+          <span class="detail-icon">
+            <i class="fa-solid fa-user"></i>
+          </span>
+
+          <div>
+
+            <small>
+              Full Name
+            </small>
+
+            <strong>
+              {{ profile?.fullName || '—' }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- USERNAME -->
+
+        <div class="detail-item">
+
+          <span class="detail-icon">
+            <i class="fa-solid fa-at"></i>
+          </span>
+
+          <div>
+
+            <small>
+              Username
+            </small>
+
+            <strong>
+              {{ profile?.username || '—' }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- EMAIL -->
+
+        <div class="detail-item">
+
+          <span class="detail-icon">
+            <i class="fa-solid fa-envelope"></i>
+          </span>
+
+          <div>
+
+            <small>
+              Email Address
+            </small>
+
+            <strong>
+              {{ profile?.email || '—' }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ROLE -->
+
+        <div class="detail-item">
+
+          <span class="detail-icon">
+            <i class="fa-solid fa-scale-balanced"></i>
+          </span>
+
+          <div>
+
+            <small>
+              Role
+            </small>
+
+            <strong>
+              {{ judgeTypeLabel }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- STATUS -->
+
+        <div class="detail-item">
+
+          <span class="detail-icon">
+            <i class="fa-solid fa-circle-check"></i>
+          </span>
+
+          <div>
+
+            <small>
+              Account Status
+            </small>
+
+            <strong class="status-active">
+              {{ profile?.status || '—' }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- CREATED -->
+
+        <div class="detail-item">
+
+          <span class="detail-icon">
+            <i class="fa-solid fa-calendar"></i>
+          </span>
+
+          <div>
+
+            <small>
+              Member Since
+            </small>
+
+            <strong>
+              {{ formattedCreatedAt }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =====================================
+           SAVE AREA
+      ====================================== -->
+
+      <div class="profile-actions">
+
+        <div class="save-message">
+
+          <i
+            class="fa-solid fa-circle-info"
+            *ngIf="!imagePreview"
+          ></i>
+
+          <span *ngIf="!imagePreview">
+            Change your profile photo and save your changes.
+          </span>
+
+          <span
+            class="changes-ready"
+            *ngIf="imagePreview"
+          >
+            <i class="fa-solid fa-circle-check"></i>
+            Profile photo changed. Save your changes.
+          </span>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="save-profile-btn"
+          [disabled]="!imagePreview || saving"
+          (click)="saveProfile()"
+        >
+
+          <i
+            *ngIf="!saving"
+            class="fa-solid fa-floppy-disk"
+          ></i>
+
+          <i
+            *ngIf="saving"
+            class="fa-solid fa-spinner fa-spin"
+          ></i>
+
+          <span>
+            {{ saving ? 'Saving...' : 'Save Changes' }}
+          </span>
+
+        </button>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =======================================
+         JUDGE INFORMATION
+    ======================================== -->
+
+    <section class="card judge-info-card">
+
+      <div class="card-header">
+
+        <div class="header-icon">
+
+          <i class="fa-solid fa-gavel"></i>
+
+        </div>
+
+        <div>
+
+          <h2>
+            Judge Information
+          </h2>
+
+          <p>
+            Your assigned judging information.
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- JUDGE TYPE -->
+
+      <div class="judge-type-box">
+
+        <div class="judge-type-icon">
+
+          <i class="fa-solid fa-scale-balanced"></i>
+
+        </div>
+
+        <div>
+
+          <span>
+            Judging Category
+          </span>
+
+          <strong>
+            {{ judgeTypeLabel }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- INFORMATION -->
+
+      <div class="information-note">
+
+        <i class="fa-solid fa-circle-info"></i>
+
+        <p>
+          Your judging category determines the scoring
+          criteria available in the My Score section.
+        </p>
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+
+  <!-- =========================================
+       LOADING
+  ========================================== -->
+
+  <div
+    class="profile-loading"
+    *ngIf="loading"
+  >
+
+    <i class="fa-solid fa-spinner fa-spin"></i>
+
+    Loading profile...
+
+  </div>
+
+</div>

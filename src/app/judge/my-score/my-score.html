@@ -23,15 +23,12 @@
 
     </div>
 
-
     <!-- JUDGE BADGE -->
 
     <div class="judge-badge">
 
       <span class="badge-icon">
-
         <i class="fa-solid fa-scale-balanced"></i>
-
       </span>
 
       <div>
@@ -51,7 +48,6 @@
   </div>
 
 
-
   <!-- =====================================================
        MAIN GRID
   ====================================================== -->
@@ -60,18 +56,15 @@
 
 
     <!-- ===================================================
-         SELECTION CARD
+         PARTICIPANT SELECTION CARD
     ==================================================== -->
 
     <section class="card participant-card">
 
-
       <div class="card-header">
 
         <div class="header-icon">
-
           <i class="fa-solid fa-users"></i>
-
         </div>
 
         <div>
@@ -81,13 +74,12 @@
           </h2>
 
           <p>
-            Select competition, madrasa and participant.
+            Select competition, madrasa, Juzuu and participant.
           </p>
 
         </div>
 
       </div>
-
 
 
       <!-- =================================================
@@ -120,7 +112,6 @@
 
             </option>
 
-
             <option
               *ngFor="let competition of competitions"
               [ngValue]="competition"
@@ -135,7 +126,6 @@
         </div>
 
       </div>
-
 
 
       <!-- =================================================
@@ -180,6 +170,47 @@
       </div>
 
 
+      <!-- =================================================
+           JUZUU
+      ================================================== -->
+
+      <div
+        class="form-group"
+        *ngIf="selectedMadrasa"
+      >
+
+        <label>
+          Juzuu
+        </label>
+
+        <div class="select-wrapper">
+
+          <i class="fa-solid fa-book-quran"></i>
+
+          <select
+            [(ngModel)]="selectedJuzuu"
+            (change)="onJuzuuChange()"
+          >
+
+            <option [ngValue]="null">
+              Select Juzuu
+            </option>
+
+            <option
+              *ngFor="let juzuu of juzuuOptions"
+              [ngValue]="juzuu"
+            >
+
+              {{ juzuu }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
 
       <!-- =================================================
            PARTICIPANT
@@ -187,7 +218,7 @@
 
       <div
         class="form-group"
-        *ngIf="selectedMadrasa"
+        *ngIf="selectedJuzuu"
       >
 
         <label>
@@ -201,25 +232,25 @@
           <select
             [(ngModel)]="selectedParticipantId"
             (change)="onParticipantChange()"
+            [disabled]="filteredParticipants.length === 0"
           >
 
             <option [ngValue]="null">
-              Select participant
+
+              {{
+                filteredParticipants.length === 0
+                  ? 'No participants found'
+                  : 'Select participant'
+              }}
+
             </option>
 
-
             <option
-              *ngFor="
-                let participant
-                of filteredParticipants
-              "
+              *ngFor="let participant of filteredParticipants"
               [ngValue]="participant.id"
             >
 
               {{ participant.fullName }}
-
-              —
-              {{ participant.juzuu }}
 
             </option>
 
@@ -227,8 +258,96 @@
 
         </div>
 
+        <!-- NO PARTICIPANTS FOR JUZUU -->
+
+        <div
+          class="selection-info warning"
+          *ngIf="
+            selectedJuzuu &&
+            filteredParticipants.length === 0
+          "
+        >
+
+          <i class="fa-solid fa-circle-exclamation"></i>
+
+          <span>
+            No participants found for
+            <strong>{{ selectedJuzuu }}</strong>
+            in
+            <strong>{{ selectedMadrasa }}</strong>.
+          </span>
+
+        </div>
+
       </div>
 
+
+      <!-- =================================================
+           SELECTION SUMMARY
+      ================================================== -->
+
+      <div
+        class="selection-summary"
+        *ngIf="
+          selectedCompetition &&
+          selectedMadrasa &&
+          selectedJuzuu
+        "
+      >
+
+        <div class="summary-item">
+
+          <span>
+            <i class="fa-solid fa-trophy"></i>
+            Competition
+          </span>
+
+          <strong>
+            {{ selectedCompetition }}
+          </strong>
+
+        </div>
+
+        <div class="summary-item">
+
+          <span>
+            <i class="fa-solid fa-school"></i>
+            Madrasa
+          </span>
+
+          <strong>
+            {{ selectedMadrasa }}
+          </strong>
+
+        </div>
+
+        <div class="summary-item">
+
+          <span>
+            <i class="fa-solid fa-book-quran"></i>
+            Juzuu
+          </span>
+
+          <strong>
+            {{ selectedJuzuu }}
+          </strong>
+
+        </div>
+
+        <div class="summary-item">
+
+          <span>
+            <i class="fa-solid fa-users"></i>
+            Available Participants
+          </span>
+
+          <strong>
+            {{ filteredParticipants.length }}
+          </strong>
+
+        </div>
+
+      </div>
 
 
       <!-- =================================================
@@ -252,13 +371,12 @@
 
         <p>
 
-          Select a competition, madrasa and participant
-          to begin scoring.
+          Select competition, madrasa and Juzuu,
+          then choose a participant to begin scoring.
 
         </p>
 
       </div>
-
 
 
       <!-- =================================================
@@ -276,13 +394,11 @@
 
         </div>
 
-
         <div class="participant-info">
 
           <h3>
             {{ selectedParticipant.fullName }}
           </h3>
-
 
           <div class="detail-list">
 
@@ -294,7 +410,6 @@
 
             </span>
 
-
             <span>
 
               <i class="fa-solid fa-venus-mars"></i>
@@ -303,7 +418,6 @@
 
             </span>
 
-
             <span>
 
               <i class="fa-solid fa-calendar"></i>
@@ -311,7 +425,6 @@
               {{ selectedParticipant.age }} years
 
             </span>
-
 
             <span>
 
@@ -330,13 +443,11 @@
     </section>
 
 
-
     <!-- ===================================================
-         SCORE CARD
+         SCORING CARD
     ==================================================== -->
 
     <section class="card scoring-card">
-
 
       <div class="card-header">
 
@@ -349,7 +460,7 @@
         <div>
 
           <h2>
-            Enter Score
+            Evaluate Participant
           </h2>
 
           <p>
@@ -361,10 +472,7 @@
       </div>
 
 
-
-      <!-- =================================================
-           NO PARTICIPANT
-      ================================================== -->
+      <!-- NO PARTICIPANT -->
 
       <div
         class="score-empty"
@@ -380,16 +488,12 @@
       </div>
 
 
-
-      <!-- =================================================
-           SCORE FORM
-      ================================================== -->
+      <!-- SCORE FORM -->
 
       <div
         class="score-form"
         *ngIf="selectedParticipant"
       >
-
 
         <!-- EXISTING SCORE -->
 
@@ -419,29 +523,22 @@
         </div>
 
 
-
-        <!-- SCORE INPUT -->
+        <!-- CURRENT SCORE -->
 
         <div
-          class="score-input-area"
+          class="current-score-box"
           *ngIf="!myScore"
         >
 
-          <label>
-            {{ scoreCategory }} Score
-          </label>
+          <span class="score-label">
+            Current Score
+          </span>
 
+          <div class="current-score">
 
-          <div class="score-input-wrapper">
-
-            <input
-              type="number"
-              [(ngModel)]="score"
-              min="0"
-              [max]="maxScore"
-              step="0.01"
-              placeholder="0.00"
-            />
+            <strong>
+              {{ formatScore(currentScore) }}
+            </strong>
 
             <span>
               / {{ maxScore }}
@@ -449,29 +546,339 @@
 
           </div>
 
+          <div class="score-progress">
 
-          <div class="score-limit">
+            <div
+              class="score-progress-fill"
+              [style.width.%]="
+                maxScore > 0
+                  ? (currentScore / maxScore) * 100
+                  : 0
+              "
+            ></div>
+
+          </div>
+
+          <div class="score-status">
 
             <span>
-              Minimum
+              Total deducted
             </span>
 
             <strong>
-              0
-            </strong>
-
-            <span>
-              Maximum
-            </span>
-
-            <strong>
-              {{ maxScore }}
+              {{ formatScore(totalDeduction) }}
             </strong>
 
           </div>
 
         </div>
 
+
+        <!-- =================================================
+             MEMORIZATION DEDUCTIONS
+        ================================================== -->
+
+        <div
+          class="deduction-section"
+          *ngIf="
+            !myScore &&
+            judgeType === 'MEMORIZATION'
+          "
+        >
+
+          <div class="deduction-heading">
+
+            <div>
+
+              <h3>
+                Memorization Deductions
+              </h3>
+
+              <p>
+                Select the marks to deduct according
+                to the participant's mistake.
+              </p>
+
+            </div>
+
+            <span class="deduction-badge">
+              50 Marks
+            </span>
+
+          </div>
+
+
+          <div class="deduction-grid memorization-grid">
+
+            <button
+              type="button"
+              class="deduction-btn quarter"
+              (click)="deductMarks(0.25)"
+              [disabled]="currentScore <= 0"
+            >
+
+              <span class="deduction-icon">
+                <i class="fa-solid fa-minus"></i>
+              </span>
+
+              <span class="deduction-value">
+                1/4
+              </span>
+
+              <small>
+                Deduct 0.25
+              </small>
+
+            </button>
+
+
+            <button
+              type="button"
+              class="deduction-btn"
+              (click)="deductMarks(2)"
+              [disabled]="currentScore <= 0"
+            >
+
+              <span class="deduction-icon">
+                <i class="fa-solid fa-minus"></i>
+              </span>
+
+              <span class="deduction-value">
+                2
+              </span>
+
+              <small>
+                Deduct 2 marks
+              </small>
+
+            </button>
+
+
+            <button
+              type="button"
+              class="deduction-btn"
+              (click)="deductMarks(3)"
+              [disabled]="currentScore <= 0"
+            >
+
+              <span class="deduction-icon">
+                <i class="fa-solid fa-minus"></i>
+              </span>
+
+              <span class="deduction-value">
+                3
+              </span>
+
+              <small>
+                Deduct 3 marks
+              </small>
+
+            </button>
+
+
+            <button
+              type="button"
+              class="deduction-btn"
+              (click)="deductMarks(4)"
+              [disabled]="currentScore <= 0"
+            >
+
+              <span class="deduction-icon">
+                <i class="fa-solid fa-minus"></i>
+              </span>
+
+              <span class="deduction-value">
+                4
+              </span>
+
+              <small>
+                Deduct 4 marks
+              </small>
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- TAJWEED -->
+
+        <div
+          class="deduction-section"
+          *ngIf="
+            !myScore &&
+            judgeType === 'TAJWEED'
+          "
+        >
+
+          <div class="deduction-heading">
+
+            <div>
+
+              <h3>
+                Tajweed Deduction
+              </h3>
+
+              <p>
+                Deduct 2 marks for each applicable mistake.
+              </p>
+
+            </div>
+
+            <span class="deduction-badge">
+              30 Marks
+            </span>
+
+          </div>
+
+          <button
+            type="button"
+            class="deduction-btn single"
+            (click)="deductMarks(2)"
+            [disabled]="currentScore <= 0"
+          >
+
+            <span class="deduction-icon">
+              <i class="fa-solid fa-minus"></i>
+            </span>
+
+            <span class="deduction-value">
+              2
+            </span>
+
+            <span class="deduction-text">
+              Deduct 2 Marks
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <!-- MAKHARIJ -->
+
+        <div
+          class="deduction-section"
+          *ngIf="
+            !myScore &&
+            judgeType === 'MAKHARIJ'
+          "
+        >
+
+          <div class="deduction-heading">
+
+            <div>
+
+              <h3>
+                Makharij Deduction
+              </h3>
+
+              <p>
+                Deduct 1 mark for each applicable mistake.
+              </p>
+
+            </div>
+
+            <span class="deduction-badge">
+              20 Marks
+            </span>
+
+          </div>
+
+          <button
+            type="button"
+            class="deduction-btn single"
+            (click)="deductMarks(1)"
+            [disabled]="currentScore <= 0"
+          >
+
+            <span class="deduction-icon">
+              <i class="fa-solid fa-minus"></i>
+            </span>
+
+            <span class="deduction-value">
+              1
+            </span>
+
+            <span class="deduction-text">
+              Deduct 1 Mark
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <!-- SCORE HISTORY -->
+
+        <div
+          class="deduction-history"
+          *ngIf="
+            !myScore &&
+            deductions.length > 0
+          "
+        >
+
+          <div class="history-header">
+
+            <span>
+              Deductions Made
+            </span>
+
+            <button
+              type="button"
+              class="reset-btn"
+              (click)="resetScore()"
+            >
+
+              <i class="fa-solid fa-rotate-left"></i>
+
+              Reset
+
+            </button>
+
+          </div>
+
+          <div class="history-list">
+
+            <span
+              class="history-chip"
+              *ngFor="
+                let deduction
+                of deductions;
+                let i = index
+              "
+            >
+
+              <i class="fa-solid fa-minus"></i>
+
+              {{ formatScore(deduction) }}
+
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- UNDO -->
+
+        <button
+          type="button"
+          class="undo-btn"
+          *ngIf="
+            !myScore &&
+            deductions.length > 0
+          "
+          (click)="undoLastDeduction()"
+        >
+
+          <i class="fa-solid fa-arrow-rotate-left"></i>
+
+          Undo Last Deduction
+
+        </button>
 
 
         <!-- SUBMITTED SCORE -->
@@ -485,16 +892,19 @@
             Your Score
           </span>
 
-          <strong>
-            {{ myScore.score }}
-          </strong>
+          <div>
 
-          <small>
-            / {{ maxScore }}
-          </small>
+            <strong>
+              {{ formatScore(myScore.score) }}
+            </strong>
+
+            <small>
+              / {{ maxScore }}
+            </small>
+
+          </div>
 
         </div>
-
 
 
         <!-- SUBMIT -->
@@ -507,7 +917,8 @@
           [disabled]="
             submitting ||
             loadingScore ||
-            !judgeType
+            !judgeType ||
+            score === null
           "
         >
 
@@ -521,11 +932,10 @@
           {{
             submitting
               ? 'Submitting...'
-              : 'Submit Score'
+              : 'Submit Final Score'
           }}
 
         </button>
-
 
 
         <!-- CHANGE PARTICIPANT -->
@@ -549,13 +959,11 @@
   </div>
 
 
-
   <!-- =====================================================
        SCORING GUIDE
   ====================================================== -->
 
   <section class="scoring-guide">
-
 
     <div class="guide-title">
 
@@ -572,7 +980,7 @@
         </h3>
 
         <p>
-          Your score must remain within your assigned category.
+          Your judging category determines the available deductions.
         </p>
 
       </div>
@@ -580,15 +988,13 @@
     </div>
 
 
-
     <div class="guide-items">
 
+      <!-- MEMORIZATION -->
 
       <div
         class="guide-item"
-        [class.active]="
-          judgeType === 'MEMORIZATION'
-        "
+        [class.active]="judgeType === 'MEMORIZATION'"
       >
 
         <span class="guide-number">
@@ -602,7 +1008,7 @@
           </strong>
 
           <small>
-            Maximum 50 marks
+            Deductions: 1/4, 2, 3 or 4 marks
           </small>
 
         </div>
@@ -610,12 +1016,11 @@
       </div>
 
 
+      <!-- TAJWEED -->
 
       <div
         class="guide-item"
-        [class.active]="
-          judgeType === 'TAJWEED'
-        "
+        [class.active]="judgeType === 'TAJWEED'"
       >
 
         <span class="guide-number">
@@ -629,7 +1034,7 @@
           </strong>
 
           <small>
-            Maximum 30 marks
+            Deduct 2 marks per mistake
           </small>
 
         </div>
@@ -637,12 +1042,11 @@
       </div>
 
 
+      <!-- MAKHARIJ -->
 
       <div
         class="guide-item"
-        [class.active]="
-          judgeType === 'MAKHARIJ'
-        "
+        [class.active]="judgeType === 'MAKHARIJ'"
       >
 
         <span class="guide-number">
@@ -656,7 +1060,7 @@
           </strong>
 
           <small>
-            Maximum 20 marks
+            Deduct 1 mark per mistake
           </small>
 
         </div>

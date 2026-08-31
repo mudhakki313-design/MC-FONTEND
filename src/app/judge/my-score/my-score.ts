@@ -69,6 +69,12 @@ export class MyScore implements OnInit {
 
   selectedMadrasa: string | null = null;
 
+  /**
+   * NEW:
+   * Juzuu selected before participant.
+   */
+  selectedJuzuu: string | null = null;
+
   selectedParticipantId: number | null = null;
 
 
@@ -76,6 +82,16 @@ export class MyScore implements OnInit {
 
   madrasas: string[] = [];
 
+  /**
+   * NEW:
+   * Juzuu available for selected competition + madrasa.
+   */
+  juzuuOptions: string[] = [];
+
+  /**
+   * Participants available after:
+   * Competition + Madrasa + Juzuu filtering.
+   */
   filteredParticipants: Participant[] = [];
 
 
@@ -84,6 +100,8 @@ export class MyScore implements OnInit {
   // =========================================================
 
   score: number | null = null;
+
+  deductions: number[] = [];
 
 
   // =========================================================
@@ -108,6 +126,10 @@ export class MyScore implements OnInit {
   submitting = false;
 
 
+  // =========================================================
+  // CONSTRUCTOR
+  // =========================================================
+
   constructor(
     private resultService: ResultService,
     private participantService: ParticipantService,
@@ -126,8 +148,6 @@ export class MyScore implements OnInit {
     this.loadCurrentJudge();
 
     this.loadParticipants();
-
-    this.loadJudgeType();
 
   }
 
@@ -221,38 +241,6 @@ export class MyScore implements OnInit {
 
   }
 
-  private loadJudgeType(): void {
-
-  this.judgeService
-    .getCurrentJudge()
-    .subscribe({
-
-      next: judge => {
-
-        this.judgeType = judge.judgeType;
-
-        this.cdr.detectChanges();
-
-      },
-
-      error: error => {
-
-        console.error(
-          'Failed to load current judge:',
-          error
-        );
-
-        this.alertService.error(
-          'Unable to Load Judge',
-          'Your judge profile could not be loaded.'
-        );
-
-      }
-
-    });
-
-}
-
 
   // =========================================================
   // BUILD COMPETITIONS
@@ -262,9 +250,16 @@ export class MyScore implements OnInit {
 
     this.competitions = [
       ...new Set(
+
         this.participants
-          .map(participant => participant.competition)
+
+          .map(
+            participant =>
+              participant.competition
+          )
+
           .filter(Boolean)
+
       )
     ];
 
@@ -277,7 +272,11 @@ export class MyScore implements OnInit {
 
   onCompetitionChange(): void {
 
+    // Reset everything below competition
+
     this.selectedMadrasa = null;
+
+    this.selectedJuzuu = null;
 
     this.selectedParticipantId = null;
 
@@ -287,7 +286,11 @@ export class MyScore implements OnInit {
 
     this.score = null;
 
+    this.deductions = [];
+
     this.madrasas = [];
+
+    this.juzuuOptions = [];
 
     this.filteredParticipants = [];
 
@@ -297,6 +300,8 @@ export class MyScore implements OnInit {
     }
 
 
+    // Get participants belonging to selected competition
+
     const competitionParticipants =
       this.participants.filter(
         participant =>
@@ -305,13 +310,25 @@ export class MyScore implements OnInit {
       );
 
 
+    // Build madrasa list
+
     this.madrasas = [
       ...new Set(
+
         competitionParticipants
-          .map(participant => participant.madrasa)
+
+          .map(
+            participant =>
+              participant.madrasa
+          )
+
           .filter(Boolean)
+
       )
     ];
+
+
+    this.cdr.detectChanges();
 
   }
 
@@ -322,6 +339,10 @@ export class MyScore implements OnInit {
 
   onMadrasaChange(): void {
 
+    // Reset everything below madrasa
+
+    this.selectedJuzuu = null;
+
     this.selectedParticipantId = null;
 
     this.selectedParticipant = null;
@@ -330,26 +351,123 @@ export class MyScore implements OnInit {
 
     this.score = null;
 
+    this.deductions = [];
+
+    this.juzuuOptions = [];
+
     this.filteredParticipants = [];
 
 
-    if (!this.selectedCompetition ||
-        !this.selectedMadrasa) {
+    if (
+      !this.selectedCompetition ||
+      !this.selectedMadrasa
+    ) {
 
       return;
 
     }
 
 
-    this.filteredParticipants =
+    // Get participants belonging to:
+    // Competition + Madrasa
+
+    const madrasaParticipants =
       this.participants.filter(
+
         participant =>
+
           participant.competition ===
             this.selectedCompetition &&
 
           participant.madrasa ===
             this.selectedMadrasa
+
       );
+
+
+    // Build Juzuu list
+
+    this.juzuuOptions = [
+      ...new Set(
+
+        madrasaParticipants
+
+          .map(
+            participant =>
+              participant.juzuu
+          )
+
+          .filter(Boolean)
+
+      )
+    ];
+
+
+    this.cdr.detectChanges();
+
+  }
+
+
+  // =========================================================
+  // JUZUU CHANGE
+  // =========================================================
+
+  onJuzuuChange(): void {
+
+    // Reset participant whenever Juzuu changes
+
+    this.selectedParticipantId = null;
+
+    this.selectedParticipant = null;
+
+    this.myScore = null;
+
+    this.score = null;
+
+    this.deductions = [];
+
+    this.filteredParticipants = [];
+
+
+    if (
+      !this.selectedCompetition ||
+      !this.selectedMadrasa ||
+      !this.selectedJuzuu
+    ) {
+
+      return;
+
+    }
+
+
+    // IMPORTANT:
+    //
+    // Participant must belong to:
+    //
+    // Competition
+    // +
+    // Madrasa
+    // +
+    // Juzuu
+
+    this.filteredParticipants =
+      this.participants.filter(
+
+        participant =>
+
+          participant.competition ===
+            this.selectedCompetition &&
+
+          participant.madrasa ===
+            this.selectedMadrasa &&
+
+          participant.juzuu ===
+            this.selectedJuzuu
+
+      );
+
+
+    this.cdr.detectChanges();
 
   }
 
@@ -364,12 +482,17 @@ export class MyScore implements OnInit {
 
     this.score = null;
 
+    this.deductions = [];
+
 
     this.selectedParticipant =
       this.filteredParticipants.find(
+
         participant =>
+
           participant.id ===
           this.selectedParticipantId
+
       ) ?? null;
 
 
@@ -409,11 +532,17 @@ export class MyScore implements OnInit {
 
           } else {
 
+            // New participant starts
+            // with full marks.
+
             this.myScore = null;
 
-            this.score = null;
+            this.score = this.maxScore;
 
           }
+
+
+          this.deductions = [];
 
           this.loadingScore = false;
 
@@ -448,22 +577,24 @@ export class MyScore implements OnInit {
 
   get maxScore(): number {
 
-  switch (this.judgeType) {
+    switch (this.judgeType) {
 
-    case 'MEMORIZATION':
-      return 50;
+      case 'MEMORIZATION':
+        return 50;
 
-    case 'TAJWEED':
-      return 30;
+      case 'TAJWEED':
+        return 30;
 
-    case 'MAKHARIJ':
-      return 20;
+      case 'MAKHARIJ':
+        return 20;
 
-    default:
-      return 0;
+      default:
+        return 0;
+
+    }
+
   }
 
-}
 
   // =========================================================
   // JUDGE TYPE LABEL
@@ -519,6 +650,191 @@ export class MyScore implements OnInit {
 
 
   // =========================================================
+  // CURRENT SCORE
+  // =========================================================
+
+  get currentScore(): number {
+
+    return this.score ?? this.maxScore;
+
+  }
+
+
+  // =========================================================
+  // TOTAL DEDUCTION
+  // =========================================================
+
+  get totalDeduction(): number {
+
+    return this.deductions.reduce(
+
+      (total, deduction) =>
+        total + deduction,
+
+      0
+
+    );
+
+  }
+
+
+  // =========================================================
+  // FORMAT SCORE
+  // =========================================================
+
+  formatScore(value: number): string {
+
+    if (Number.isInteger(value)) {
+
+      return value.toString();
+
+    }
+
+    return value
+
+      .toFixed(2)
+
+      .replace(
+        /\.?0+$/,
+        ''
+      );
+
+  }
+
+
+  // =========================================================
+  // DEDUCT SCORE
+  // =========================================================
+
+  deductMarks(
+    deduction: number
+  ): void {
+
+    if (!this.selectedParticipant) {
+      return;
+    }
+
+
+    if (this.myScore) {
+
+      this.alertService.info(
+        'Score Already Submitted',
+        'This participant already has a submitted score.'
+      );
+
+      return;
+
+    }
+
+
+    const current =
+      this.score ?? this.maxScore;
+
+
+    if (current <= 0) {
+
+      this.alertService.warning(
+        'No Marks Remaining',
+        'The participant score cannot go below zero.'
+      );
+
+      return;
+
+    }
+
+
+    const actualDeduction =
+      Math.min(
+        deduction,
+        current
+      );
+
+
+    this.score =
+      Number(
+
+        (
+          current -
+          actualDeduction
+        ).toFixed(2)
+
+      );
+
+
+    this.deductions.push(
+      actualDeduction
+    );
+
+
+    this.cdr.detectChanges();
+
+  }
+
+
+  // =========================================================
+  // UNDO LAST DEDUCTION
+  // =========================================================
+
+  undoLastDeduction(): void {
+
+    if (
+      this.myScore ||
+      this.deductions.length === 0
+    ) {
+
+      return;
+
+    }
+
+
+    const lastDeduction =
+      this.deductions.pop();
+
+
+    if (lastDeduction === undefined) {
+      return;
+    }
+
+
+    this.score =
+      Number(
+
+        (
+
+          (this.score ?? 0) +
+          lastDeduction
+
+        ).toFixed(2)
+
+      );
+
+
+    this.cdr.detectChanges();
+
+  }
+
+
+  // =========================================================
+  // RESET SCORE
+  // =========================================================
+
+  resetScore(): void {
+
+    if (this.myScore) {
+      return;
+    }
+
+
+    this.score = this.maxScore;
+
+    this.deductions = [];
+
+    this.cdr.detectChanges();
+
+  }
+
+
+  // =========================================================
   // SUBMIT SCORE
   // =========================================================
 
@@ -556,7 +872,7 @@ export class MyScore implements OnInit {
 
       this.alertService.warning(
         'Score Required',
-        'Please enter a score.'
+        'Please evaluate the participant before submitting.'
       );
 
       return;
@@ -605,7 +921,7 @@ export class MyScore implements OnInit {
 
         'Submit Score?',
 
-        `Submit ${this.score} / ${this.maxScore} for ${this.selectedParticipant.fullName}?`,
+        `Submit ${this.formatScore(this.score)} / ${this.maxScore} for ${this.selectedParticipant.fullName}?`,
 
         'Submit Score'
 
@@ -647,8 +963,11 @@ export class MyScore implements OnInit {
           this.score = response.score;
 
           this.alertService.success(
+
             'Score Submitted',
-            `Score ${response.score} has been successfully recorded.`
+
+            `Score ${this.formatScore(response.score)} has been successfully recorded.`
+
           );
 
           this.cdr.detectChanges();
@@ -698,6 +1017,8 @@ export class MyScore implements OnInit {
 
     this.score = null;
 
+    this.deductions = [];
+
   }
 
 
@@ -709,6 +1030,8 @@ export class MyScore implements OnInit {
 
     this.selectedMadrasa = null;
 
+    this.selectedJuzuu = null;
+
     this.selectedParticipantId = null;
 
     this.selectedParticipant = null;
@@ -716,6 +1039,10 @@ export class MyScore implements OnInit {
     this.myScore = null;
 
     this.score = null;
+
+    this.deductions = [];
+
+    this.juzuuOptions = [];
 
     this.filteredParticipants = [];
 
@@ -732,6 +1059,8 @@ export class MyScore implements OnInit {
 
     this.selectedMadrasa = null;
 
+    this.selectedJuzuu = null;
+
     this.selectedParticipantId = null;
 
     this.selectedParticipant = null;
@@ -740,7 +1069,11 @@ export class MyScore implements OnInit {
 
     this.score = null;
 
+    this.deductions = [];
+
     this.madrasas = [];
+
+    this.juzuuOptions = [];
 
     this.filteredParticipants = [];
 

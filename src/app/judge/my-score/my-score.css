@@ -155,8 +155,7 @@
   margin-bottom: 25px;
 }
 
-.form-group label,
-.score-input-area label {
+.form-group label {
   display: block;
   margin-bottom: 9px;
   font-size: 12px;
@@ -326,61 +325,328 @@ select:disabled {
   padding-top: 5px;
 }
 
-.score-input-area {
-  margin-top: 12px;
-}
 
-.score-input-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
+/* =========================================================
+   CURRENT SCORE
+========================================================= */
 
-.score-input-wrapper input {
-  width: 100%;
-  height: 75px;
-  border: 2px solid #dce6e3;
-  border-radius: 14px;
-  background: #fbfdfc;
-  padding: 0 20px;
-  font-size: 28px;
-  font-weight: 750;
-  color: #0b4f4a;
-  outline: none;
+.current-score-box {
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(
+    145deg,
+    #f5faf8,
+    #ffffff
+  );
+  border: 1px solid #dfeae7;
   text-align: center;
-  transition: 0.2s ease;
+  margin-bottom: 22px;
 }
 
-.score-input-wrapper input:focus {
-  border-color: #0b4f4a;
-  box-shadow: 0 0 0 4px rgba(11, 79, 74, 0.08);
-}
-
-.score-input-wrapper > span {
-  white-space: nowrap;
-  font-size: 18px;
+.score-label {
+  display: block;
+  font-size: 11px;
   font-weight: 700;
-  color: #82908d;
+  color: #7b8986;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 5px;
+}
+
+.current-score {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 7px;
+}
+
+.current-score strong {
+  font-size: 48px;
+  line-height: 1;
+  color: #0b4f4a;
+  font-weight: 800;
+}
+
+.current-score span {
+  font-size: 16px;
+  font-weight: 700;
+  color: #899795;
+}
+
+.score-progress {
+  height: 7px;
+  background: #e7eeec;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 18px;
+}
+
+.score-progress-fill {
+  height: 100%;
+  background: #0b4f4a;
+  border-radius: inherit;
+  transition: width 0.25s ease;
+}
+
+.score-status {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 12px;
+  font-size: 11px;
+  color: #8a9693;
+}
+
+.score-status strong {
+  color: #b78b18;
 }
 
 
 /* =========================================================
-   SCORE LIMIT
+   DEDUCTION SECTION
 ========================================================= */
 
-.score-limit {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-  font-size: 11px;
-  color: #899492;
+.deduction-section {
+  margin-top: 5px;
 }
 
-.score-limit strong {
+.deduction-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 14px;
+}
+
+.deduction-heading h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #314743;
+}
+
+.deduction-heading p {
+  margin: 4px 0 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #899592;
+}
+
+.deduction-badge {
+  flex-shrink: 0;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #f8f3e4;
+  color: #9a7418;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   DEDUCTION GRID
+========================================================= */
+
+.deduction-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.memorization-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+
+/* =========================================================
+   DEDUCTION BUTTON
+========================================================= */
+
+.deduction-btn {
+  min-height: 100px;
+  border: 1px solid #dce7e4;
+  border-radius: 13px;
+  background: #ffffff;
+  color: #23413d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.deduction-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: #0b4f4a;
+  background: #f3f9f7;
+  box-shadow: 0 7px 18px rgba(11, 79, 74, 0.1);
+}
+
+.deduction-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.deduction-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.deduction-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7eeee;
+  color: #a64a4a;
+  font-size: 11px;
+}
+
+.deduction-value {
+  font-size: 19px;
+  font-weight: 800;
   color: #0b4f4a;
-  margin-right: 10px;
+}
+
+.deduction-btn small {
+  font-size: 9px;
+  color: #8a9693;
+}
+
+
+/* =========================================================
+   QUARTER BUTTON
+========================================================= */
+
+.deduction-btn.quarter .deduction-value {
+  font-size: 17px;
+}
+
+
+/* =========================================================
+   SINGLE DEDUCTION BUTTON
+========================================================= */
+
+.deduction-btn.single {
+  width: 100%;
+  min-height: 75px;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 12px 18px;
+  text-align: left;
+}
+
+.deduction-btn.single .deduction-icon {
+  flex-shrink: 0;
+}
+
+.deduction-btn.single .deduction-value {
+  font-size: 20px;
+}
+
+.deduction-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4b5d59;
+}
+
+
+/* =========================================================
+   DEDUCTION HISTORY
+========================================================= */
+
+.deduction-history {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #fafbfb;
+  border: 1px solid #e7eceb;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.history-header > span {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64736f;
+}
+
+.reset-btn {
+  border: none;
+  background: transparent;
+  color: #0b4f4a;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.reset-btn:hover {
+  text-decoration: underline;
+}
+
+.reset-btn i {
+  margin-right: 4px;
+}
+
+.history-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.history-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 9px;
+  border-radius: 8px;
+  background: #f5eaea;
+  color: #9a4a4a;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.history-chip i {
+  font-size: 8px;
+}
+
+
+/* =========================================================
+   UNDO
+========================================================= */
+
+.undo-btn {
+  width: 100%;
+  height: 40px;
+  margin-top: 10px;
+  border: 1px dashed #ccd9d6;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #687774;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.undo-btn:hover {
+  border-color: #0b4f4a;
+  color: #0b4f4a;
+  background: #f7faf9;
+}
+
+.undo-btn i {
+  margin-right: 6px;
 }
 
 
@@ -390,8 +656,8 @@ select:disabled {
 
 .submit-btn {
   width: 100%;
-  height: 50px;
-  margin-top: 25px;
+  height: 52px;
+  margin-top: 20px;
   border: none;
   border-radius: 11px;
   background: #0b4f4a;
@@ -430,6 +696,7 @@ select:disabled {
   border-radius: 13px;
   background: #edf8f2;
   border: 1px solid #d4ebdd;
+  margin-bottom: 18px;
 }
 
 .success-icon {
@@ -442,6 +709,7 @@ select:disabled {
   background: #d8f1e2;
   color: #25804e;
   font-size: 18px;
+  flex-shrink: 0;
 }
 
 .already-submitted strong {
@@ -475,6 +743,13 @@ select:disabled {
   margin-bottom: 8px;
 }
 
+.submitted-score > div {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 5px;
+}
+
 .submitted-score strong {
   color: #0b4f4a;
   font-size: 38px;
@@ -483,7 +758,6 @@ select:disabled {
 .submitted-score small {
   color: #87928f;
   font-size: 15px;
-  margin-left: 4px;
 }
 
 
@@ -641,6 +915,10 @@ select:disabled {
     grid-template-columns: 1fr;
   }
 
+  .memorization-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
 }
 
 
@@ -669,9 +947,150 @@ select:disabled {
     gap: 6px;
   }
 
-  .score-input-wrapper input {
-    height: 65px;
-    font-size: 24px;
+  .current-score strong {
+    font-size: 42px;
+  }
+
+  .memorization-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .deduction-heading {
+    align-items: flex-start;
+  }
+
+}
+
+/* =========================================================
+   JUZUU SELECTION
+========================================================= */
+
+.selection-info {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  margin-top: 9px;
+  padding: 10px 12px;
+
+  border-radius: 9px;
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.selection-info.warning {
+  background: #fff8e8;
+  border: 1px solid #f3dfad;
+  color: #8a6a20;
+}
+
+.selection-info.warning i {
+  color: #c59424;
+  font-size: 13px;
+}
+
+.selection-info strong {
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   SELECTION SUMMARY
+========================================================= */
+
+.selection-summary {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 10px;
+
+  margin-top: 5px;
+  margin-bottom: 22px;
+
+  padding: 14px;
+
+  border-radius: 13px;
+
+  background: #f5f9f8;
+
+  border: 1px solid #e1ebe8;
+}
+
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+  min-width: 0;
+}
+
+
+.summary-item span {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  color: #899592;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+
+.summary-item span i {
+  color: #0b4f4a;
+  font-size: 10px;
+}
+
+
+.summary-item strong {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: #23423e;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   JUZUU SELECT HIGHLIGHT
+========================================================= */
+
+.form-group:has(
+  select option:checked
+) select {
+  color: #293a38;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .selection-summary {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+}
+
+
+@media (max-width: 420px) {
+
+  .selection-info {
+    align-items: flex-start;
   }
 
 }

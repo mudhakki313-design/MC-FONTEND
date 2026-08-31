@@ -1,0 +1,897 @@
+/* =========================================================
+   JUDGE DASHBOARD
+========================================================= */
+
+.judge-dashboard {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 30px;
+  color: #1f2937;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.header-content {
+  min-width: 0;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 7px;
+  color: #0b4f4a;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+}
+
+.header-content h1 {
+  margin: 0;
+  color: #173936;
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -0.5px;
+}
+
+.header-content h1 span {
+  color: #0b4f4a;
+}
+
+.header-content p {
+  max-width: 700px;
+  margin: 9px 0 0;
+  color: #778582;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   JUDGE PROFILE
+========================================================= */
+
+.judge-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 245px;
+  padding: 13px 17px;
+  border: 1px solid #e3ebe9;
+  border-radius: 15px;
+  background: #ffffff;
+  box-shadow: 0 7px 24px rgba(16, 55, 51, 0.055);
+}
+
+.judge-avatar {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  background: #eaf4f2;
+  color: #0b4f4a;
+  font-size: 19px;
+}
+
+.judge-profile-info span {
+  display: block;
+  margin-bottom: 4px;
+  color: #899592;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.judge-profile-info strong {
+  display: block;
+  color: #173d39;
+  font-size: 13px;
+}
+
+.judge-profile-info small {
+  display: block;
+  margin-top: 3px;
+  color: #0b4f4a;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.dashboard-loading {
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  color: #7e8c89;
+}
+
+.loading-spinner {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: #eaf4f2;
+  color: #0b4f4a;
+  font-size: 20px;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 17px;
+  margin-bottom: 22px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 105px;
+  padding: 18px;
+  border: 1px solid #e5ecea;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 7px 22px rgba(19, 49, 46, 0.045);
+  transition: 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 11px 27px rgba(19, 49, 46, 0.075);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  font-size: 18px;
+}
+
+.stat-icon.teal {
+  background: #eaf4f2;
+  color: #0b4f4a;
+}
+
+.stat-icon.blue {
+  background: #edf4fb;
+  color: #3973a5;
+}
+
+.stat-icon.green {
+  background: #edf8f2;
+  color: #2b8755;
+}
+
+.stat-icon.gold {
+  background: #fbf5e7;
+  color: #b38a1c;
+}
+
+.stat-content {
+  min-width: 0;
+}
+
+.stat-content span {
+  display: block;
+  color: #7d8a87;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.stat-content strong {
+  display: block;
+  margin: 4px 0;
+  color: #1b3c38;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.stat-content small {
+  color: #9aa4a1;
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   MAIN GRID
+========================================================= */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.75fr);
+  gap: 22px;
+}
+
+.dashboard-main,
+.dashboard-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+.panel {
+  border: 1px solid #e5ecea;
+  border-radius: 17px;
+  background: #ffffff;
+  box-shadow: 0 7px 23px rgba(20, 48, 45, 0.045);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 20px 21px;
+  border-bottom: 1px solid #edf1f0;
+}
+
+.panel-header.compact {
+  padding-bottom: 17px;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.panel-icon {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  background: #eaf4f2;
+  color: #0b4f4a;
+  font-size: 15px;
+}
+
+.panel-icon.gold-icon {
+  background: #fbf5e7;
+  color: #b18721;
+}
+
+.panel-heading h2 {
+  margin: 0;
+  color: #243d3a;
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.panel-heading p {
+  margin: 4px 0 0;
+  color: #8a9693;
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-percentage {
+  color: #0b4f4a;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.progress-panel {
+  overflow: hidden;
+}
+
+.progress-track {
+  height: 9px;
+  margin: 23px 21px 16px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #edf2f0;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: #0b4f4a;
+  transition: width 0.5s ease;
+}
+
+.progress-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0 21px 20px;
+}
+
+.progress-summary > div {
+  padding-right: 15px;
+}
+
+.progress-summary strong {
+  display: block;
+  color: #1c3d39;
+  font-size: 17px;
+}
+
+.progress-summary span {
+  display: block;
+  margin-top: 3px;
+  color: #8c9895;
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   CURRENT COMPETITION
+========================================================= */
+
+.competition-content {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  padding: 21px;
+}
+
+.competition-symbol {
+  width: 62px;
+  height: 62px;
+  flex: 0 0 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  background: #f8f2df;
+  color: #b18721;
+  font-size: 24px;
+}
+
+.competition-info {
+  min-width: 0;
+}
+
+.competition-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #2d8756;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.competition-status i {
+  font-size: 6px;
+}
+
+.competition-info h3 {
+  margin: 6px 0 8px;
+  color: #203a36;
+  font-size: 17px;
+}
+
+.competition-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+
+.competition-meta span {
+  color: #7e8b88;
+  font-size: 10px;
+}
+
+.competition-meta i {
+  margin-right: 4px;
+  color: #0b4f4a;
+}
+
+.no-competition {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 24px 21px;
+}
+
+.no-competition-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #f5f7f6;
+  color: #98a3a0;
+}
+
+.no-competition strong {
+  color: #52615e;
+  font-size: 12px;
+}
+
+.no-competition p {
+  margin: 4px 0 0;
+  color: #909b98;
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   UPCOMING COMPETITIONS
+========================================================= */
+
+.competition-list {
+  padding: 5px 21px 10px;
+}
+
+.competition-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f2f1;
+}
+
+.competition-row:last-child {
+  border-bottom: none;
+}
+
+.row-icon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #f1f7f5;
+  color: #0b4f4a;
+  font-size: 12px;
+}
+
+.row-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-info strong {
+  display: block;
+  overflow: hidden;
+  color: #344845;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-info span {
+  display: block;
+  margin-top: 4px;
+  color: #929d9a;
+  font-size: 9px;
+}
+
+.row-info i {
+  margin-right: 3px;
+  color: #0b4f4a;
+}
+
+.row-date {
+  text-align: right;
+}
+
+.row-date strong {
+  display: block;
+  color: #3b514e;
+  font-size: 10px;
+}
+
+.row-date span {
+  display: block;
+  margin-top: 3px;
+  color: #b08a24;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.empty-panel {
+  min-height: 125px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: #98a29f;
+  font-size: 10px;
+}
+
+.empty-panel i {
+  color: #d1d9d6;
+  font-size: 25px;
+}
+
+
+/* =========================================================
+   QUICK ACTION
+========================================================= */
+
+.action-card {
+  position: relative;
+  overflow: hidden;
+  padding: 25px;
+  border-radius: 18px;
+  background: #0b4f4a;
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(11, 79, 74, 0.16);
+}
+
+.action-glow {
+  position: absolute;
+  top: -55px;
+  right: -45px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.action-icon {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 19px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.13);
+  font-size: 17px;
+}
+
+.action-card > span {
+  position: relative;
+  color: #c9e2de;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.action-card h2 {
+  position: relative;
+  margin: 7px 0;
+  font-size: 20px;
+}
+
+.action-card p {
+  position: relative;
+  margin: 0 0 20px;
+  color: #d4e6e3;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.primary-action {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 43px;
+  padding: 0 14px;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #0b4f4a;
+  font-size: 11px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.primary-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 7px 16px rgba(0, 0, 0, 0.12);
+}
+
+.primary-action i {
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   ASSIGNMENT
+========================================================= */
+
+.assignment-list {
+  padding: 6px 20px 12px;
+}
+
+.assignment-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f2f1;
+}
+
+.assignment-item:last-child {
+  border-bottom: none;
+}
+
+.assignment-item-icon {
+  width: 33px;
+  height: 33px;
+  flex: 0 0 33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: #f1f7f5;
+  color: #0b4f4a;
+  font-size: 11px;
+}
+
+.assignment-item span {
+  display: block;
+  color: #909b98;
+  font-size: 8px;
+}
+
+.assignment-item strong {
+  display: block;
+  margin-top: 3px;
+  color: #334945;
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   RULES
+========================================================= */
+
+.rules-panel {
+  padding: 20px;
+}
+
+.rules-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #edf1f0;
+}
+
+.rules-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #f8f2df;
+  color: #b18721;
+  font-size: 14px;
+}
+
+.rules-heading h3 {
+  margin: 0;
+  color: #394d4a;
+  font-size: 12px;
+}
+
+.rules-heading p {
+  margin: 3px 0 0;
+  color: #929c99;
+  font-size: 9px;
+}
+
+.rules-panel ul {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin: 17px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rules-panel li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #73817e;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.rules-panel li i {
+  margin-top: 2px;
+  color: #2b8755;
+  font-size: 8px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.dashboard-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 22px;
+  padding: 14px 4px 2px;
+  color: #899592;
+  font-size: 9px;
+}
+
+.dashboard-footer > div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.dashboard-footer i {
+  color: #0b4f4a;
+}
+
+.last-updated {
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-side {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  .action-card {
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  .rules-panel {
+    grid-column: span 2;
+  }
+
+}
+
+
+@media (max-width: 800px) {
+
+  .judge-dashboard {
+    padding: 22px 16px;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .judge-profile-card {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .dashboard-side {
+    grid-template-columns: 1fr;
+  }
+
+  .rules-panel {
+    grid-column: auto;
+  }
+
+}
+
+
+@media (max-width: 560px) {
+
+  .judge-dashboard {
+    padding: 18px 13px;
+  }
+
+  .header-content h1 {
+    font-size: 24px;
+  }
+
+  .header-content p {
+    font-size: 11px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    min-height: 85px;
+  }
+
+  .panel-header {
+    padding: 17px;
+  }
+
+  .competition-content {
+    align-items: flex-start;
+    padding: 17px;
+  }
+
+  .competition-symbol {
+    width: 50px;
+    height: 50px;
+    flex-basis: 50px;
+    font-size: 19px;
+  }
+
+  .competition-info h3 {
+    font-size: 14px;
+  }
+
+  .competition-meta {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .progress-summary {
+    padding-left: 17px;
+    padding-right: 17px;
+  }
+
+  .progress-track {
+    margin-left: 17px;
+    margin-right: 17px;
+  }
+
+  .dashboard-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .last-updated {
+    white-space: normal;
+  }
+
+}

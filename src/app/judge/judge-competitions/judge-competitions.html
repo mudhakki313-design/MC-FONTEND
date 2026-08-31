@@ -1,1 +1,881 @@
-<p>judge-competitions works!</p>
+<div class="competitions-page">
+
+
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+
+  <div class="page-header">
+
+    <div class="header-content">
+
+      <span class="eyebrow">
+        JUDGE PANEL
+      </span>
+
+      <h1>
+        Competitions
+      </h1>
+
+      <p>
+        View available Qur'an competitions and their
+        current status.
+      </p>
+
+    </div>
+
+
+    <!-- REFRESH -->
+
+    <button
+      type="button"
+      class="refresh-btn"
+      (click)="refresh()"
+      [disabled]="loading"
+    >
+
+      <i
+        class="fa-solid"
+        [class.fa-rotate]="!loading"
+        [class.fa-spinner]="loading"
+        [class.fa-spin]="loading"
+      ></i>
+
+      {{
+        loading
+          ? 'Loading...'
+          : 'Refresh'
+      }}
+
+    </button>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       STATISTICS
+  ====================================================== -->
+
+  <div class="stats-grid">
+
+
+    <!-- TOTAL -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+
+        <i class="fa-solid fa-trophy"></i>
+
+      </div>
+
+      <div class="stat-info">
+
+        <span>
+          Total Competitions
+        </span>
+
+        <strong>
+          {{ totalCompetitions }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- UPCOMING -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon upcoming">
+
+        <i class="fa-solid fa-calendar-days"></i>
+
+      </div>
+
+      <div class="stat-info">
+
+        <span>
+          Upcoming
+        </span>
+
+        <strong>
+          {{ upcomingCompetitions }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- ONGOING -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon ongoing">
+
+        <i class="fa-solid fa-circle-play"></i>
+
+      </div>
+
+      <div class="stat-info">
+
+        <span>
+          Ongoing
+        </span>
+
+        <strong>
+          {{ ongoingCompetitions }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- COMPLETED -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon completed">
+
+        <i class="fa-solid fa-circle-check"></i>
+
+      </div>
+
+      <div class="stat-info">
+
+        <span>
+          Completed
+        </span>
+
+        <strong>
+          {{ completedCompetitions }}
+        </strong>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       MAIN CARD
+  ====================================================== -->
+
+  <section class="competition-card">
+
+
+    <!-- CARD HEADER -->
+
+    <div class="card-top">
+
+      <div>
+
+        <div class="section-title">
+
+          <span class="section-icon">
+
+            <i class="fa-solid fa-trophy"></i>
+
+          </span>
+
+          <div>
+
+            <h2>
+              Available Competitions
+            </h2>
+
+            <p>
+              Competitions available in the system.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <span class="result-count">
+
+        {{ filteredCompetitions.length }}
+
+        {{
+          filteredCompetitions.length === 1
+            ? 'competition'
+            : 'competitions'
+        }}
+
+      </span>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FILTERS
+    ====================================================== -->
+
+    <div class="filters">
+
+
+      <!-- SEARCH -->
+
+      <div class="search-box">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+          placeholder="Search competition or venue..."
+        />
+
+        <button
+          type="button"
+          *ngIf="searchTerm"
+          class="clear-search"
+          (click)="searchTerm = ''; onSearchChange()"
+          aria-label="Clear search"
+        >
+
+          <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+      </div>
+
+
+      <!-- STATUS -->
+
+      <div class="status-filter">
+
+        <label>
+          Status
+        </label>
+
+        <div class="status-select">
+
+          <i class="fa-solid fa-filter"></i>
+
+          <select
+            [(ngModel)]="selectedStatus"
+            (change)="onStatusChange()"
+          >
+
+            <option value="ALL">
+              All Status
+            </option>
+
+            <option value="UPCOMING">
+              Upcoming
+            </option>
+
+            <option value="ONGOING">
+              Ongoing
+            </option>
+
+            <option value="COMPLETED">
+              Completed
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <!-- CLEAR -->
+
+      <button
+        type="button"
+        class="clear-filter-btn"
+        *ngIf="
+          searchTerm ||
+          selectedStatus !== 'ALL'
+        "
+        (click)="clearFilters()"
+      >
+
+        <i class="fa-solid fa-rotate-left"></i>
+
+        Clear
+
+      </button>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
+
+    <div
+      class="loading-state"
+      *ngIf="loading"
+    >
+
+      <div class="loading-spinner">
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+      </div>
+
+      <h3>
+        Loading Competitions
+      </h3>
+
+      <p>
+        Please wait while competition information is loaded.
+      </p>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         EMPTY STATE
+    ====================================================== -->
+
+    <div
+      class="empty-state"
+      *ngIf="
+        !loading &&
+        filteredCompetitions.length === 0
+      "
+    >
+
+      <div class="empty-icon">
+
+        <i class="fa-solid fa-trophy"></i>
+
+      </div>
+
+      <h3>
+        No Competitions Found
+      </h3>
+
+      <p
+        *ngIf="
+          searchTerm ||
+          selectedStatus !== 'ALL'
+        "
+      >
+        No competitions match your current filters.
+      </p>
+
+      <p
+        *ngIf="
+          !searchTerm &&
+          selectedStatus === 'ALL'
+        "
+      >
+        There are currently no competitions available.
+      </p>
+
+      <button
+        type="button"
+        class="empty-action"
+        *ngIf="
+          searchTerm ||
+          selectedStatus !== 'ALL'
+        "
+        (click)="clearFilters()"
+      >
+
+        <i class="fa-solid fa-rotate-left"></i>
+
+        Clear Filters
+
+      </button>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DESKTOP TABLE
+    ====================================================== -->
+
+    <div
+      class="table-wrapper"
+      *ngIf="
+        !loading &&
+        filteredCompetitions.length > 0
+      "
+    >
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Competition
+            </th>
+
+            <th>
+              Venue
+            </th>
+
+            <th>
+              Competition Date
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Action
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="
+              let competition
+              of filteredCompetitions
+            "
+          >
+
+
+            <!-- COMPETITION -->
+
+            <td>
+
+              <div class="competition-name">
+
+                <div class="competition-icon">
+
+                  <i class="fa-solid fa-trophy"></i>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    {{ competition.title }}
+                  </strong>
+
+                  <small>
+                    Competition #{{ competition.id }}
+                  </small>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <!-- VENUE -->
+
+            <td>
+
+              <div class="venue">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                <span>
+                  {{ competition.venue || '—' }}
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <!-- DATE -->
+
+            <td>
+
+              <div class="date">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <span>
+                  {{ formatDate(competition.competitionDate) }}
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <!-- STATUS -->
+
+            <td>
+
+              <span
+                class="status-badge"
+                [class.upcoming]="
+                  competition.status === 'UPCOMING'
+                "
+                [class.ongoing]="
+                  competition.status === 'ONGOING'
+                "
+                [class.completed]="
+                  competition.status === 'COMPLETED'
+                "
+              >
+
+                <i
+                  class="fa-solid"
+                  [ngClass]="
+                    getStatusIcon(competition.status)
+                  "
+                ></i>
+
+                {{ getStatusLabel(competition.status) }}
+
+              </span>
+
+            </td>
+
+
+            <!-- ACTION -->
+
+            <td>
+
+              <button
+                type="button"
+                class="view-btn"
+                (click)="viewCompetition(competition)"
+              >
+
+                <i class="fa-solid fa-eye"></i>
+
+                View
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MOBILE CARDS
+    ====================================================== -->
+
+    <div
+      class="mobile-list"
+      *ngIf="
+        !loading &&
+        filteredCompetitions.length > 0
+      "
+    >
+
+      <article
+        class="mobile-competition"
+        *ngFor="
+          let competition
+          of filteredCompetitions
+        "
+      >
+
+        <div class="mobile-card-header">
+
+          <div class="mobile-title">
+
+            <div class="competition-icon">
+
+              <i class="fa-solid fa-trophy"></i>
+
+            </div>
+
+            <div>
+
+              <h3>
+                {{ competition.title }}
+              </h3>
+
+              <small>
+                Competition #{{ competition.id }}
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <span
+            class="status-badge"
+            [class.upcoming]="
+              competition.status === 'UPCOMING'
+            "
+            [class.ongoing]="
+              competition.status === 'ONGOING'
+            "
+            [class.completed]="
+              competition.status === 'COMPLETED'
+            "
+          >
+
+            <i
+              class="fa-solid"
+              [ngClass]="
+                getStatusIcon(competition.status)
+              "
+            ></i>
+
+            {{ getStatusLabel(competition.status) }}
+
+          </span>
+
+        </div>
+
+
+        <div class="mobile-details">
+
+          <div>
+
+            <i class="fa-solid fa-location-dot"></i>
+
+            <span>
+              {{ competition.venue || '—' }}
+            </span>
+
+          </div>
+
+          <div>
+
+            <i class="fa-regular fa-calendar"></i>
+
+            <span>
+              {{ formatDate(competition.competitionDate) }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="mobile-view-btn"
+          (click)="viewCompetition(competition)"
+        >
+
+          <i class="fa-solid fa-eye"></i>
+
+          View Competition
+
+        </button>
+
+      </article>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       COMPETITION DETAILS MODAL
+  ====================================================== -->
+
+  <div
+    class="modal-backdrop"
+    *ngIf="selectedCompetition"
+    (click)="closeDetails()"
+  >
+
+    <div
+      class="competition-modal"
+      (click)="$event.stopPropagation()"
+    >
+
+
+      <!-- MODAL HEADER -->
+
+      <div class="modal-header">
+
+        <div class="modal-heading">
+
+          <div class="modal-icon">
+
+            <i class="fa-solid fa-trophy"></i>
+
+          </div>
+
+          <div>
+
+            <span>
+              Competition Details
+            </span>
+
+            <h2>
+              {{ selectedCompetition.title }}
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="modal-close"
+          (click)="closeDetails()"
+          aria-label="Close"
+        >
+
+          <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+      </div>
+
+
+
+      <!-- MODAL BODY -->
+
+      <div class="modal-body">
+
+
+        <div class="detail-row">
+
+          <span>
+            <i class="fa-solid fa-location-dot"></i>
+            Venue
+          </span>
+
+          <strong>
+            {{ selectedCompetition.venue || '—' }}
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>
+            <i class="fa-regular fa-calendar"></i>
+            Competition Date
+          </span>
+
+          <strong>
+            {{
+              formatDate(
+                selectedCompetition.competitionDate
+              )
+            }}
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>
+            <i class="fa-solid fa-circle-info"></i>
+            Status
+          </span>
+
+          <span
+            class="status-badge"
+            [class.upcoming]="
+              selectedCompetition.status === 'UPCOMING'
+            "
+            [class.ongoing]="
+              selectedCompetition.status === 'ONGOING'
+            "
+            [class.completed]="
+              selectedCompetition.status === 'COMPLETED'
+            "
+          >
+
+            <i
+              class="fa-solid"
+              [ngClass]="
+                getStatusIcon(
+                  selectedCompetition.status
+                )
+              "
+            ></i>
+
+            {{
+              getStatusLabel(
+                selectedCompetition.status
+              )
+            }}
+
+          </span>
+
+        </div>
+
+
+        <div class="judge-note">
+
+          <div class="note-icon">
+
+            <i class="fa-solid fa-scale-balanced"></i>
+
+          </div>
+
+          <div>
+
+            <strong>
+              Judge Access
+            </strong>
+
+            <p>
+              Competition information is available
+              for reference. Scoring is performed from
+              the <strong>My Score</strong> section.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- MODAL FOOTER -->
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="modal-done"
+          (click)="closeDetails()"
+        >
+
+          <i class="fa-solid fa-check"></i>
+
+          Close
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

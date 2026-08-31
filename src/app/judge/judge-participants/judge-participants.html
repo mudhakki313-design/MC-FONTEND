@@ -1,1 +1,660 @@
-<p>judge-participants works!</p>
+<div class="participants-page">
+
+
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+
+  <div class="page-header">
+
+    <div class="page-heading">
+
+      <span class="eyebrow">
+        JUDGE PANEL
+      </span>
+
+      <h1>
+        Participants
+      </h1>
+
+      <p>
+        View approved Qur'an competition participants
+        assigned for judging.
+      </p>
+
+    </div>
+
+
+    <!-- TOTAL -->
+
+    <div class="total-card">
+
+      <div class="total-icon">
+        <i class="fa-solid fa-users"></i>
+      </div>
+
+      <div>
+
+        <span>
+          Available Participants
+        </span>
+
+        <strong>
+          {{ filteredParticipants.length }}
+        </strong>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       FILTER CARD
+  ====================================================== -->
+
+  <section class="filter-card">
+
+    <div class="filter-header">
+
+      <div class="filter-title">
+
+        <div class="filter-icon">
+
+          <i class="fa-solid fa-filter"></i>
+
+        </div>
+
+        <div>
+
+          <h2>
+            Filter Participants
+          </h2>
+
+          <p>
+            Filter participants by competition, madrasa
+            and Juzuu.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- CLEAR -->
+
+      <button
+        type="button"
+        class="clear-filter-btn"
+        *ngIf="hasFilters"
+        (click)="clearFilters()"
+      >
+
+        <i class="fa-solid fa-rotate-left"></i>
+
+        Clear Filters
+
+      </button>
+
+    </div>
+
+
+
+    <div class="filter-grid">
+
+
+      <!-- =================================================
+           COMPETITION
+      ================================================== -->
+
+      <div class="filter-group">
+
+        <label>
+          Competition
+        </label>
+
+        <div class="select-wrapper">
+
+          <i class="fa-solid fa-trophy"></i>
+
+          <select
+            [(ngModel)]="selectedCompetition"
+            (change)="onCompetitionChange()"
+          >
+
+            <option [ngValue]="null">
+              All Competitions
+            </option>
+
+            <option
+              *ngFor="let competition of competitions"
+              [ngValue]="competition"
+            >
+
+              {{ competition }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =================================================
+           MADRASA
+      ================================================== -->
+
+      <div class="filter-group">
+
+        <label>
+          Madrasa
+        </label>
+
+        <div class="select-wrapper">
+
+          <i class="fa-solid fa-school"></i>
+
+          <select
+            [(ngModel)]="selectedMadrasa"
+            (change)="onMadrasaChange()"
+          >
+
+            <option [ngValue]="null">
+              All Madrasas
+            </option>
+
+            <option
+              *ngFor="let madrasa of madrasas"
+              [ngValue]="madrasa"
+            >
+
+              {{ madrasa }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =================================================
+           JUZUU
+      ================================================== -->
+
+      <div class="filter-group">
+
+        <label>
+          Juzuu
+        </label>
+
+        <div class="select-wrapper">
+
+          <i class="fa-solid fa-book-quran"></i>
+
+          <select
+            [(ngModel)]="selectedJuzuu"
+            (change)="onJuzuuChange()"
+          >
+
+            <option [ngValue]="null">
+              All Juzuu
+            </option>
+
+            <option
+              *ngFor="let juzuu of juzuuList"
+              [ngValue]="juzuu"
+            >
+
+              {{ getJuzuuLabel(juzuu) }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FILTER SUMMARY
+    ====================================================== -->
+
+    <div
+      class="filter-summary"
+      *ngIf="hasFilters"
+    >
+
+      <span class="summary-label">
+
+        <i class="fa-solid fa-sliders"></i>
+
+        Active Filters
+
+      </span>
+
+
+
+      <!-- COMPETITION CHIP -->
+
+      <span
+        class="filter-chip"
+        *ngIf="selectedCompetition"
+      >
+
+        <i class="fa-solid fa-trophy"></i>
+
+        {{ selectedCompetition }}
+
+      </span>
+
+
+
+      <!-- MADRASA CHIP -->
+
+      <span
+        class="filter-chip"
+        *ngIf="selectedMadrasa"
+      >
+
+        <i class="fa-solid fa-school"></i>
+
+        {{ selectedMadrasa }}
+
+      </span>
+
+
+
+      <!-- JUZUU CHIP -->
+
+      <span
+        class="filter-chip"
+        *ngIf="selectedJuzuu"
+      >
+
+        <i class="fa-solid fa-book-quran"></i>
+
+        {{ getJuzuuLabel(selectedJuzuu) }}
+
+      </span>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       LOADING
+  ====================================================== -->
+
+  <div
+    class="loading-state"
+    *ngIf="loading"
+  >
+
+    <div class="loading-spinner">
+
+      <i class="fa-solid fa-spinner fa-spin"></i>
+
+    </div>
+
+    <h3>
+      Loading Participants
+    </h3>
+
+    <p>
+      Please wait while approved participants are loaded.
+    </p>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       PARTICIPANTS TABLE
+  ====================================================== -->
+
+  <section
+    class="participants-card"
+    *ngIf="!loading"
+  >
+
+    <div class="table-header">
+
+      <div>
+
+        <h2>
+          Participant List
+        </h2>
+
+        <p>
+
+          Showing
+
+          <strong>
+            {{ filteredParticipants.length }}
+          </strong>
+
+          participant(s)
+
+        </p>
+
+      </div>
+
+
+      <!-- REFRESH -->
+
+      <button
+        type="button"
+        class="refresh-btn"
+        (click)="refresh()"
+      >
+
+        <i class="fa-solid fa-rotate"></i>
+
+        Refresh
+
+      </button>
+
+    </div>
+
+
+
+    <!-- =================================================
+         EMPTY
+    ================================================== -->
+
+    <div
+      class="empty-state"
+      *ngIf="filteredParticipants.length === 0"
+    >
+
+      <div class="empty-icon">
+
+        <i class="fa-solid fa-users-slash"></i>
+
+      </div>
+
+      <h3>
+        No Participants Found
+      </h3>
+
+      <p>
+        No participants match the selected filters.
+        Try changing or clearing your filters.
+      </p>
+
+
+      <button
+        type="button"
+        class="empty-clear-btn"
+        *ngIf="hasFilters"
+        (click)="clearFilters()"
+      >
+
+        <i class="fa-solid fa-filter-circle-xmark"></i>
+
+        Clear Filters
+
+      </button>
+
+    </div>
+
+
+
+    <!-- =================================================
+         TABLE
+    ================================================== -->
+
+    <div
+      class="table-wrapper"
+      *ngIf="filteredParticipants.length > 0"
+    >
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              #
+            </th>
+
+            <th>
+              Participant
+            </th>
+
+            <th>
+              Gender
+            </th>
+
+            <th>
+              Age
+            </th>
+
+            <th>
+              Madrasa
+            </th>
+
+            <th>
+              Competition
+            </th>
+
+            <th>
+              Juzuu
+            </th>
+
+            <th>
+              Status
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="
+              let participant of filteredParticipants;
+              let i = index
+            "
+          >
+
+            <!-- NUMBER -->
+
+            <td class="number-cell">
+
+              {{ i + 1 }}
+
+            </td>
+
+
+
+            <!-- PARTICIPANT -->
+
+            <td>
+
+              <div class="participant-cell">
+
+                <div class="participant-avatar">
+
+                  <i class="fa-solid fa-user"></i>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    {{ participant.fullName }}
+                  </strong>
+
+                  <small>
+                    ID #{{ participant.id }}
+                  </small>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+
+            <!-- GENDER -->
+
+            <td>
+
+              <span
+                class="gender-badge"
+
+                [class.male]="
+                  participant.gender === 'MALE'
+                "
+
+                [class.female]="
+                  participant.gender === 'FEMALE'
+                "
+              >
+
+                <i
+                  class="fa-solid"
+
+                  [class.fa-mars]="
+                    participant.gender === 'MALE'
+                  "
+
+                  [class.fa-venus]="
+                    participant.gender === 'FEMALE'
+                  "
+                ></i>
+
+                {{ participant.gender }}
+
+              </span>
+
+            </td>
+
+
+
+            <!-- AGE -->
+
+            <td>
+
+              <span class="age-value">
+
+                {{ participant.age }}
+
+                <small>
+                  yrs
+                </small>
+
+              </span>
+
+            </td>
+
+
+
+            <!-- MADRASA -->
+
+            <td>
+
+              <div class="madrasa-cell">
+
+                <i class="fa-solid fa-school"></i>
+
+                <span>
+                  {{ participant.madrasa }}
+                </span>
+
+              </div>
+
+            </td>
+
+
+
+            <!-- COMPETITION -->
+
+            <td>
+
+              <div class="competition-cell">
+
+                <i class="fa-solid fa-trophy"></i>
+
+                <span>
+                  {{ participant.competition }}
+                </span>
+
+              </div>
+
+            </td>
+
+
+
+            <!-- JUZUU -->
+
+            <td>
+
+              <span class="juzuu-badge">
+
+                <i class="fa-solid fa-book-quran"></i>
+
+                {{ getJuzuuLabel(participant.juzuu) }}
+
+              </span>
+
+            </td>
+
+
+
+            <!-- STATUS -->
+
+            <td>
+
+              <span
+                class="status-badge"
+
+                [class.approved]="
+                  participant.status === 'APPROVED'
+                "
+              >
+
+                <i
+                  class="fa-solid"
+
+                  [class.fa-circle-check]="
+                    participant.status === 'APPROVED'
+                  "
+                ></i>
+
+                {{ participant.status }}
+
+              </span>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</div>

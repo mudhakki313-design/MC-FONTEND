@@ -1,1 +1,1165 @@
-<p>chief-daashboard works!</p>
+<div class="dashboard">
+
+
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="eyebrow">
+        CHIEF JUDGE PANEL
+      </span>
+
+      <h1>
+        Dashboard
+      </h1>
+
+      <p>
+        Monitor competitions, participants and judging progress.
+      </p>
+
+    </div>
+
+
+    <div class="header-actions">
+
+      <div
+        class="last-updated"
+        *ngIf="lastUpdated"
+      >
+
+        <i class="fas fa-clock"></i>
+
+        <span>
+          Updated
+          {{ lastUpdated | date:'dd MMM, HH:mm' }}
+        </span>
+
+      </div>
+
+
+      <button
+        class="refresh-btn"
+        (click)="refreshDashboard()"
+        [disabled]="loading"
+      >
+
+        <i
+          class="fas fa-sync-alt"
+          [class.fa-spin]="loading"
+        ></i>
+
+        Refresh
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       LOADING
+  ====================================================== -->
+
+  <div
+    class="loading-state"
+    *ngIf="loading"
+  >
+
+    <div class="spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+
+    <h3>
+      Loading dashboard...
+    </h3>
+
+    <p>
+      Please wait while we collect the latest competition data.
+    </p>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       MAIN CONTENT
+  ====================================================== -->
+
+  <div
+    class="dashboard-content"
+    *ngIf="!loading"
+  >
+
+
+    <!-- ===================================================
+         STAT CARDS
+    ==================================================== -->
+
+    <div class="stats-grid">
+
+
+      <!-- COMPETITIONS -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon competition-icon">
+          <i class="fas fa-trophy"></i>
+        </div>
+
+        <div class="stat-content">
+
+          <span>
+            Competitions
+          </span>
+
+          <strong>
+            {{ totalCompetitions }}
+          </strong>
+
+          <small>
+
+            <b>
+              {{ ongoingCompetitions }}
+            </b>
+
+            ongoing
+
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- PARTICIPANTS -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon participant-icon">
+          <i class="fas fa-users"></i>
+        </div>
+
+        <div class="stat-content">
+
+          <span>
+            Participants
+          </span>
+
+          <strong>
+            {{ totalParticipants }}
+          </strong>
+
+          <small>
+
+            <b>
+              {{ approvedParticipants }}
+            </b>
+
+            approved
+
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- JUDGES -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon judge-icon">
+          <i class="fas fa-gavel"></i>
+        </div>
+
+        <div class="stat-content">
+
+          <span>
+            Judges
+          </span>
+
+          <strong>
+            {{ totalJudges }}
+          </strong>
+
+          <small>
+
+            <b>
+              {{ activeJudges }}
+            </b>
+
+            active
+
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- MADRASAS -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon madrasa-icon">
+          <i class="fas fa-school"></i>
+        </div>
+
+        <div class="stat-content">
+
+          <span>
+            Madrasas
+          </span>
+
+          <strong>
+            {{ totalMadrasas }}
+          </strong>
+
+          <small>
+            registered institutions
+          </small>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ===================================================
+         SECOND ROW
+    ==================================================== -->
+
+    <div class="main-grid">
+
+
+      <!-- =================================================
+           CURRENT COMPETITION
+      ================================================== -->
+
+      <section class="card current-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <span class="card-label">
+              CURRENT EVENT
+            </span>
+
+            <h2>
+              Competition Status
+            </h2>
+
+          </div>
+
+          <i class="fas fa-calendar-check"></i>
+
+        </div>
+
+
+        <div
+          class="current-competition"
+          *ngIf="currentCompetition"
+        >
+
+          <div class="competition-symbol">
+
+            <i class="fas fa-trophy"></i>
+
+          </div>
+
+
+          <div class="competition-details">
+
+            <h3>
+              {{ currentCompetition.title }}
+            </h3>
+
+            <p>
+
+              <i class="fas fa-map-marker-alt"></i>
+
+              {{ currentCompetition.venue }}
+
+            </p>
+
+            <p>
+
+              <i class="fas fa-calendar-alt"></i>
+
+              {{ formatDate(currentCompetition.competitionDate) }}
+
+              <span
+                *ngIf="formatTime(currentCompetition.competitionDate)"
+              >
+                ·
+                {{ formatTime(currentCompetition.competitionDate) }}
+              </span>
+
+            </p>
+
+          </div>
+
+
+          <span class="status-badge ongoing">
+            <span class="status-dot"></span>
+            ONGOING
+          </span>
+
+        </div>
+
+
+        <div
+          class="no-current"
+          *ngIf="!currentCompetition"
+        >
+
+          <i class="fas fa-calendar-day"></i>
+
+          <h3>
+            No Ongoing Competition
+          </h3>
+
+          <p>
+            There is currently no competition marked as ongoing.
+          </p>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =================================================
+           JUDGING COMPLETION
+      ================================================== -->
+
+      <section class="card judging-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <span class="card-label">
+              JUDGING PROGRESS
+            </span>
+
+            <h2>
+              Overall Completion
+            </h2>
+
+          </div>
+
+          <i class="fas fa-chart-line"></i>
+
+        </div>
+
+
+        <div class="completion-area">
+
+          <div class="completion-circle">
+
+            <span>
+              {{ judgingCompletion }}%
+            </span>
+
+            <small>
+              Complete
+            </small>
+
+          </div>
+
+
+          <div class="completion-info">
+
+            <div class="completion-row">
+
+              <div>
+
+                <span>
+                  Scores Submitted
+                </span>
+
+                <strong>
+                  {{ totalScores }}
+                </strong>
+
+              </div>
+
+              <i class="fas fa-check-circle"></i>
+
+            </div>
+
+
+            <div class="completion-row">
+
+              <div>
+
+                <span>
+                  Participants Scored
+                </span>
+
+                <strong>
+                  {{ participantsWithScores }}
+                  / {{ approvedParticipants }}
+                </strong>
+
+              </div>
+
+              <i class="fas fa-user-check"></i>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+
+    <!-- ===================================================
+         SCORE CATEGORY PROGRESS
+    ==================================================== -->
+
+    <section class="card score-card">
+
+      <div class="card-header">
+
+        <div>
+
+          <span class="card-label">
+            JUDGING CATEGORIES
+          </span>
+
+          <h2>
+            Score Submission Progress
+          </h2>
+
+        </div>
+
+        <i class="fas fa-clipboard-check"></i>
+
+      </div>
+
+
+      <div class="category-grid">
+
+
+        <!-- MEMORIZATION -->
+
+        <div class="category">
+
+          <div class="category-top">
+
+            <div class="category-name">
+
+              <div class="mini-icon">
+                <i class="fas fa-brain"></i>
+              </div>
+
+              <div>
+
+                <strong>
+                  Memorization
+                </strong>
+
+                <span>
+                  Maximum 50 points
+                </span>
+
+              </div>
+
+            </div>
+
+            <strong>
+              {{ memorizationProgress }}%
+            </strong>
+
+          </div>
+
+
+          <div class="progress-track">
+
+            <div
+              class="progress-fill memorization"
+              [style.width.%]="memorizationProgress"
+            ></div>
+
+          </div>
+
+
+          <small>
+            {{ memorizationScores }}
+            of
+            {{ approvedParticipants }}
+            scores submitted
+          </small>
+
+        </div>
+
+
+
+        <!-- TAJWEED -->
+
+        <div class="category">
+
+          <div class="category-top">
+
+            <div class="category-name">
+
+              <div class="mini-icon">
+                <i class="fas fa-book-quran"></i>
+              </div>
+
+              <div>
+
+                <strong>
+                  Tajweed
+                </strong>
+
+                <span>
+                  Maximum 30 points
+                </span>
+
+              </div>
+
+            </div>
+
+            <strong>
+              {{ tajweedProgress }}%
+            </strong>
+
+          </div>
+
+
+          <div class="progress-track">
+
+            <div
+              class="progress-fill tajweed"
+              [style.width.%]="tajweedProgress"
+            ></div>
+
+          </div>
+
+
+          <small>
+            {{ tajweedScores }}
+            of
+            {{ approvedParticipants }}
+            scores submitted
+          </small>
+
+        </div>
+
+
+
+        <!-- MAKHARIJ -->
+
+        <div class="category">
+
+          <div class="category-top">
+
+            <div class="category-name">
+
+              <div class="mini-icon">
+                <i class="fas fa-microphone"></i>
+              </div>
+
+              <div>
+
+                <strong>
+                  Makharij
+                </strong>
+
+                <span>
+                  Maximum 20 points
+                </span>
+
+              </div>
+
+            </div>
+
+            <strong>
+              {{ makharijProgress }}%
+            </strong>
+
+          </div>
+
+
+          <div class="progress-track">
+
+            <div
+              class="progress-fill makharij"
+              [style.width.%]="makharijProgress"
+            ></div>
+
+          </div>
+
+
+          <small>
+            {{ makharijScores }}
+            of
+            {{ approvedParticipants }}
+            scores submitted
+          </small>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         LOWER GRID
+    ==================================================== -->
+
+    <div class="lower-grid">
+
+
+      <!-- =================================================
+           PARTICIPANT OVERVIEW
+      ================================================== -->
+
+      <section class="card">
+
+        <div class="card-header">
+
+          <div>
+
+            <span class="card-label">
+              PARTICIPANTS
+            </span>
+
+            <h2>
+              Screening Overview
+            </h2>
+
+          </div>
+
+          <i class="fas fa-users"></i>
+
+        </div>
+
+
+        <div class="participant-overview">
+
+
+          <div class="participant-total">
+
+            <strong>
+              {{ totalParticipants }}
+            </strong>
+
+            <span>
+              Total Participants
+            </span>
+
+          </div>
+
+
+          <div class="status-list">
+
+
+            <div class="status-item">
+
+              <div class="status-left">
+
+                <span class="legend approved"></span>
+
+                <span>
+                  Approved
+                </span>
+
+              </div>
+
+              <strong>
+                {{ approvedParticipants }}
+              </strong>
+
+            </div>
+
+
+            <div class="status-item">
+
+              <div class="status-left">
+
+                <span class="legend pending"></span>
+
+                <span>
+                  Pending
+                </span>
+
+              </div>
+
+              <strong>
+                {{ pendingParticipants }}
+              </strong>
+
+            </div>
+
+
+            <div class="status-item">
+
+              <div class="status-left">
+
+                <span class="legend rejected"></span>
+
+                <span>
+                  Rejected
+                </span>
+
+              </div>
+
+              <strong>
+                {{ rejectedParticipants }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="approval-progress">
+
+          <div class="approval-label">
+
+            <span>
+              Approval rate
+            </span>
+
+            <strong>
+              {{ participantApprovalRate }}%
+            </strong>
+
+          </div>
+
+          <div class="progress-track">
+
+            <div
+              class="progress-fill approval"
+              [style.width.%]="participantApprovalRate"
+            ></div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =================================================
+           NEXT COMPETITION
+      ================================================== -->
+
+      <section class="card">
+
+        <div class="card-header">
+
+          <div>
+
+            <span class="card-label">
+              UPCOMING
+            </span>
+
+            <h2>
+              Next Competition
+            </h2>
+
+          </div>
+
+          <i class="fas fa-calendar-plus"></i>
+
+        </div>
+
+
+        <div
+          class="next-event"
+          *ngIf="nextCompetition"
+        >
+
+          <div class="event-date">
+
+            <span>
+              {{ nextCompetition.competitionDate | date:'MMM' }}
+            </span>
+
+            <strong>
+              {{ nextCompetition.competitionDate | date:'dd' }}
+            </strong>
+
+          </div>
+
+
+          <div class="event-info">
+
+            <h3>
+              {{ nextCompetition.title }}
+            </h3>
+
+            <p>
+
+              <i class="fas fa-map-marker-alt"></i>
+
+              {{ nextCompetition.venue }}
+
+            </p>
+
+            <p>
+
+              <i class="fas fa-calendar"></i>
+
+              {{ formatDate(nextCompetition.competitionDate) }}
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="no-current"
+          *ngIf="!nextCompetition"
+        >
+
+          <i class="fas fa-calendar-times"></i>
+
+          <h3>
+            No Upcoming Competition
+          </h3>
+
+          <p>
+            No upcoming competition has been scheduled.
+          </p>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+
+    <!-- ===================================================
+         COMPETITION PERFORMANCE
+    ==================================================== -->
+
+    <section class="card performance-card">
+
+      <div class="card-header">
+
+        <div>
+
+          <span class="card-label">
+            COMPETITION ANALYTICS
+          </span>
+
+          <h2>
+            Competition Performance
+          </h2>
+
+        </div>
+
+        <i class="fas fa-chart-bar"></i>
+
+      </div>
+
+
+      <div
+        class="table-wrapper"
+        *ngIf="competitionPerformance.length > 0"
+      >
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Competition
+              </th>
+
+              <th>
+                Date
+              </th>
+
+              <th>
+                Participants
+              </th>
+
+              <th>
+                Scores
+              </th>
+
+              <th>
+                Judging Progress
+              </th>
+
+              <th>
+                Status
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            <tr
+              *ngFor="
+                let item of competitionPerformance
+              "
+            >
+
+              <td>
+
+                <div class="competition-cell">
+
+                  <div class="table-icon">
+                    <i class="fas fa-trophy"></i>
+                  </div>
+
+                  <strong>
+                    {{ item.competition.title }}
+                  </strong>
+
+                </div>
+
+              </td>
+
+
+              <td>
+
+                {{ formatDate(
+                  item.competition.competitionDate
+                ) }}
+
+              </td>
+
+
+              <td>
+
+                <strong>
+                  {{ item.participants }}
+                </strong>
+
+              </td>
+
+
+              <td>
+
+                <span class="score-count">
+                  {{ item.scores }}
+                </span>
+
+              </td>
+
+
+              <td>
+
+                <div class="table-progress">
+
+                  <div class="table-progress-top">
+
+                    <span>
+                      {{ item.progress }}%
+                    </span>
+
+                  </div>
+
+                  <div class="progress-track">
+
+                    <div
+                      class="progress-fill"
+                      [style.width.%]="item.progress"
+                    ></div>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+
+              <td>
+
+                <span
+                  class="status-badge"
+                  [ngClass]="
+                    getStatusClass(
+                      item.competition.status
+                    )
+                  "
+                >
+
+                  <span class="status-dot"></span>
+
+                  {{ item.competition.status }}
+
+                </span>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <div
+        class="empty-state"
+        *ngIf="competitionPerformance.length === 0"
+      >
+
+        <i class="fas fa-chart-bar"></i>
+
+        <h3>
+          No Competition Data
+        </h3>
+
+        <p>
+          Competition analytics will appear here once competitions are available.
+        </p>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         RECENT SCORES
+    ==================================================== -->
+
+    <section class="card recent-card">
+
+      <div class="card-header">
+
+        <div>
+
+          <span class="card-label">
+            JUDGING ACTIVITY
+          </span>
+
+          <h2>
+            Recent Score Submissions
+          </h2>
+
+        </div>
+
+        <i class="fas fa-history"></i>
+
+      </div>
+
+
+      <div
+        class="recent-list"
+        *ngIf="recentScores.length > 0"
+      >
+
+        <div
+          class="recent-item"
+          *ngFor="
+            let score of recentScores
+          "
+        >
+
+          <div class="recent-avatar">
+
+            <i class="fas fa-user"></i>
+
+          </div>
+
+
+          <div class="recent-info">
+
+            <strong>
+              {{ score.participant }}
+            </strong>
+
+            <span>
+
+              {{ score.madrasa }}
+
+              <span class="separator">
+                ·
+              </span>
+
+              {{ getJudgeTypeLabel(score.judgeType) }}
+
+            </span>
+
+          </div>
+
+
+          <div class="recent-score">
+
+            <strong>
+              {{ score.score }}
+            </strong>
+
+            <span>
+              points
+            </span>
+
+          </div>
+
+
+          <div class="recent-juzuu">
+
+            {{ formatJuzuu(score.juzuu) }}
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="empty-state"
+        *ngIf="recentScores.length === 0"
+      >
+
+        <i class="fas fa-clipboard-list"></i>
+
+        <h3>
+          No Scores Yet
+        </h3>
+
+        <p>
+          Score submissions will appear here when judges begin scoring.
+        </p>
+
+      </div>
+
+    </section>
+
+
+  </div>
+
+</div>
