@@ -1,0 +1,1550 @@
+/* =========================================================
+   PAGE
+========================================================= */
+
+.competitions-page {
+
+  padding: 28px;
+
+  min-height: 100%;
+
+  background: #f6f8f9;
+
+  box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header {
+
+  margin-bottom: 24px;
+
+}
+
+.header-content {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+}
+
+
+.title-section {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+}
+
+
+.title-icon {
+
+  width: 52px;
+
+  height: 52px;
+
+  border-radius: 14px;
+
+  background: #0B4F4A;
+
+  color: #fff;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 21px;
+
+  box-shadow:
+    0 8px 20px rgba(11, 79, 74, .15);
+
+}
+
+
+.title-section h1 {
+
+  margin: 0 0 5px;
+
+  font-size: 25px;
+
+  font-weight: 700;
+
+  color: #172525;
+
+}
+
+
+.title-section p {
+
+  margin: 0;
+
+  font-size: 14px;
+
+  color: #758181;
+
+}
+
+
+
+/* =========================================================
+   REFRESH BUTTON
+========================================================= */
+
+.refresh-btn {
+
+  height: 42px;
+
+  padding: 0 17px;
+
+  border: 1px solid #dce4e3;
+
+  border-radius: 9px;
+
+  background: #fff;
+
+  color: #0B4F4A;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: .2s ease;
+
+}
+
+
+.refresh-btn:hover {
+
+  background: #f1f7f6;
+
+  border-color: #b9cfcc;
+
+}
+
+
+.refresh-btn:disabled {
+
+  opacity: .6;
+
+  cursor: not-allowed;
+
+}
+
+
+
+/* =========================================================
+   CONTENT CARD
+========================================================= */
+
+.content-card {
+
+  background: #fff;
+
+  border: 1px solid #e3e9e8;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 4px 16px rgba(21, 48, 47, .04);
+
+}
+
+
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.table-toolbar {
+
+  min-height: 76px;
+
+  padding: 15px 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border-bottom: 1px solid #edf1f1;
+
+}
+
+
+.toolbar-left {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  flex: 1;
+
+}
+
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-box {
+
+  width: 320px;
+
+  height: 40px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+}
+
+
+.search-box > i {
+
+  position: absolute;
+
+  left: 13px;
+
+  color: #899695;
+
+  font-size: 13px;
+
+  pointer-events: none;
+
+}
+
+
+.search-box input {
+
+  width: 100%;
+
+  height: 100%;
+
+  box-sizing: border-box;
+
+  padding: 0 38px 0 37px;
+
+  border: 1px solid #dce5e4;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  color: #273636;
+
+  font-size: 13px;
+
+  background: #fff;
+
+  transition: .2s ease;
+
+}
+
+
+.search-box input::placeholder {
+
+  color: #a0aaaa;
+
+}
+
+
+.search-box input:focus {
+
+  border-color: #0B4F4A;
+
+  box-shadow:
+    0 0 0 3px rgba(11, 79, 74, .08);
+
+}
+
+
+.clear-search {
+
+  position: absolute;
+
+  right: 7px;
+
+  width: 28px;
+
+  height: 28px;
+
+  border: 0;
+
+  border-radius: 6px;
+
+  background: transparent;
+
+  color: #899695;
+
+  cursor: pointer;
+
+}
+
+
+.clear-search:hover {
+
+  background: #f1f4f4;
+
+  color: #333;
+
+}
+
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+.filter-box {
+
+  height: 40px;
+
+  min-width: 160px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+}
+
+
+.filter-box > i {
+
+  position: absolute;
+
+  left: 12px;
+
+  color: #0B4F4A;
+
+  font-size: 12px;
+
+  pointer-events: none;
+
+}
+
+
+.filter-box select {
+
+  width: 100%;
+
+  height: 100%;
+
+  padding: 0 30px 0 34px;
+
+  border: 1px solid #dce5e4;
+
+  border-radius: 8px;
+
+  background: #fff;
+
+  color: #374444;
+
+  font-size: 13px;
+
+  outline: none;
+
+  cursor: pointer;
+
+}
+
+
+.filter-box select:focus {
+
+  border-color: #0B4F4A;
+
+}
+
+
+
+/* =========================================================
+   COUNT
+========================================================= */
+
+.competition-count {
+
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 7px;
+
+  white-space: nowrap;
+
+}
+
+
+.count-number {
+
+  font-size: 19px;
+
+  font-weight: 700;
+
+  color: #0B4F4A;
+
+}
+
+
+.count-label {
+
+  font-size: 12px;
+
+  color: #899695;
+
+}
+
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrapper {
+
+  width: 100%;
+
+  overflow-x: auto;
+
+}
+
+
+.competitions-table {
+
+  width: 100%;
+
+  min-width: 850px;
+
+  border-collapse: collapse;
+
+}
+
+
+.competitions-table th {
+
+  height: 48px;
+
+  padding: 0 18px;
+
+  background: #fafcfc;
+
+  border-bottom: 1px solid #e7edec;
+
+  color: #687776;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: .45px;
+
+  text-align: left;
+
+  white-space: nowrap;
+
+}
+
+
+.competitions-table td {
+
+  height: 72px;
+
+  padding: 0 18px;
+
+  border-bottom: 1px solid #edf1f1;
+
+  color: #334141;
+
+  font-size: 13px;
+
+}
+
+
+.competitions-table tbody tr {
+
+  transition: background .15s ease;
+
+}
+
+
+.competitions-table tbody tr:hover {
+
+  background: #fbfdfd;
+
+}
+
+
+.competitions-table tbody tr:last-child td {
+
+  border-bottom: 0;
+
+}
+
+
+.number-cell {
+
+  width: 50px;
+
+  color: #9aa5a4 !important;
+
+  font-size: 12px !important;
+
+  font-weight: 600;
+
+}
+
+
+
+/* =========================================================
+   COMPETITION INFO
+========================================================= */
+
+.competition-info {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+}
+
+
+.competition-icon {
+
+  width: 40px;
+
+  height: 40px;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #edf6f5;
+
+  color: #0B4F4A;
+
+  font-size: 15px;
+
+}
+
+
+.competition-name {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+}
+
+
+.competition-name .name {
+
+  max-width: 260px;
+
+  color: #243333;
+
+  font-size: 13px;
+
+  font-weight: 650;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+}
+
+
+.competition-name .id {
+
+  color: #9aa5a4;
+
+  font-size: 11px;
+
+}
+
+
+
+/* =========================================================
+   VENUE
+========================================================= */
+
+.venue-info {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  max-width: 220px;
+
+}
+
+
+.venue-info i {
+
+  color: #0B4F4A;
+
+  font-size: 12px;
+
+}
+
+
+.venue-info span {
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+}
+
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+.date-info {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  white-space: nowrap;
+
+}
+
+
+.date-info i {
+
+  color: #7d8988;
+
+  font-size: 13px;
+
+}
+
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-badge {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+
+  font-weight: 650;
+
+  white-space: nowrap;
+
+}
+
+
+.status-dot {
+
+  width: 6px;
+
+  height: 6px;
+
+  border-radius: 50%;
+
+}
+
+
+.status-upcoming {
+
+  color: #8a6716;
+
+  background: #fff7df;
+
+}
+
+
+.status-upcoming .status-dot {
+
+  background: #D4A437;
+
+}
+
+
+.status-ongoing {
+
+  color: #08756d;
+
+  background: #e8f7f5;
+
+}
+
+
+.status-ongoing .status-dot {
+
+  background: #0B4F4A;
+
+}
+
+
+.status-completed {
+
+  color: #687373;
+
+  background: #f0f2f2;
+
+}
+
+
+.status-completed .status-dot {
+
+  background: #7d8988;
+
+}
+
+
+
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
+
+.actions-header {
+
+  text-align: center !important;
+
+}
+
+
+.view-btn {
+
+  height: 34px;
+
+  padding: 0 12px;
+
+  border: 1px solid #d6e3e1;
+
+  border-radius: 7px;
+
+  background: #fff;
+
+  color: #0B4F4A;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: .2s ease;
+
+}
+
+
+.view-btn:hover {
+
+  background: #edf6f5;
+
+  border-color: #b8d2cf;
+
+}
+
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading-state {
+
+  min-height: 360px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+}
+
+
+.spinner {
+
+  width: 35px;
+
+  height: 35px;
+
+  border: 3px solid #e2ecea;
+
+  border-top-color: #0B4F4A;
+
+  border-radius: 50%;
+
+  animation: spin .8s linear infinite;
+
+  margin-bottom: 17px;
+
+}
+
+
+@keyframes spin {
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+.loading-state h3 {
+
+  margin: 0 0 6px;
+
+  color: #354444;
+
+  font-size: 15px;
+
+}
+
+
+.loading-state p {
+
+  margin: 0;
+
+  color: #9aa5a4;
+
+  font-size: 12px;
+
+}
+
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-state {
+
+  min-height: 360px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 30px;
+
+}
+
+
+.empty-icon {
+
+  width: 66px;
+
+  height: 66px;
+
+  margin-bottom: 18px;
+
+  border-radius: 50%;
+
+  background: #edf6f5;
+
+  color: #0B4F4A;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 23px;
+
+}
+
+
+.empty-state h3 {
+
+  margin: 0 0 8px;
+
+  color: #354444;
+
+  font-size: 17px;
+
+}
+
+
+.empty-state p {
+
+  max-width: 420px;
+
+  margin: 0 0 20px;
+
+  color: #899695;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+}
+
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn-secondary {
+
+  height: 40px;
+
+  padding: 0 17px;
+
+  border: 1px solid #d8e2e1;
+
+  border-radius: 8px;
+
+  background: #fff;
+
+  color: #485555;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+}
+
+
+.btn-secondary:hover {
+
+  background: #f5f7f7;
+
+}
+
+
+
+/* =========================================================
+   MODAL BACKDROP
+========================================================= */
+
+.modal-backdrop {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  padding: 20px;
+
+  background: rgba(17, 31, 30, .48);
+
+  backdrop-filter: blur(3px);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  animation: fadeIn .18s ease;
+
+}
+
+
+@keyframes fadeIn {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+
+}
+
+
+
+/* =========================================================
+   DETAILS MODAL
+========================================================= */
+
+.details-modal {
+
+  width: min(620px, 100%);
+
+  max-height: calc(100vh - 40px);
+
+  overflow-y: auto;
+
+  background: #fff;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, .18);
+
+  animation: modalIn .2s ease;
+
+}
+
+
+@keyframes modalIn {
+
+  from {
+
+    opacity: 0;
+
+    transform: translateY(12px) scale(.98);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform: translateY(0) scale(1);
+
+  }
+
+}
+
+
+
+/* =========================================================
+   MODAL HEADER
+========================================================= */
+
+.modal-header {
+
+  min-height: 74px;
+
+  padding: 14px 20px;
+
+  border-bottom: 1px solid #e9eeee;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+}
+
+
+.modal-title {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+}
+
+
+.modal-icon {
+
+  width: 42px;
+
+  height: 42px;
+
+  border-radius: 10px;
+
+  background: #edf6f5;
+
+  color: #0B4F4A;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+
+.modal-title h2 {
+
+  margin: 0 0 3px;
+
+  color: #253535;
+
+  font-size: 17px;
+
+}
+
+
+.modal-title p {
+
+  margin: 0;
+
+  color: #899695;
+
+  font-size: 12px;
+
+}
+
+
+.modal-close {
+
+  width: 34px;
+
+  height: 34px;
+
+  border: 0;
+
+  border-radius: 7px;
+
+  background: transparent;
+
+  color: #778382;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 17px;
+
+}
+
+
+.modal-close:hover {
+
+  background: #f1f4f4;
+
+  color: #303d3c;
+
+}
+
+
+
+/* =========================================================
+   MODAL BODY
+========================================================= */
+
+.modal-body {
+
+  padding: 24px;
+
+}
+
+
+.competition-hero {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 18px;
+
+  border: 1px solid #e5eceb;
+
+  border-radius: 11px;
+
+  background: #fafcfc;
+
+}
+
+
+.hero-icon {
+
+  width: 50px;
+
+  height: 50px;
+
+  flex-shrink: 0;
+
+  border-radius: 12px;
+
+  background: #0B4F4A;
+
+  color: #fff;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 19px;
+
+}
+
+
+.competition-hero h3 {
+
+  margin: 0 0 5px;
+
+  color: #263535;
+
+  font-size: 17px;
+
+}
+
+
+.competition-hero span {
+
+  color: #96a09f;
+
+  font-size: 11px;
+
+}
+
+
+
+/* =========================================================
+   DETAIL STATUS
+========================================================= */
+
+.detail-status {
+
+  margin-top: 17px;
+
+  display: flex;
+
+  justify-content: flex-end;
+
+}
+
+
+
+/* =========================================================
+   DETAILS GRID
+========================================================= */
+
+.details-grid {
+
+  margin-top: 17px;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 12px;
+
+}
+
+
+.detail-item {
+
+  min-height: 76px;
+
+  padding: 14px;
+
+  border: 1px solid #e7ecec;
+
+  border-radius: 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+}
+
+
+.detail-icon {
+
+  width: 36px;
+
+  height: 36px;
+
+  flex-shrink: 0;
+
+  border-radius: 9px;
+
+  background: #f0f5f4;
+
+  color: #0B4F4A;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 13px;
+
+}
+
+
+.detail-item > div:last-child {
+
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+
+}
+
+
+.detail-label {
+
+  color: #929d9c;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+  letter-spacing: .4px;
+
+}
+
+
+.detail-item strong {
+
+  color: #334141;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  word-break: break-word;
+
+}
+
+
+
+/* =========================================================
+   MODAL FOOTER
+========================================================= */
+
+.modal-footer {
+
+  min-height: 66px;
+
+  padding: 12px 20px;
+
+  border-top: 1px solid #e9eeee;
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  align-items: center;
+
+}
+
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 800px) {
+
+  .competitions-page {
+
+    padding: 18px;
+
+  }
+
+
+  .header-content {
+
+    align-items: flex-start;
+
+  }
+
+
+  .table-toolbar {
+
+    align-items: stretch;
+
+    flex-direction: column;
+
+  }
+
+
+  .toolbar-left {
+
+    width: 100%;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+  }
+
+
+  .search-box {
+
+    width: 100%;
+
+  }
+
+
+  .filter-box {
+
+    width: 100%;
+
+  }
+
+
+  .toolbar-right {
+
+    align-self: flex-end;
+
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .competitions-page {
+
+    padding: 13px;
+
+  }
+
+
+  .title-icon {
+
+    width: 44px;
+
+    height: 44px;
+
+  }
+
+
+  .title-section h1 {
+
+    font-size: 20px;
+
+  }
+
+
+  .title-section p {
+
+    font-size: 12px;
+
+  }
+
+
+  .refresh-btn span {
+
+    display: none;
+
+  }
+
+
+  .refresh-btn {
+
+    width: 40px;
+
+    padding: 0;
+
+    justify-content: center;
+
+  }
+
+
+  .details-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+
+  .modal-body {
+
+    padding: 17px;
+
+  }
+
+}

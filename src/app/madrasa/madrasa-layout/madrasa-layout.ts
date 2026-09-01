@@ -23,6 +23,11 @@ import {
   UserProfile
 } from '../../services/user.service';
 
+import {
+  MadrasaService,
+  Madrasa
+} from '../../services/madrasa.service';
+
 
 @Component({
 
@@ -46,68 +51,86 @@ export class MadrasaLayout
   implements OnInit {
 
 
-  // ==========================================
+  // =====================================================
   // SIDEBAR
-  // ==========================================
+  // =====================================================
 
   sidebarOpen = false;
 
 
-  // ==========================================
-  // USER
-  // ==========================================
+  // =====================================================
+  // PROFILE
+  // =====================================================
 
   profile: UserProfile | null = null;
 
 
-  displayName = 'Madrasa User';
+  // =====================================================
+  // MADRASA
+  // =====================================================
+
+  madrasa: Madrasa | null = null;
+
+
+  // =====================================================
+  // DISPLAY
+  // =====================================================
+
+  displayName = 'Madrasa';
+
 
   username = '';
 
 
-  // ==========================================
+  // =====================================================
   // CONSTRUCTOR
-  // ==========================================
+  // =====================================================
 
   constructor(
 
-    private authService: AuthService,
+    private authService:
+      AuthService,
 
-    private userService: UserService,
+    private userService:
+      UserService,
 
-    private router: Router
+    private madrasaService:
+      MadrasaService,
+
+    private router:
+      Router
 
   ) {}
 
 
-  // ==========================================
+  // =====================================================
   // INIT
-  // ==========================================
+  // =====================================================
 
   ngOnInit(): void {
 
     const user =
       this.authService.getUser();
 
+
     if (user) {
 
-      this.displayName =
-        user.fullName || user.username;
-
       this.username =
-        user.username;
+        user.username || '';
 
     }
 
 
     this.loadProfile();
 
+    this.loadMyMadrasa();
+
   }
 
 
-  // ==========================================
+  // =====================================================
   // LOAD PROFILE
-  // ==========================================
+  // =====================================================
 
   loadProfile(): void {
 
@@ -119,9 +142,14 @@ export class MadrasaLayout
 
           this.profile = profile;
 
-          this.displayName =
-            profile.fullName ||
-            profile.username;
+          /*
+           * IMPORTANT:
+           *
+           * Do NOT use profile.fullName here.
+           *
+           * For Madrasa accounts, fullName is
+           * the contact person / Sheikh.
+           */
 
         },
 
@@ -139,14 +167,66 @@ export class MadrasaLayout
   }
 
 
-  // ==========================================
+  // =====================================================
+  // LOAD MY MADRASA
+  // =====================================================
+
+  loadMyMadrasa(): void {
+
+    this.madrasaService
+      .getMyMadrasa()
+      .subscribe({
+
+        next: madrasa => {
+
+          this.madrasa =
+            madrasa;
+
+
+          if (
+            madrasa?.name?.trim()
+          ) {
+
+            this.displayName =
+              madrasa.name.trim();
+
+          }
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Failed to load my madrasa:',
+            error
+          );
+
+          /*
+           * Do not replace the madrasa name
+           * with Sheikh/contact person.
+           *
+           * Keep the neutral fallback.
+           */
+
+          this.displayName =
+            'Madrasa';
+
+        }
+
+      });
+
+  }
+
+
+  // =====================================================
   // INITIALS
-  // ==========================================
+  // =====================================================
 
   get initials(): string {
 
     const name =
       this.displayName?.trim();
+
 
     if (!name) {
 
@@ -159,7 +239,9 @@ export class MadrasaLayout
       name.split(/\s+/);
 
 
-    if (parts.length === 1) {
+    if (
+      parts.length === 1
+    ) {
 
       return parts[0]
         .substring(0, 2)
@@ -176,20 +258,23 @@ export class MadrasaLayout
   }
 
 
-  // ==========================================
+  // =====================================================
   // PROFILE IMAGE
-  // ==========================================
+  // =====================================================
 
   get profileImageUrl(): string | null {
 
-    return this.profile?.profileImage ?? null;
+    return (
+      this.profile?.profileImage ??
+      null
+    );
 
   }
 
 
-  // ==========================================
+  // =====================================================
   // TOGGLE SIDEBAR
-  // ==========================================
+  // =====================================================
 
   toggleSidebar(): void {
 
@@ -199,9 +284,9 @@ export class MadrasaLayout
   }
 
 
-  // ==========================================
+  // =====================================================
   // CLOSE SIDEBAR
-  // ==========================================
+  // =====================================================
 
   closeSidebar(): void {
 
@@ -210,9 +295,9 @@ export class MadrasaLayout
   }
 
 
-  // ==========================================
+  // =====================================================
   // LOGOUT
-  // ==========================================
+  // =====================================================
 
   logout(): void {
 

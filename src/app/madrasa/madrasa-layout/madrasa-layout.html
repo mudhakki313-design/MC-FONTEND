@@ -29,7 +29,9 @@
 
       <div class="brand-logo">
 
-        <img src="/img/logo.png">
+        <img
+          src="/img/logo.png"
+          alt="QMCMS Logo">
 
       </div>
 
@@ -282,7 +284,7 @@
     <div class="sidebar-footer">
 
 
-      <!-- USER -->
+      <!-- USER / MADRASA -->
 
       <div class="mini-profile">
 
@@ -294,7 +296,7 @@
 
             <img
               [src]="profileImageUrl"
-              alt="Profile">
+              alt="Madrasa">
 
           </ng-container>
 
@@ -387,7 +389,8 @@
         <button
           class="menu-button"
           type="button"
-          (click)="toggleSidebar()">
+          (click)="toggleSidebar()"
+          aria-label="Open menu">
 
           <svg
             viewBox="0 0 24 24"
@@ -471,7 +474,7 @@
         </button>
 
 
-        <!-- USER -->
+        <!-- MADRASA -->
 
         <div class="top-user">
 
@@ -483,9 +486,10 @@
 
               <img
                 [src]="profileImageUrl"
-                alt="Profile">
+                alt="Madrasa">
 
             </ng-container>
+
 
             <ng-template #topInitials>
 

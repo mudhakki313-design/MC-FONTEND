@@ -1,1 +1,679 @@
-<p>madrasa-competitions works!</p>
+<div class="competitions-page">
+
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+
+  <div class="page-header">
+
+    <div class="header-content">
+
+      <div class="title-section">
+
+        <div class="title-icon">
+
+          <i class="fa-solid fa-trophy"></i>
+
+        </div>
+
+        <div>
+
+          <h1>Madrasa Competitions</h1>
+
+          <p>
+            View upcoming, ongoing and completed Quran competitions.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="refresh-btn"
+        [disabled]="loading"
+        (click)="refresh()"
+      >
+
+        <i
+          class="fa-solid fa-rotate-right"
+          [class.fa-spin]="loading"
+        ></i>
+
+        <span>Refresh</span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       CONTENT CARD
+  ====================================================== -->
+
+  <div class="content-card">
+
+
+    <!-- ===================================================
+         TOOLBAR
+    ==================================================== -->
+
+    <div class="table-toolbar">
+
+      <div class="toolbar-left">
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+          <i class="fa-solid fa-magnifying-glass"></i>
+
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onSearchChange()"
+            placeholder="Search competition or venue..."
+          />
+
+          @if (searchTerm) {
+
+            <button
+              type="button"
+              class="clear-search"
+              (click)="searchTerm=''; applyFilter()"
+              title="Clear search"
+            >
+
+              <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+          }
+
+        </div>
+
+
+        <!-- STATUS FILTER -->
+
+        <div class="filter-box">
+
+          <i class="fa-solid fa-filter"></i>
+
+          <select
+            [(ngModel)]="selectedStatus"
+            (ngModelChange)="onStatusChange()"
+          >
+
+            <option value="ALL">
+              All Status
+            </option>
+
+            <option value="UPCOMING">
+              Upcoming
+            </option>
+
+            <option value="ONGOING">
+              Ongoing
+            </option>
+
+            <option value="COMPLETED">
+              Completed
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- COUNT -->
+
+      <div class="toolbar-right">
+
+        <div class="competition-count">
+
+          <span class="count-number">
+            {{ filteredCompetitions.length }}
+          </span>
+
+          <span class="count-label">
+            Competitions
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ===================================================
+         LOADING
+    ==================================================== -->
+
+    @if (loading) {
+
+      <div class="loading-state">
+
+        <div class="spinner"></div>
+
+        <h3>Loading competitions...</h3>
+
+        <p>
+          Please wait while competition information is loaded.
+        </p>
+
+      </div>
+
+    }
+
+
+
+    <!-- ===================================================
+         EMPTY STATE
+    ==================================================== -->
+
+    @else if (filteredCompetitions.length === 0) {
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+
+          <i class="fa-solid fa-trophy"></i>
+
+        </div>
+
+        @if (searchTerm || selectedStatus !== 'ALL') {
+
+          <h3>No Competitions Found</h3>
+
+          <p>
+            No competitions match your current search or filter.
+          </p>
+
+          <button
+            type="button"
+            class="btn-secondary"
+            (click)="searchTerm=''; selectedStatus='ALL'; applyFilter()"
+          >
+
+            <i class="fa-solid fa-rotate-left"></i>
+
+            Clear Filters
+
+          </button>
+
+        } @else {
+
+          <h3>No Competitions Available</h3>
+
+          <p>
+            There are currently no competitions available.
+          </p>
+
+        }
+
+      </div>
+
+    }
+
+
+
+    <!-- ===================================================
+         COMPETITIONS TABLE
+    ==================================================== -->
+
+    @else {
+
+      <div class="table-wrapper">
+
+        <table class="competitions-table">
+
+          <thead>
+
+            <tr>
+
+              <th>#</th>
+
+              <th>Competition</th>
+
+              <th>Venue</th>
+
+              <th>Date</th>
+
+              <th>Status</th>
+
+              <th class="actions-header">
+                Action
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              competition of filteredCompetitions;
+              track competition.id;
+              let i = $index
+            ) {
+
+              <tr>
+
+
+                <!-- NUMBER -->
+
+                <td class="number-cell">
+
+                  {{ i + 1 }}
+
+                </td>
+
+
+
+                <!-- COMPETITION -->
+
+                <td>
+
+                  <div class="competition-info">
+
+                    <div class="competition-icon">
+
+                      <i class="fa-solid fa-trophy"></i>
+
+                    </div>
+
+                    <div class="competition-name">
+
+                      <span class="name">
+
+                        {{ competition.title }}
+
+                      </span>
+
+                      <span class="id">
+
+                        Competition #{{ competition.id }}
+
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+
+                <!-- VENUE -->
+
+                <td>
+
+                  <div class="venue-info">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <span>
+
+                      {{ competition.venue || '—' }}
+
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+
+                <!-- DATE -->
+
+                <td>
+
+                  <div class="date-info">
+
+                    <i class="fa-regular fa-calendar"></i>
+
+                    <span>
+
+                      {{ formatDate(competition.competitionDate) }}
+
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+
+                <!-- STATUS -->
+
+                <td>
+
+                  <span
+                    class="status-badge"
+                    [ngClass]="getStatusClass(competition.status)"
+                  >
+
+                    <span class="status-dot"></span>
+
+                    {{ getStatusLabel(competition.status) }}
+
+                  </span>
+
+                </td>
+
+
+
+                <!-- ACTION -->
+
+                <td>
+
+                  <button
+                    type="button"
+                    class="view-btn"
+                    (click)="viewDetails(competition)"
+                  >
+
+                    <i class="fa-solid fa-eye"></i>
+
+                    <span>View</span>
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>
+
+
+
+<!-- =======================================================
+     COMPETITION DETAILS MODAL
+======================================================== -->
+
+@if (showDetailsModal && selectedCompetition) {
+
+  <div
+    class="modal-backdrop"
+    (click)="closeDetails()"
+  >
+
+    <div
+      class="details-modal"
+      (click)="$event.stopPropagation()"
+    >
+
+
+      <!-- =================================================
+           MODAL HEADER
+      ================================================== -->
+
+      <div class="modal-header">
+
+        <div class="modal-title">
+
+          <div class="modal-icon">
+
+            <i class="fa-solid fa-trophy"></i>
+
+          </div>
+
+          <div>
+
+            <h2>
+              Competition Details
+            </h2>
+
+            <p>
+              Competition information
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="modal-close"
+          (click)="closeDetails()"
+        >
+
+          <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+      </div>
+
+
+
+      <!-- =================================================
+           MODAL BODY
+      ================================================== -->
+
+      <div class="modal-body">
+
+
+        <!-- TITLE -->
+
+        <div class="competition-hero">
+
+          <div class="hero-icon">
+
+            <i class="fa-solid fa-trophy"></i>
+
+          </div>
+
+          <div>
+
+            <h3>
+              {{ selectedCompetition.title }}
+            </h3>
+
+            <span>
+              Competition #{{ selectedCompetition.id }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- STATUS -->
+
+        <div class="detail-status">
+
+          <span
+            class="status-badge"
+            [ngClass]="
+              getStatusClass(
+                selectedCompetition.status
+              )
+            "
+          >
+
+            <span class="status-dot"></span>
+
+            {{
+              getStatusLabel(
+                selectedCompetition.status
+              )
+            }}
+
+          </span>
+
+        </div>
+
+
+
+        <!-- DETAILS GRID -->
+
+        <div class="details-grid">
+
+
+          <!-- VENUE -->
+
+          <div class="detail-item">
+
+            <div class="detail-icon">
+
+              <i class="fa-solid fa-location-dot"></i>
+
+            </div>
+
+            <div>
+
+              <span class="detail-label">
+                Venue
+              </span>
+
+              <strong>
+                {{ selectedCompetition.venue || '—' }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- DATE -->
+
+          <div class="detail-item">
+
+            <div class="detail-icon">
+
+              <i class="fa-regular fa-calendar"></i>
+
+            </div>
+
+            <div>
+
+              <span class="detail-label">
+                Competition Date
+              </span>
+
+              <strong>
+                {{
+                  formatDate(
+                    selectedCompetition.competitionDate
+                  )
+                }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- CREATED -->
+
+          <div class="detail-item">
+
+            <div class="detail-icon">
+
+              <i class="fa-regular fa-clock"></i>
+
+            </div>
+
+            <div>
+
+              <span class="detail-label">
+                Created At
+              </span>
+
+              <strong>
+                {{
+                  formatDateTime(
+                    selectedCompetition.createdAt
+                  )
+                }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- ID -->
+
+          <div class="detail-item">
+
+            <div class="detail-icon">
+
+              <i class="fa-solid fa-hashtag"></i>
+
+            </div>
+
+            <div>
+
+              <span class="detail-label">
+                Competition ID
+              </span>
+
+              <strong>
+                #{{ selectedCompetition.id }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- =================================================
+           MODAL FOOTER
+      ================================================== -->
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="closeDetails()"
+        >
+
+          <i class="fa-solid fa-xmark"></i>
+
+          Close
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

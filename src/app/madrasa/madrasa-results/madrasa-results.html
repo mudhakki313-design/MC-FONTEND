@@ -1,1 +1,974 @@
-<p>madrasa-results works!</p>
+<div class="results-page">
+
+
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+
+  <div class="page-header">
+
+    <div class="header-content">
+
+      <div class="title-section">
+
+        <div class="title-icon">
+          <i class="fa-solid fa-ranking-star"></i>
+        </div>
+
+        <div>
+
+          <h1>Madrasa Results</h1>
+
+          <p>
+            View competition results and participant rankings.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- REFRESH -->
+
+      <button
+        type="button"
+        class="refresh-btn"
+        [disabled]="
+          competitionLoading ||
+          resultsLoading
+        "
+        (click)="refresh()"
+        title="Refresh results"
+      >
+
+        <i class="fa-solid fa-rotate"></i>
+
+        <span>
+          Refresh
+        </span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       FILTER CARD
+  ====================================================== -->
+
+  <div class="filter-card">
+
+    <div class="filter-header">
+
+      <div>
+
+        <h2>
+
+          <i class="fa-solid fa-filter"></i>
+
+          Results Filter
+
+        </h2>
+
+        <p>
+          Select a competition and Juzuu to view results.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="filter-grid">
+
+
+      <!-- =================================================
+           COMPETITION
+      ================================================== -->
+
+      <div class="form-group">
+
+        <label>
+
+          Competition
+
+          <span>*</span>
+
+        </label>
+
+
+        <div class="select-wrapper">
+
+          <i class="fa-solid fa-trophy"></i>
+
+
+          <select
+            [(ngModel)]="selectedCompetitionId"
+            (ngModelChange)="onCompetitionChange()"
+            [disabled]="competitionLoading"
+          >
+
+            <option
+              [ngValue]="null"
+              disabled
+            >
+
+              {{
+                competitionLoading
+                  ? 'Loading competitions...'
+                  : 'Select competition'
+              }}
+
+            </option>
+
+
+            @for (
+              competition of competitions;
+              track competition.id
+            ) {
+
+              <option
+                [ngValue]="competition.id"
+              >
+
+                {{ competition.title }}
+
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =================================================
+           JUZUU
+      ================================================== -->
+
+      <div class="form-group">
+
+        <label>
+
+          Juzuu
+
+          <span>*</span>
+
+        </label>
+
+
+        <div class="select-wrapper">
+
+          <i class="fa-solid fa-book-quran"></i>
+
+
+          <select
+            [(ngModel)]="selectedJuzuu"
+            (ngModelChange)="onJuzuuChange()"
+          >
+
+            @for (
+              juz of juzuuList;
+              track juz
+            ) {
+
+              <option
+                [value]="juz"
+              >
+
+                {{ getJuzuuLabel(juz) }}
+
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =================================================
+           LOAD BUTTON
+      ================================================== -->
+
+      <div class="filter-action">
+
+        <button
+          type="button"
+          class="btn-primary load-btn"
+          [disabled]="
+            resultsLoading ||
+            competitionLoading ||
+            selectedCompetitionId === null
+          "
+          (click)="loadResults()"
+        >
+
+          @if (resultsLoading) {
+
+            <span class="button-spinner"></span>
+
+            Loading...
+
+          }
+
+          @else {
+
+            <i class="fa-solid fa-chart-column"></i>
+
+            View Results
+
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       SELECTED COMPETITION INFO
+  ====================================================== -->
+
+  @if (
+    hasSearched &&
+    selectedCompetition
+  ) {
+
+    <div class="competition-banner">
+
+      <div class="competition-banner-icon">
+
+        <i class="fa-solid fa-trophy"></i>
+
+      </div>
+
+
+      <div class="competition-banner-content">
+
+        <span class="banner-label">
+          Results for
+        </span>
+
+
+        <h2>
+          {{ selectedCompetition.title }}
+        </h2>
+
+
+        <div class="competition-meta">
+
+
+          <!-- JUZUU -->
+
+          <span>
+
+            <i class="fa-solid fa-book-quran"></i>
+
+            {{ getJuzuuLabel(selectedJuzuu) }}
+
+          </span>
+
+
+          <!-- VENUE -->
+
+          @if (
+            selectedCompetition.venue
+          ) {
+
+            <span>
+
+              <i class="fa-solid fa-location-dot"></i>
+
+              {{ selectedCompetition.venue }}
+
+            </span>
+
+          }
+
+
+          <!-- DATE -->
+
+          @if (
+            selectedCompetition.competitionDate
+          ) {
+
+            <span>
+
+              <i class="fa-solid fa-calendar"></i>
+
+              {{
+                selectedCompetition.competitionDate
+                  | date:'mediumDate'
+              }}
+
+            </span>
+
+          }
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+
+
+  <!-- =====================================================
+       SUMMARY CARDS
+  ====================================================== -->
+
+  @if (
+    hasSearched &&
+    !resultsLoading &&
+    hasResults
+  ) {
+
+    <div class="summary-grid">
+
+
+      <!-- PARTICIPANTS -->
+
+      <div class="summary-card">
+
+        <div class="summary-icon participants-icon">
+
+          <i class="fa-solid fa-users"></i>
+
+        </div>
+
+
+        <div class="summary-content">
+
+          <span class="summary-label">
+            Participants
+          </span>
+
+
+          <strong>
+            {{ totalParticipants }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- HIGHEST SCORE -->
+
+      <div class="summary-card">
+
+        <div class="summary-icon score-icon">
+
+          <i class="fa-solid fa-star"></i>
+
+        </div>
+
+
+        <div class="summary-content">
+
+          <span class="summary-label">
+            Highest Score
+          </span>
+
+
+          <strong>
+            {{ topScore }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- FIRST POSITION -->
+
+      <div class="summary-card winner-card">
+
+        <div class="summary-icon winner-icon">
+
+          <i class="fa-solid fa-medal"></i>
+
+        </div>
+
+
+        <div class="summary-content">
+
+          <span class="summary-label">
+            1st Position
+          </span>
+
+
+          <strong>
+
+            {{
+              firstPosition?.participant
+              || '—'
+            }}
+
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+
+
+  <!-- =====================================================
+       RESULTS CARD
+  ====================================================== -->
+
+  <div class="results-card">
+
+
+    <!-- ===================================================
+         RESULTS TOOLBAR
+    ==================================================== -->
+
+    @if (
+      hasSearched &&
+      hasResults
+    ) {
+
+      <div class="results-toolbar">
+
+
+        <div class="results-toolbar-left">
+
+          <div class="results-heading">
+
+
+            <div class="results-heading-icon">
+
+              <i class="fa-solid fa-list-ol"></i>
+
+            </div>
+
+
+            <div>
+
+              <h2>
+                Competition Results
+              </h2>
+
+
+              <p>
+
+                {{ filteredResults.length }}
+
+                result{{
+                  filteredResults.length !== 1
+                    ? 's'
+                    : ''
+                }}
+
+                displayed
+
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- SEARCH -->
+
+        <div class="results-toolbar-right">
+
+          <div class="search-box">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+
+            <input
+              type="text"
+              [(ngModel)]="searchTerm"
+              (ngModelChange)="applyFilter()"
+              placeholder="Search participant..."
+            />
+
+
+            @if (searchTerm) {
+
+              <button
+                type="button"
+                class="clear-search"
+                (click)="clearSearch()"
+                title="Clear search"
+              >
+
+                <i class="fa-solid fa-xmark"></i>
+
+              </button>
+
+            }
+
+          </div>
+
+        </div>
+
+      </div>
+
+    }
+
+
+
+    <!-- ===================================================
+         LOADING
+    ==================================================== -->
+
+    @if (resultsLoading) {
+
+      <div class="loading-state">
+
+        <div class="spinner"></div>
+
+
+        <h3>
+          Loading Results
+        </h3>
+
+
+        <p>
+          Please wait while competition results are loaded.
+        </p>
+
+      </div>
+
+    }
+
+
+
+    <!-- ===================================================
+         INITIAL STATE
+    ==================================================== -->
+
+    @else if (!hasSearched) {
+
+      <div class="initial-state">
+
+        <div class="initial-icon">
+
+          <i class="fa-solid fa-ranking-star"></i>
+
+        </div>
+
+
+        <h3>
+          View Competition Results
+        </h3>
+
+
+        <p>
+
+          Select a competition and Juzuu above,
+          then click
+
+          <strong>
+            View Results
+          </strong>
+
+          to see the rankings.
+
+        </p>
+
+      </div>
+
+    }
+
+
+
+    <!-- ===================================================
+         EMPTY STATE
+    ==================================================== -->
+
+    @else if (
+      hasSearched &&
+      !hasResults
+    ) {
+
+      <div class="empty-state">
+
+
+        <div class="empty-icon">
+
+          <i class="fa-solid fa-chart-column"></i>
+
+        </div>
+
+
+        <h3>
+          No Results Available
+        </h3>
+
+
+        <p>
+
+          There are no generated results for
+
+          {{ getJuzuuLabel(selectedJuzuu) }}
+
+          in the selected competition.
+
+        </p>
+
+
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="loadResults()"
+        >
+
+          <i class="fa-solid fa-rotate"></i>
+
+          Check Again
+
+        </button>
+
+      </div>
+
+    }
+
+
+
+    <!-- ===================================================
+         NO SEARCH RESULTS
+    ==================================================== -->
+
+    @else if (
+      hasSearched &&
+      hasResults &&
+      filteredResults.length === 0
+    ) {
+
+      <div class="empty-state compact">
+
+
+        <div class="empty-icon">
+
+          <i class="fa-solid fa-magnifying-glass"></i>
+
+        </div>
+
+
+        <h3>
+          No Matching Participants
+        </h3>
+
+
+        <p>
+
+          No results match
+          "{{ searchTerm }}".
+
+        </p>
+
+
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="clearSearch()"
+        >
+
+          Clear Search
+
+        </button>
+
+      </div>
+
+    }
+
+
+
+    <!-- ===================================================
+         RESULTS TABLE
+    ==================================================== -->
+
+    @else {
+
+      <div class="table-wrapper">
+
+        <table class="results-table">
+
+
+          <!-- =================================================
+               TABLE HEADER
+          ================================================== -->
+
+          <thead>
+
+            <tr>
+
+              <th class="rank-column">
+                Rank
+              </th>
+
+              <th>
+                Participant
+              </th>
+
+              <th>
+                Madrasa
+              </th>
+
+              <th>
+                Juzuu
+              </th>
+
+              <th class="score-column">
+                Total Score
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+
+          <!-- =================================================
+               TABLE BODY
+          ================================================== -->
+
+          <tbody>
+
+            @for (
+              result of filteredResults;
+              track result.resultId
+            ) {
+
+              <tr
+
+                [class.first-place]="
+                  result.rank === 1
+                "
+
+                [class.second-place]="
+                  result.rank === 2
+                "
+
+                [class.third-place]="
+                  result.rank === 3
+                "
+
+              >
+
+
+                <!-- =========================================
+                     RANK
+                ========================================== -->
+
+                <td class="rank-cell">
+
+
+                  @if (
+                    result.rank === 1
+                  ) {
+
+                    <div class="rank-medal gold">
+
+                      <i class="fa-solid fa-trophy"></i>
+
+                    </div>
+
+                  }
+
+
+                  @else if (
+                    result.rank === 2
+                  ) {
+
+                    <div class="rank-medal silver">
+
+                      <i class="fa-solid fa-medal"></i>
+
+                    </div>
+
+                  }
+
+
+                  @else if (
+                    result.rank === 3
+                  ) {
+
+                    <div class="rank-medal bronze">
+
+                      <i class="fa-solid fa-medal"></i>
+
+                    </div>
+
+                  }
+
+
+                  @else {
+
+                    <div class="rank-number">
+
+                      {{ result.rank }}
+
+                    </div>
+
+                  }
+
+                </td>
+
+
+
+                <!-- =========================================
+                     PARTICIPANT
+                ========================================== -->
+
+                <td>
+
+                  <div class="participant-info">
+
+
+                    <!-- SAFE INITIAL -->
+
+                    <div class="participant-avatar">
+
+                      {{
+                        getParticipantInitial(
+                          result.participant
+                        )
+                      }}
+
+                    </div>
+
+
+                    <div class="participant-details">
+
+                      <span class="participant-name">
+
+                        {{
+                          result.participant
+                          || 'Unknown Participant'
+                        }}
+
+                      </span>
+
+
+                      <span class="participant-id">
+
+                        Participant
+                        #{{ result.participantId }}
+
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+
+                <!-- =========================================
+                     MADRASA
+                ========================================== -->
+
+                <td>
+
+                  <div class="madrasa-cell">
+
+                    <i class="fa-solid fa-mosque"></i>
+
+
+                    <span>
+
+                      {{
+                        result.madrasa
+                        || '—'
+                      }}
+
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+
+                <!-- =========================================
+                     JUZUU
+                ========================================== -->
+
+                <td>
+
+                  <span class="juzuu-badge">
+
+                    {{
+                      getJuzuuLabel(
+                        result.juzuu
+                      )
+                    }}
+
+                  </span>
+
+                </td>
+
+
+
+                <!-- =========================================
+                     SCORE
+                ========================================== -->
+
+                <td class="score-cell">
+
+                  <div class="score-value">
+
+                    <strong>
+
+                      {{
+                        result.totalScore
+                      }}
+
+                    </strong>
+
+
+                    <span>
+                      points
+                    </span>
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>

@@ -1,52 +1,89 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {
+  Injectable
+} from '@angular/core';
+
+import {
+  HttpClient
+} from '@angular/common/http';
+
+import {
+  Observable
+} from 'rxjs';
+
 
 export interface Madrasa {
+
   id: number;
+
   name: string;
+
   registrationNumber: string;
+
   district: string;
+
   region: string;
+
   contactPerson: string;
+
   phone: string;
+
   email: string;
+
   address: string;
+
   status: string;
+
   username: string;
+
   createdAt: string;
+
 }
 
+
 export interface MadrasaRequest {
+
   name: string;
+
   registrationNumber: string;
+
   district: string;
+
   region: string;
+
   contactPerson: string;
+
   phone: string;
+
   email: string;
+
   address: string;
+
   status: string;
+
 }
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class MadrasaService {
 
+
   private readonly API_URL =
     'http://localhost:8282/api/madrasas';
+
 
   constructor(
     private http: HttpClient
   ) {}
 
 
-  // =====================================
+  // =====================================================
   // GET ALL
-  // =====================================
+  // =====================================================
 
-  getAllMadrasas(): Observable<Madrasa[]> {
+  getAllMadrasas():
+    Observable<Madrasa[]> {
 
     return this.http.get<Madrasa[]>(
       this.API_URL
@@ -55,9 +92,23 @@ export class MadrasaService {
   }
 
 
-  // =====================================
+  // =====================================================
+  // GET MY MADRASA
+  // =====================================================
+
+  getMyMadrasa():
+    Observable<Madrasa> {
+
+    return this.http.get<Madrasa>(
+      `${this.API_URL}/my`
+    );
+
+  }
+
+
+  // =====================================================
   // GET ONE
-  // =====================================
+  // =====================================================
 
   getMadrasa(
     id: number
@@ -70,9 +121,9 @@ export class MadrasaService {
   }
 
 
-  // =====================================
+  // =====================================================
   // CREATE
-  // =====================================
+  // =====================================================
 
   createMadrasa(
     request: MadrasaRequest
@@ -86,9 +137,9 @@ export class MadrasaService {
   }
 
 
-  // =====================================
+  // =====================================================
   // UPDATE
-  // =====================================
+  // =====================================================
 
   updateMadrasa(
     id: number,
@@ -103,9 +154,9 @@ export class MadrasaService {
   }
 
 
-  // =====================================
+  // =====================================================
   // DEACTIVATE
-  // =====================================
+  // =====================================================
 
   deactivateMadrasa(
     id: number

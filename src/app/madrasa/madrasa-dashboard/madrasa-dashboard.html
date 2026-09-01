@@ -1,1 +1,1000 @@
-<p>madrasa-dashboard works!</p>
+<div class="dashboard-page">
+
+
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+
+  <div class="page-header">
+
+    <div class="header-left">
+
+      <div class="header-icon">
+        <i class="fa-solid fa-chart-pie"></i>
+      </div>
+
+      <div>
+
+        <span class="eyebrow">
+          MADRASA DASHBOARD
+        </span>
+
+        <h1>
+          Welcome back
+        </h1>
+
+        <p>
+          Manage your madrasa participants and
+          monitor competition activities.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="refresh-btn"
+      [disabled]="loading"
+      (click)="refreshDashboard()">
+
+      <i
+        class="fa-solid fa-rotate"
+        [class.fa-spin]="loading">
+      </i>
+
+      <span>
+        {{ loading ? 'Refreshing...' : 'Refresh' }}
+      </span>
+
+    </button>
+
+  </div>
+
+
+  <!-- =====================================================
+       MADRASA WELCOME CARD
+  ====================================================== -->
+
+  <section class="welcome-card">
+
+    <div class="welcome-main">
+
+      <div class="welcome-logo">
+        <i class="fa-solid fa-school"></i>
+      </div>
+
+
+      <div class="welcome-content">
+
+        <span class="welcome-label">
+          YOUR MADRASA
+        </span>
+
+
+        <!-- MADRASA NAME -->
+
+        @if (madrasaLoading) {
+
+          <div class="skeleton welcome-title-skeleton"></div>
+
+        } @else {
+
+          <h2>
+            {{ madrasa?.name || 'Madrasa' }}
+          </h2>
+
+        }
+
+
+        <!-- MADRASA INFORMATION -->
+
+        <div class="welcome-meta">
+
+
+          <!-- REGISTRATION NUMBER -->
+
+          @if (madrasa?.registrationNumber) {
+
+            <span>
+
+              <i class="fa-solid fa-id-card"></i>
+
+              <span>
+                {{ madrasa?.registrationNumber }}
+              </span>
+
+            </span>
+
+          }
+
+
+          <!-- LOCATION -->
+
+          @if (madrasa?.district || madrasa?.region) {
+
+            <span>
+
+              <i class="fa-solid fa-location-dot"></i>
+
+              <span>
+
+                {{ madrasa?.district || '—' }}
+
+                @if (madrasa?.region) {
+                  , {{ madrasa?.region }}
+                }
+
+              </span>
+
+            </span>
+
+          }
+
+
+          <!-- PHONE -->
+
+          @if (madrasa?.phone) {
+
+            <span>
+
+              <i class="fa-solid fa-phone"></i>
+
+              <span>
+                {{ madrasa?.phone }}
+              </span>
+
+            </span>
+
+          }
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ACCOUNT STATUS -->
+
+    <div class="welcome-status">
+
+      <span class="status-dot"></span>
+
+      <span>
+        Account Active
+      </span>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       STATISTICS
+  ====================================================== -->
+
+  <section class="stats-grid">
+
+
+    <!-- ===================================================
+         TOTAL PARTICIPANTS
+    ==================================================== -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon total-icon">
+
+        <i class="fa-solid fa-users"></i>
+
+      </div>
+
+
+      <div class="stat-content">
+
+        <span>
+          Total Participants
+        </span>
+
+        <strong>
+          {{ totalParticipants }}
+        </strong>
+
+        <small>
+          Registered by your madrasa
+        </small>
+
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         APPROVED
+    ==================================================== -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon approved-icon">
+
+        <i class="fa-solid fa-circle-check"></i>
+
+      </div>
+
+
+      <div class="stat-content">
+
+        <span>
+          Approved
+        </span>
+
+        <strong>
+          {{ approvedParticipants }}
+        </strong>
+
+        <small>
+          Eligible for judging
+        </small>
+
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         PENDING
+    ==================================================== -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon pending-icon">
+
+        <i class="fa-solid fa-clock"></i>
+
+      </div>
+
+
+      <div class="stat-content">
+
+        <span>
+          Pending Screening
+        </span>
+
+        <strong>
+          {{ pendingParticipants }}
+        </strong>
+
+        <small>
+          Awaiting screening
+        </small>
+
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         REJECTED
+    ==================================================== -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon rejected-icon">
+
+        <i class="fa-solid fa-circle-xmark"></i>
+
+      </div>
+
+
+      <div class="stat-content">
+
+        <span>
+          Rejected
+        </span>
+
+        <strong>
+          {{ rejectedParticipants }}
+        </strong>
+
+        <small>
+          Not approved
+        </small>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       COMPETITION OVERVIEW
+  ====================================================== -->
+
+  <section class="competition-summary">
+
+
+    <!-- HEADER -->
+
+    <div class="section-heading">
+
+      <div>
+
+        <span class="section-eyebrow">
+          COMPETITION ACTIVITY
+        </span>
+
+        <h2>
+          Competition Overview
+        </h2>
+
+      </div>
+
+
+      <a
+        routerLink="/madrasa/competitions"
+        class="view-link">
+
+        <span>
+          View Competitions
+        </span>
+
+        <i class="fa-solid fa-arrow-right"></i>
+
+      </a>
+
+    </div>
+
+
+    <!-- COMPETITION COUNTS -->
+
+    <div class="competition-stat-grid">
+
+
+      <!-- ONGOING -->
+
+      <div class="competition-stat ongoing-stat">
+
+        <div class="competition-stat-icon">
+
+          <i class="fa-solid fa-play"></i>
+
+        </div>
+
+
+        <div>
+
+          <span>
+            Ongoing
+          </span>
+
+          <strong>
+            {{ ongoingCount }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- UPCOMING -->
+
+      <div class="competition-stat upcoming-stat">
+
+        <div class="competition-stat-icon">
+
+          <i class="fa-solid fa-calendar-days"></i>
+
+        </div>
+
+
+        <div>
+
+          <span>
+            Upcoming
+          </span>
+
+          <strong>
+            {{ upcomingCount }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- COMPLETED -->
+
+      <div class="competition-stat completed-stat">
+
+        <div class="competition-stat-icon">
+
+          <i class="fa-solid fa-flag-checkered"></i>
+
+        </div>
+
+
+        <div>
+
+          <span>
+            Completed
+          </span>
+
+          <strong>
+            {{ completedCompetitions.length }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       MAIN GRID
+  ====================================================== -->
+
+  <div class="dashboard-grid">
+
+
+    <!-- ===================================================
+         UPCOMING COMPETITIONS
+    ==================================================== -->
+
+    <section class="content-card">
+
+
+      <!-- CARD HEADER -->
+
+      <div class="card-header">
+
+        <div>
+
+          <div class="card-title-row">
+
+            <div class="card-title-icon">
+
+              <i class="fa-solid fa-calendar-check"></i>
+
+            </div>
+
+            <h2>
+              Upcoming Competitions
+            </h2>
+
+          </div>
+
+
+          <p>
+            Competitions scheduled by the association.
+          </p>
+
+        </div>
+
+
+        <span class="count-badge">
+          {{ upcomingCount }}
+        </span>
+
+      </div>
+
+
+      <!-- =================================================
+           LOADING
+      ================================================== -->
+
+      @if (competitionsLoading) {
+
+        <div class="list-loading">
+
+          <div class="small-spinner"></div>
+
+          <span>
+            Loading competitions...
+          </span>
+
+        </div>
+
+      }
+
+
+      <!-- =================================================
+           EMPTY
+      ================================================== -->
+
+      @else if (upcomingCompetitions.length === 0) {
+
+        <div class="empty-small">
+
+          <div class="empty-small-icon">
+
+            <i class="fa-solid fa-calendar-xmark"></i>
+
+          </div>
+
+
+          <strong>
+            No Upcoming Competitions
+          </strong>
+
+
+          <span>
+            There are no upcoming competitions at the moment.
+          </span>
+
+        </div>
+
+      }
+
+
+      <!-- =================================================
+           COMPETITION LIST
+      ================================================== -->
+
+      @else {
+
+        <div class="competition-list">
+
+          @for (
+            competition of upcomingCompetitions.slice(0, 4);
+            track competition.id
+          ) {
+
+            <div class="competition-item">
+
+
+              <!-- DATE -->
+
+              <div class="competition-date">
+
+                <i class="fa-solid fa-calendar-day"></i>
+
+                <span>
+                  {{
+                    formatCompetitionDate(
+                      competition.competitionDate
+                    )
+                  }}
+                </span>
+
+              </div>
+
+
+              <!-- INFORMATION -->
+
+              <div class="competition-info">
+
+                <strong>
+                  {{ competition.title }}
+                </strong>
+
+
+                <div class="competition-details">
+
+
+                  <!-- VENUE -->
+
+                  @if (competition.venue) {
+
+                    <span>
+
+                      <i class="fa-solid fa-location-dot"></i>
+
+                      <span>
+                        {{ competition.venue }}
+                      </span>
+
+                    </span>
+
+                  }
+
+
+                  <!-- STATUS -->
+
+                  <span class="upcoming-label">
+
+                    <span class="mini-dot"></span>
+
+                    Upcoming
+
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+    </section>
+
+
+    <!-- ===================================================
+         RECENT PARTICIPANTS
+    ==================================================== -->
+
+    <section class="content-card">
+
+
+      <!-- CARD HEADER -->
+
+      <div class="card-header">
+
+        <div>
+
+          <div class="card-title-row">
+
+            <div class="card-title-icon">
+
+              <i class="fa-solid fa-users"></i>
+
+            </div>
+
+            <h2>
+              Your Participants
+            </h2>
+
+          </div>
+
+
+          <p>
+            Recently registered participants.
+          </p>
+
+        </div>
+
+
+        <a
+          routerLink="/madrasa/participants"
+          class="view-link">
+
+          <span>
+            View All
+          </span>
+
+          <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+      </div>
+
+
+      <!-- =================================================
+           LOADING
+      ================================================== -->
+
+      @if (participantsLoading) {
+
+        <div class="list-loading">
+
+          <div class="small-spinner"></div>
+
+          <span>
+            Loading participants...
+          </span>
+
+        </div>
+
+      }
+
+
+      <!-- =================================================
+           EMPTY
+      ================================================== -->
+
+      @else if (recentParticipants.length === 0) {
+
+        <div class="empty-small">
+
+          <div class="empty-small-icon">
+
+            <i class="fa-solid fa-user-plus"></i>
+
+          </div>
+
+
+          <strong>
+            No Participants Yet
+          </strong>
+
+
+          <span>
+            Register your first competition participant.
+          </span>
+
+
+          <a
+            routerLink="/madrasa/participants"
+            class="empty-action">
+
+            <i class="fa-solid fa-plus"></i>
+
+            <span>
+              Add Participant
+            </span>
+
+          </a>
+
+        </div>
+
+      }
+
+
+      <!-- =================================================
+           PARTICIPANT LIST
+      ================================================== -->
+
+      @else {
+
+        <div class="participant-list">
+
+          @for (
+            participant of recentParticipants;
+            track participant.id
+          ) {
+
+            <div class="participant-item">
+
+
+              <!-- AVATAR -->
+
+              <div class="participant-avatar">
+
+                {{
+                  getParticipantInitial(
+                    participant
+                  )
+                }}
+
+              </div>
+
+
+              <!-- PARTICIPANT INFORMATION -->
+
+              <div class="participant-info">
+
+                <strong>
+                  {{ participant.fullName }}
+                </strong>
+
+
+                <div class="participant-meta">
+
+
+                  <!-- JUZUU -->
+
+                  <span>
+
+                    <i class="fa-solid fa-book-quran"></i>
+
+                    <span>
+                      {{
+                        getJuzuuLabel(
+                          participant.juzuu
+                        )
+                      }}
+                    </span>
+
+                  </span>
+
+
+                  <!-- COMPETITION -->
+
+                  <span>
+
+                    {{
+                      getParticipantCompetition(
+                        participant
+                      )
+                    }}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- STATUS -->
+
+              <span
+                class="status-badge"
+                [class]="
+                  getStatusClass(
+                    participant.status
+                  )
+                ">
+
+                <span class="status-badge-dot"></span>
+
+                {{ participant.status }}
+
+              </span>
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+    </section>
+
+  </div>
+
+
+  <!-- =====================================================
+       QUICK ACTIONS
+  ====================================================== -->
+
+  <section class="quick-actions-card">
+
+
+    <!-- HEADING -->
+
+    <div class="quick-actions-heading">
+
+      <div>
+
+        <span class="section-eyebrow">
+          QUICK ACCESS
+        </span>
+
+        <h2>
+          Manage Your Madrasa
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="quick-actions-grid">
+
+
+      <!-- =================================================
+           PARTICIPANTS
+      ================================================== -->
+
+      <a
+        routerLink="/madrasa/participants"
+        class="quick-action">
+
+        <div class="quick-action-icon">
+
+          <i class="fa-solid fa-user-plus"></i>
+
+        </div>
+
+
+        <div>
+
+          <strong>
+            Manage Participants
+          </strong>
+
+          <span>
+            Register and manage your learners.
+          </span>
+
+        </div>
+
+
+        <i class="fa-solid fa-chevron-right arrow"></i>
+
+      </a>
+
+
+      <!-- =================================================
+           COMPETITIONS
+      ================================================== -->
+
+      <a
+        routerLink="/madrasa/competitions"
+        class="quick-action">
+
+        <div class="quick-action-icon">
+
+          <i class="fa-solid fa-trophy"></i>
+
+        </div>
+
+
+        <div>
+
+          <strong>
+            View Competitions
+          </strong>
+
+          <span>
+            Check competition schedules and details.
+          </span>
+
+        </div>
+
+
+        <i class="fa-solid fa-chevron-right arrow"></i>
+
+      </a>
+
+
+      <!-- =================================================
+           RESULTS
+      ================================================== -->
+
+      <a
+        routerLink="/madrasa/results"
+        class="quick-action">
+
+        <div class="quick-action-icon">
+
+          <i class="fa-solid fa-ranking-star"></i>
+
+        </div>
+
+
+        <div>
+
+          <strong>
+            Competition Results
+          </strong>
+
+          <span>
+            View available competition rankings.
+          </span>
+
+        </div>
+
+
+        <i class="fa-solid fa-chevron-right arrow"></i>
+
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       FOOTER
+  ====================================================== -->
+
+  <div class="dashboard-footer">
+
+
+    <span>
+
+      <i class="fa-solid fa-shield-halved"></i>
+
+      <span>
+        Madrasa account
+      </span>
+
+    </span>
+
+
+    <span class="footer-separator">
+      •
+    </span>
+
+
+    <span>
+      Last updated {{ lastUpdatedText }}
+    </span>
+
+  </div>
+
+
+</div>
